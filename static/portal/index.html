@@ -1,0 +1,19 @@
+[[define "portal"]]
+[[template "head"]]
+        <link rel="stylesheet" type="text/css" href="/css/portal/portal.css" />
+        [[template "login"]]
+        [[template "register"]]
+    </head>
+    <body>
+        <div id="portal">
+            <div class="portal-title row-align-center">GroupUp</div>
+            <hr />
+            <div class="block size-3of4">
+                <router-view>
+                </router-view>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript" src="/js/portal/portal.js"></script>
+</html>
+[[end]]

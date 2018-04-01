@@ -1,0 +1,16 @@
+[[define "login"]]
+<script type="text/x-template" id="tmpl-login">
+    <div id="login">
+            <label for="username">Username</label>
+            <input id="username" v-model="username" />
+            <label for="password">Password</label>
+            <input id="password" v-model="password" />
+            <div class="row links">
+                <router-link to="/register" class="text-left size-1of3">Create Account</router-link>
+                <router-link to="/recover/user" class="text-center size-1of3" href="#">Forgot Username</router-link>
+                <router-link to="/recover/pass" class="text-right size-1of3" href="#">Forgot Password</router-link>
+            </div>
+            <button class="contrast-button">Login</button>
+    </div>
+</script>
+[[end]]

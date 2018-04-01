@@ -1,0 +1,30 @@
+#portal {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px 1px #888888
+}
+
+.portal-title {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#portal * {
+    margin: 10px auto 20px auto;
+}
+
+#portal a {
+    margin: 0;
+    font-size: 12px;
+}
+
+#portal .links {
+    margin-top: -18px;
+}
