@@ -1,21 +1,48 @@
 (function() {
-    const Login = {
-        template: '#tmpl-login',
+    const Home = {
+        template: '#tmpl-home',
         data: function() {
             return {
-                username: "",
-                password: "",
+
             }
         },
     }
 
+    const CreateGroup = {
+        template: '#tmpl-creategroup',
+        data: function() {
+            return {
+
+            }
+        },
+    }
+
+    const JoinGroup = {
+        template: '#tmpl-joingroup',
+        data: function() {
+            return {
+
+            }
+        },
+    }
+
+    const Settings = {
+        template: '#tmpl-settings',
+        data: function() {
+            return {
+
+            }
+        }
+    }
+
     const router = new VueRouter({
         routes: [
-            { path: '/', component: Login },
-            { path: '/register', component: Register },
-            { path: '/recover/user', component: RecoverUser },
-            { path: '/recover/pass/', component: RecoverPass },
-        ]
+            { path: '/', component: Home },
+            { path: '/group/create', component: CreateGroup },
+            { path: '/group/join', component: JoinGroup },
+            { path: '/settings', component: Settings },
+        ],
+        linkExactActiveClass: "active-button",
     })
 
     var vm = new Vue({

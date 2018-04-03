@@ -1,26 +1,29 @@
 [[define "app"]]
 [[template "head"]]
         <link rel="stylesheet" type="text/css" href="/css/app/frame.css" />
+        [[template "creategroup"]]
+        [[template "joingroup"]]
+        [[template "home"]]
+        [[template "settings"]]
     </head>
     <body>
-        <div class="app">
+        <div id="app" class="app">
             <div class="title">GroupUp</div>
             <hr />
             <div class="row-fit row header">
                 <div class="column">
-                    <router-link to="/"><button class="dull-button">Home</button></router-link>
-                    <router-link to="/create"><button class="dull-button">Create Group</button></router-link>
-                    <button class="dull-button">Join Group</button>
+                    <router-link to="/" tag="button" class="dull-button">Home</router-link>
+                    <router-link to="/group/create" tag="button" class="dull-button">Create Group</router-link>
+                    <router-link to="/group/join" tag="button" class="dull-button">Join Group</router-link>
                 </div>
                 <div class="text-right column">
-                    <button class="dull-button">Settings</button>
+                    <router-link to="/settings" tag="button" class="dull-button">Settings</router-link>
                     <button class="dull-button">Logout</button>
                 </div>
             </div>
-            <div style="clear: both">
-                <p>Where does this go?</p>
-            </div>
+            <router-view></router-view>
         </div>
     </body>
+    <script type="text/javascript" src="/js/app/app.js"></script>
 </html>
 [[end]]

@@ -51,6 +51,10 @@ button.dull-button:hover {
     background-color: #ccc;
 }
 
+button.active-button {
+    opacity: 0.7;
+}
+
 hr {
     border: 0;
     height: 1px;
