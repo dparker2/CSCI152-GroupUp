@@ -20,7 +20,7 @@ func LoadTemplateForApp(appURL string) (*template.Template, error) {
 func getAllFiles(appURL string) ([]string, error) {
 	appindex := path.Join("./static", appURL, "index.html")
 	globaltemplates, _ := filepath.Glob("./global/static/templates/*.html")
-	apptemplates, _ := filepath.Glob("./static/portal/templates/*.html")
+	apptemplates, _ := filepath.Glob(path.Join("./static", appURL, "templates/*.html"))
 
 	_, err := os.Stat(appindex)
 	if err != nil {

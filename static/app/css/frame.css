@@ -1,0 +1,21 @@
+.app {
+    min-height: 100vh;
+    padding: 10px 20px;
+}
+
+.title {
+    font-size: 36px;
+}
+
+.header {
+    margin-top: 20px;
+}
+
+.header button {
+    margin-right: 5px;
+}
+
+.header .text-right button {
+    margin-right: 0;
+    margin-left: 5px;
+}

@@ -1,8 +1,26 @@
 [[define "app"]]
 [[template "head"]]
+        <link rel="stylesheet" type="text/css" href="/css/app/frame.css" />
     </head>
     <body>
-        <p style="color: black;">Coming soon</p>
+        <div class="app">
+            <div class="title">GroupUp</div>
+            <hr />
+            <div class="row-fit row header">
+                <div class="column">
+                    <router-link to="/"><button class="dull-button">Home</button></router-link>
+                    <router-link to="/create"><button class="dull-button">Create Group</button></router-link>
+                    <button class="dull-button">Join Group</button>
+                </div>
+                <div class="text-right column">
+                    <button class="dull-button">Settings</button>
+                    <button class="dull-button">Logout</button>
+                </div>
+            </div>
+            <div style="clear: both">
+                <p>Where does this go?</p>
+            </div>
+        </div>
     </body>
 </html>
 [[end]]

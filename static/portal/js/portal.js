@@ -24,10 +24,12 @@ const socket = new WebSocket('ws://localhost:3000');
     }
 
     const RecoverUser = {
-        template: `
-        <div id="recoveruser">
-            :D
-        </div>`,
+        template: '#tmpl-recoveruser',
+        data: function() {
+            return {
+                reg_recover_email: "Username",
+            }
+        },
     }
 
     const RecoverPass = {

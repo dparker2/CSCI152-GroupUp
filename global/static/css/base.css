@@ -13,7 +13,7 @@ body * {
 }
 
 div {
-    background-color: #291003;
+    background-color: #0f0601;
 }
 
 input {
@@ -41,6 +41,14 @@ button.contrast-button {
 
 button.contrast-button:active {
     background-color: #00943D;
+}
+
+button.dull-button {
+    background-color: #ddd;
+}
+
+button.dull-button:hover {
+    background-color: #ccc;
 }
 
 hr {
