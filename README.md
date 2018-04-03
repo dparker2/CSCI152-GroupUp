@@ -22,3 +22,15 @@ src="/js/support/vue/dist/vue/js"
 `/src/system` holds all other groupup packages that do not fit into the others.
 
 `/static` holds folders that are named consistent to their app's url routing. These should only contain static (html/css/js) files.
+
+## Environment Configuration
+
+1. Install https://golang.org/
+2. Verify that you can run `go` in console
+3. Choose a location for your $GOPATH (this is where packages from `go get` will be placed)
+4. Make a new environment variable named GOPATH that is equal to this location
+5. In command prompt, run `go get github.com/gorilla/mux`
+6. Within the `/src` folder of your GOPATH, run `git clone github.com/ParkerD559/GroupUp.git`
+7. Rename the `GroupUp` folder to `groupup`
+8. Inside `/groupup`, run `go run main.go`, use `go get` to install all missing dependencies remaining
+
