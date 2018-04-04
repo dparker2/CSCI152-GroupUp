@@ -1,7 +1,7 @@
 package db
 
 import (
-	_ "github.com/go-sql-driver/mysql" // MySQL driver for xorm
+	_ "github.com/go-sql-driver/mysql" // MySQL driver for xormz
 	"github.com/go-xorm/xorm"
 )
 

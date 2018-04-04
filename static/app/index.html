@@ -8,10 +8,9 @@
     </head>
     <body>
         <div id="app" class="app">
-            <div class="title">GroupUp</div>
-            <hr />
             <div class="row-fit row header">
-                <div class="column">
+                <div class="column title"><i class="fi"></i>GroupUp</div>
+                <div class="column hidden">
                     <router-link to="/" tag="button" class="dull-button">Home</router-link>
                     <router-link to="/group/create" tag="button" class="dull-button">Create Group</router-link>
                     <router-link to="/group/join" tag="button" class="dull-button">Join Group</router-link>
@@ -21,6 +20,7 @@
                     <button class="dull-button">Logout</button>
                 </div>
             </div>
+            <hr />
             <router-view></router-view>
         </div>
     </body>

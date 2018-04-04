@@ -1,18 +1,21 @@
 .app {
     min-height: 100vh;
-    padding: 10px 20px;
+    padding: 0 20px 10px 20px;
 }
 
 .title {
     font-size: 36px;
 }
 
-.header {
-    margin-top: 20px;
+.title i::before {
+    content: "\e9b3";
+    font-size: 24px;
+    padding-right: 10px;
+    vertical-align: 10%;
 }
 
 .header button {
-    margin-right: 5px;
+    margin: 13px 5px 13px 0;
 }
 
 .header .text-right button {
