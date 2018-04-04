@@ -1,6 +1,7 @@
 [[define "app"]]
 [[template "head"]]
         <link rel="stylesheet" type="text/css" href="/css/app/frame.css" />
+        <link rel="stylesheet" type="text/css" href="/css/app/menu.css" />
         [[template "creategroup"]]
         [[template "joingroup"]]
         [[template "home"]]
@@ -9,11 +10,15 @@
     <body>
         <div id="app" class="app">
             <div class="row-fit row header">
-                <div class="column title"><i class="fi"></i>GroupUp</div>
-                <div class="column hidden">
-                    <router-link to="/" tag="button" class="dull-button">Home</router-link>
-                    <router-link to="/group/create" tag="button" class="dull-button">Create Group</router-link>
-                    <router-link to="/group/join" tag="button" class="dull-button">Join Group</router-link>
+                <div class="column title"><i v-on:click="showMenu = !showMenu" class="fi"></i>
+                    <div class="menu" v-on:mouseleave="showMenu = false" v-bind:class="{ show: showMenu }">
+                        <ul>
+                            <router-link v-on:click.native="showMenu = false" to="/" tag="li"><i class="home-icon fi"></i>Home</router-link>
+                            <router-link v-on:click.native="showMenu = false" to="/group/create" tag="li"><i class="plus-icon fi"></i>Create Group</router-link>
+                            <router-link v-on:click.native="showMenu = false" to="/group/join" tag="li"><i class="persons-icon fi"></i>Join Group</router-link>
+                        </ul>
+                    </div>
+                    GroupUp
                 </div>
                 <div class="text-right column">
                     <router-link to="/settings" tag="button" class="dull-button">Settings</router-link>

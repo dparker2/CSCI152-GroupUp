@@ -1,0 +1,40 @@
+.menu {
+    position: absolute;
+    background-color: #eee;
+    color: #000;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.2s ease-out;
+}
+
+.menu.show {
+    max-height: 500px;
+    transition: max-height 0.5s ease-out;
+}
+
+.menu ul {
+    margin: 0;
+    padding: 0;
+}
+
+.menu li {
+    list-style-type: none;
+    padding: 10px 20px;
+}
+
+.menu li:hover {
+    background-color: #ccc;
+    cursor: pointer;
+}
+
+.menu .home-icon:before {
+    content: "\e9aa";
+}
+
+.menu .plus-icon:before {
+    content: "\e9be";
+}
+
+.menu .persons-icon:before {
+    content: "\e9bc";
+}

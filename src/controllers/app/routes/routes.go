@@ -28,6 +28,7 @@ func Init(c *controllers.MainController, DB *xorm.Engine) {
 
 func middleware(next http.Handler) http.Handler {
 	log.Println("TODO: Authentication... verify x-app-token header to allow access.")
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		next.ServeHTTP(w, r)
 	})

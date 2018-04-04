@@ -1,3 +1,9 @@
+const socket = WebSocket;
+
+socket.onmessage = function (event) {
+    console.log(event);
+}
+
 (function() {
     const Home = {
         template: '#tmpl-home',
@@ -48,5 +54,8 @@
     var vm = new Vue({
         el: "#app", 
         router,
+        data: {
+            showMenu: false,
+        },
      })
 }());

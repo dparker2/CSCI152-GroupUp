@@ -7,12 +7,18 @@ import (
 	"net/http"
 
 	"github.com/go-xorm/xorm"
+	"github.com/gorilla/websocket"
 )
 
 var db *xorm.Engine
 
 func Init(DB *xorm.Engine) {
 	db = DB
+}
+
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
 }
 
 func App(w http.ResponseWriter, r *http.Request) {
@@ -27,4 +33,12 @@ func App(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl.ExecuteTemplate(w, "app", nil)
+
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	conn.WriteMessage(websocket.TextMessage, []byte("Hello from a websocket!"))
 }

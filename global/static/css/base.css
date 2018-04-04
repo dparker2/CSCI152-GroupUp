@@ -32,6 +32,7 @@ button {
     border-radius: 3px;
     padding: 6px 16px;
     border: 0;
+    cursor: pointer;
 }
 
 button.contrast-button {

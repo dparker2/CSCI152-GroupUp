@@ -11,7 +11,7 @@
     content: "\e9b3";
     font-size: 24px;
     padding-right: 10px;
-    vertical-align: 10%;
+    cursor: pointer;
 }
 
 .header button {
