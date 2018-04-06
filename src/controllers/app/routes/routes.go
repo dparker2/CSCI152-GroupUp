@@ -21,6 +21,7 @@ func Init(c *controllers.MainController, DB *xorm.Engine) {
 	c.RegisterSubRoute("/app",
 		routes.Routes{
 			routes.Route{"App", "GET", "/", AppFileHandler.App},
+			routes.Route{"WebSocket", "GET", "/ws", AppFileHandler.WS},
 		},
 		middleware,
 	)

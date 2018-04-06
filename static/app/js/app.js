@@ -1,10 +1,10 @@
-const socket = WebSocket;
-
-socket.onmessage = function (event) {
-    console.log(event);
-}
+const socket = new WebSocket("ws://localhost:3000/app/ws");
 
 (function() {
+    socket.onmessage = function (event) {
+        console.log(event.data);
+    }
+
     const Home = {
         template: '#tmpl-home',
         data: function() {
@@ -36,9 +36,26 @@ socket.onmessage = function (event) {
         template: '#tmpl-settings',
         data: function() {
             return {
+                message: '',
+            }
+        },
+        methods: {
+            sendmsg: function() {
+                socket.send(this.message);
+            }
+        },
+    }
+
+    const Group = {
+        template: '#tmpl-group',
+        data: function() {
+            return {
 
             }
-        }
+        },
+        methods: {
+
+        },
     }
 
     const router = new VueRouter({
@@ -47,6 +64,7 @@ socket.onmessage = function (event) {
             { path: '/group/create', component: CreateGroup },
             { path: '/group/join', component: JoinGroup },
             { path: '/settings', component: Settings },
+            { path: '/group/', component: Group }
         ],
         linkExactActiveClass: "active-button",
     })
