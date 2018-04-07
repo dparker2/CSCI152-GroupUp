@@ -50,11 +50,33 @@ const socket = new WebSocket("ws://localhost:3000/app/ws");
         template: '#tmpl-group',
         data: function() {
             return {
-
+                drawing: false
             }
         },
         methods: {
-
+            startDraw: function(e) {
+                if (!this.drawing) {
+                    this.drawing = true;
+                    var x = e.x - e.target.offsetLeft;
+                    var y = e.y - e.target.offsetTop;
+                    whiteboardCtx.moveTo(x, y);
+                    whiteboardCtx.beginPath();
+                }
+            },
+            draw: function(e) {
+                if (this.drawing) {
+                    var x = e.x - e.target.offsetLeft;
+                    var y = e.y - e.target.offsetTop;
+                    whiteboardCtx.lineTo(x, y);
+                    whiteboardCtx.stroke();
+                }
+            },
+            endDraw: function() {
+                if (this.drawing) {
+                    this.drawing = false;
+                    whiteboardCtx.closePath();
+                }
+            },
         },
     }
 
@@ -76,4 +98,6 @@ const socket = new WebSocket("ws://localhost:3000/app/ws");
             showMenu: false,
         },
      })
+
+    whiteboardCtx = document.getElementById('whiteboard').getContext('2d');
 }());

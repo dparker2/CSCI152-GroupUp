@@ -1,3 +1,49 @@
 .group-frame {
+    height: calc(100% - 57px);
+    padding-top: 10px;
+}
+
+.group-frame > .row {
     height: 100%;
+}
+
+.group-name {
+    position: fixed;
+    top: 7px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 500px;
+    text-align: center;
+    font-size: 28px;
+}
+
+.chat-box {
+    background-color: #111;
+    padding: 10px 20px;
+    overflow-y: auto;
+
+}
+
+.study-mode {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    margin: 0 10px;
+}
+
+.study-mode canvas {
+    background-color: #fff;
+}
+
+span.chat-username {
+    padding-right: 10px;
+}
+
+span.chat-username:after {
+    content: ':';
+}
+
+.user-list {
+    width: auto;
 }
