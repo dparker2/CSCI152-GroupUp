@@ -30,7 +30,7 @@ src="/js/support/vue/dist/vue/js"
 3. Choose a location for your $GOPATH (this is where packages from `go get` will be placed)
 4. Make a new environment variable named GOPATH that is equal to this location
 5. In command prompt, run `go get github.com/gorilla/mux`
-6. Within the `/src` folder of your GOPATH, run `git clone github.com/ParkerD559/GroupUp.git`
+6. Within the `/src` folder of your GOPATH, run `git clone https://github.com/ParkerD559/GroupUp.git`
 7. Rename the `GroupUp` folder to `groupup`
 8. Inside `/groupup`, run `go run main.go`, use `go get` to install all missing dependencies remaining
 
