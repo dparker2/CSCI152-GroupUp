@@ -1,10 +1,13 @@
 [[define "group"]]
 <script type="text/x-template" id="tmpl-group">
     <div class="group-frame">
-        <div class="group-name">ExampleGroup#1243</div>
+        <div class="group-name">{{ $route.params.groupid }}</div>
         <div class="row">
-            <div class="chat-box size-5of12">
-                <p><span class="chat-username">User1</span>This is a message!</p>
+            <div class="chat-wrapper size-5of12">
+                <div class="chat-box">
+                    <!--<p v-for="chat in chats"><span class="chat-username">{{ chat.username }}</span>{{ chat.message }}</p>-->
+                </div>
+                <input v-on:keyup.enter="sendChat" v-model="inputMessage" placeholder="Enter a message..." />
             </div>
             <div class="study-mode size-5of12">
                 <canvas width="2000px" height="1000px" id="whiteboard" v-on:mousedown="startDraw" v-on:mousemove="draw" v-on:mouseup="endDraw"></canvas>

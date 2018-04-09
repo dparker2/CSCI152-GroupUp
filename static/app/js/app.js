@@ -1,8 +1,12 @@
-const socket = new WebSocket("ws://localhost:3000/app/ws");
-
 (function() {
+    const socket = new WebSocket("ws://" + document.location.host + "/app/ws");
+
     socket.onmessage = function (event) {
         console.log(event.data);
+        wsData = JSON.parse(event.data)
+        if (wsData.code == "CHAT") {
+            $('.chat-box').append("<p>" + wsData.username + ": " + wsData.chat + "</p>");
+        }
     }
 
     const Home = {
@@ -60,7 +64,8 @@ const socket = new WebSocket("ws://localhost:3000/app/ws");
         template: '#tmpl-group',
         data: function() {
             return {
-                drawing: false
+                drawing: false,
+                inputMessage: '',
             }
         },
         methods: {
@@ -75,6 +80,7 @@ const socket = new WebSocket("ws://localhost:3000/app/ws");
             },
             draw: function(e) {
                 if (this.drawing) {
+                    console.log(e);
                     var x = e.x - e.target.offsetLeft;
                     var y = e.y - e.target.offsetTop;
                     whiteboardCtx.lineTo(x, y);
@@ -87,7 +93,33 @@ const socket = new WebSocket("ws://localhost:3000/app/ws");
                     whiteboardCtx.closePath();
                 }
             },
+            sendChat: function() {
+                socket.send(JSON.stringify({
+                    code: "CHAT",
+                    groupid: this.$route.params.groupid,
+                    chat: this.inputMessage,
+                    username: this.$route.params.username,
+                }));
+                this.inputMessage = '';
+            },
         },
+        created: function() {
+            var me = this;
+            // Need to send after socket has connected
+            function send_join() {
+                socket.send(JSON.stringify({
+                    code: "JOIN GROUP",
+                    groupid: me.$route.params.groupid,
+                    username: me.$route.params.username,
+                }));
+            }
+            // Make send_join() send after socket is opened, or now if it already is
+            if (socket.readyState !== 1) {
+                socket.onopen = send_join;
+            } else {
+                send_join();
+            }
+        }
     }
 
     const router = new VueRouter({
@@ -96,7 +128,7 @@ const socket = new WebSocket("ws://localhost:3000/app/ws");
             { path: '/group/create', component: CreateGroup },
             { path: '/group/join', component: JoinGroup },
             { path: '/settings', component: Settings },
-            { path: '/group/', component: Group }
+            { path: '/group/:groupid/:username', component: Group }
         ],
         linkExactActiveClass: "active-button",
     })
@@ -108,6 +140,7 @@ const socket = new WebSocket("ws://localhost:3000/app/ws");
             showMenu: false,
         },
      })
-
-    whiteboardCtx = document.getElementById('whiteboard').getContext('2d');
 }());
+
+
+whiteboardCtx = document.getElementById('whiteboard').getContext('2d');
