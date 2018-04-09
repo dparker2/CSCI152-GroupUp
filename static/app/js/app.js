@@ -18,18 +18,28 @@ const socket = new WebSocket("ws://localhost:3000/app/ws");
         template: '#tmpl-creategroup',
         data: function() {
             return {
-
+                createGroupName: '',
             }
         },
+        methods: {
+            createGroup: function() {
+                alert(this.createGroupName);
+            }
+        }
     }
 
     const JoinGroup = {
         template: '#tmpl-joingroup',
         data: function() {
             return {
-
+                joinGroupName: '',
             }
         },
+        methods: {
+            joinGroup: function() {
+                alert(this.joinGroupName);
+            }
+        }
     }
 
     const Settings = {
