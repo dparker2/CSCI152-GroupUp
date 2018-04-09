@@ -16,6 +16,10 @@
     margin-bottom: 20px;
 }
 
+.portal-support {
+    text-align: right;
+}
+
 #portal * {
     margin: 10px auto 20px auto;
 }

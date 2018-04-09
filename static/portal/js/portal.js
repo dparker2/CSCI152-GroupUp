@@ -37,12 +37,41 @@
         </div>`,
     }
 
+    const About = {
+        template: '#templ-about'
+    }
+
+    const Help = {
+        template: '#templ-help'
+    }
+
+    const FAQ = {
+        template: ''
+    }
+
+    const Contacts = {
+        template: ''
+    }
+
+    const Privacy = {
+        template: ''
+    }
+
+    const News = {
+        template: ''
+    }
+
     const router = new VueRouter({
         routes: [
             { path: '/', component: Login },
             { path: '/register', component: Register },
             { path: '/recover/user', component: RecoverUser },
             { path: '/recover/pass/', component: RecoverPass },
+            { path: '/about', component: About },
+            { path: '/help', component: Help },
+            { path: '/contacts', componenet: Contacts },
+            { path: '/privacy', component: Privacy },
+            { path: '/news', component: News },
         ]
     })
 
