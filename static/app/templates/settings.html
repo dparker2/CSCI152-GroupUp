@@ -1,7 +1,20 @@
 [[define "settings"]]
 <script type="text/x-template" id="tmpl-settings">
     <div>
-        <input v-model="message"></input><button v-on:click="sendmsg">Send!</button>
+        <!--<input v-model="message"></input><button v-on:click="sendmsg">Send!</button>-->
+        <div id="settings">
+            <div class="option-list">
+                <button class="list-button">User</button>
+                <button class="list-button">App Settings</button>
+                <button class="list-button">Poof</button>
+            </div>
+            <div class="content">
+                <div class="settings-title"> User Settings </div>
+                <div class="settings-user">
+                    username <div class="user-info">Seymore Butts</div>
+                </div>
+            </div>
+        </div> 
     </div>
 </script>
 [[end]]

@@ -20,7 +20,7 @@
             }
         },
     }
-
+    
     const RecoverUser = {
         template: '#tmpl-recoveruser',
         data: function() {
