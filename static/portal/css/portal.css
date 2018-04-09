@@ -5,7 +5,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 600px;
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px;
     box-shadow: 0 5px 20px 1px #888888
 }
@@ -18,10 +18,15 @@
 
 .portal-support {
     text-align: right;
+    padding: 0px 0px 0px 0px;
+}
+
+.portal-support a {
+    padding: 0px 5px 0px 0px;
 }
 
 #portal * {
-    margin: 10px auto 20px auto;
+    margin: 10px auto 2px auto;
 }
 
 #portal a {
@@ -30,5 +35,5 @@
 }
 
 #portal .links {
-    margin-top: -18px;
+    margin-top: 5px;
 }
