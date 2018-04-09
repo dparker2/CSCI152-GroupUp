@@ -63,3 +63,20 @@
     width: 15%;
     margin: 10px;
 }
+
+.home .friendslist .friends {
+    margin: 5px;
+    background: #1d1f21;
+    line-height: 24px;
+}
+
+.home .friendslist .friends i {
+    margin: 0px 5px;
+    float: right;
+    line-height: 24px;
+    cursor: pointer;
+}
+
+.home .friendslist .friends i:hover {
+    background-color:rgba(153, 153, 153, 0.137);
+}
