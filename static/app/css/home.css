@@ -1,8 +1,8 @@
 .home {
     display: flex;
-    height: 90vh;
     flex-direction: row; 
     justify-content: space-between;
+    height: 90vh;
 }
 
 .home .groups {
@@ -10,6 +10,7 @@
     flex-direction: column;
     width: 50%;
 }
+
 .home ul {
     color:white;
 }
@@ -17,39 +18,48 @@
 .home .recentgroups {
     display:flex;
     flex-direction: column;
+    flex-grow: 1;
     color:rgb(255, 255, 255);
     background-color:#1d1f21;
     margin: 5px 0px 0px 0px;
     padding: 10px 10px 0px 10px;
-    flex-grow: 1;
+    
 }
 
 .home .favoritegroups {
     display:flex;
     flex-direction: column;
+    flex-grow: 1; 
     color:white;
     background-color:#1d1f21;
-    flex-grow: 1;
     margin: 5px 0px 0px 0px;
     padding: 10px 10px 0px 10px;
 }
 
 .home .recentgroups > div {
-    background-color: black;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    background-color: rgba(153, 153, 153, 0.137);
     margin: 10px;
     padding: 10px;
+    line-height: 31px;
 }
 
 .home .favoritegroups > div {
-    background-color: black;
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    background-color: rgba(153, 153, 153, 0.137);
     margin: 10px;
     padding: 10px;
+    line-height: 31px;
 }
 
 .home .friendslist {
     color:white;
     background-color:#1d1f21;
-    padding: 10px 15px;
+    padding: 10px 15px; 
     width: 15%;
     margin: 10px;
 }
