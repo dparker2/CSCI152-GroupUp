@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"groupup/src/models"
 	"groupup/src/system/router"
 
 	"github.com/go-xorm/xorm"
@@ -33,6 +34,8 @@ func (s *Server) Init(port string, db *xorm.Engine) {
 // Start the server
 func (s *Server) Start() {
 	log.Println("Starting server on port" + s.port)
+
+	models.Init()
 
 	r := router.NewRouter()
 
