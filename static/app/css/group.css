@@ -18,11 +18,30 @@
     font-size: 28px;
 }
 
-.chat-box {
+.chat-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
     background-color: #111;
-    padding: 10px 20px;
-    overflow-y: auto;
+}
 
+.chat-wrapper input {
+    background-color: #222;
+    border-style: none;
+    box-shadow: none;
+    border-radius: 5px;
+    border: 1px solid #555;
+    color: #eee;
+}
+
+.chat-box {
+    background-color: inherit;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.chat-box p {
+    margin: 0;
 }
 
 .study-mode {
