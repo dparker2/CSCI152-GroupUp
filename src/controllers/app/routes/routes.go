@@ -7,17 +7,11 @@ import (
 	"groupup/pkg/types/routes"
 	"groupup/src/controllers"
 	AppFileHandler "groupup/src/controllers/app/app"
-
-	"github.com/go-xorm/xorm"
 )
 
-var db *xorm.Engine
 var subrs map[string]routes.SubRoutePackage
 
-func Init(c *controllers.MainController, DB *xorm.Engine) {
-	db = DB
-	//StatusHandler.Init(DB)
-
+func Init(c *controllers.MainController) {
 	c.RegisterSubRoute("/app",
 		routes.Routes{
 			routes.Route{"App", "GET", "/", AppFileHandler.App},

@@ -4,8 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-xorm/xorm"
-
 	"groupup/pkg/types/routes"
 	PortalHandler "groupup/src/controllers/portal"
 )
@@ -17,9 +15,7 @@ func Middleware(next http.Handler) http.Handler {
 	})
 }
 
-func GetRoutes(db *xorm.Engine) (rts routes.Routes) {
-	PortalHandler.Init(db)
-
+func GetRoutes() (rts routes.Routes) {
 	rts = routes.Routes{
 		routes.Route{"Home", "GET", "/", PortalHandler.Index},
 		routes.Route{"Portal", "GET", "/portal{extras:.*}", PortalHandler.Portal},
