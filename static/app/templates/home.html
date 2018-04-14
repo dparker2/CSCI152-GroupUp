@@ -5,19 +5,19 @@
             <div class="recentgroups">
                 <h2> Recent Groups </h2>
                 <hr>
-                <div> 
-                    CSCI150_0128 <button> Join </button>
+                <div class="groupObject"> 
+                    CSCI150_0128 <router-link class="joinbtn" to="/group/CSCI150_0128/current">Join</router-link> 
                 </div>
-                <div> 
-                    CSCI152_2801 <button> Join </button>
+                <div class="groupObject"> 
+                    CSCI152_0111 <router-link class="joinbtn" to="/group/CSCI152_0111/username">Join</router-link> 
                 </div>
             </div>
 
             <div class="favoritegroups">
                 <h2> Favorite Groups </h2>
                 <hr>
-                <div> 
-                    CSCI152_2801 <button> Join </button>
+                <div class="groupObject"> 
+                    CSCI150_0128 <router-link class="joinbtn" to="/group/CSCI150_0128/username">Join</router-link> 
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
         <div class="friendslist">
             <h2 style="text-align:center"> Friends List</h2>
             <form>
-                <input type="text" placeholder="Search" style="margin-bottom:10px">
+                <input class="friendSearch" type="text" placeholder="Search">
             </form>
             <div class="friends">
                 Dave Parker <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
@@ -43,6 +43,7 @@
                 Fuller Le <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
             </div>     
         </div>
+        
     </div>
 </script>
 [[end]]

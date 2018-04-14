@@ -9,6 +9,14 @@
     display: flex;
     flex-direction: column;
     width: 50%;
+    height: 90vh;
+    min-width: 250px;
+}
+.home .groups .joinbtn {
+    background-color: white;
+    color: black;
+    text-align:center;
+    width: 60px;
 }
 
 .home ul {
@@ -21,6 +29,8 @@
     flex-grow: 1;
     color:rgb(255, 255, 255);
     background-color:#1d1f21;
+    height: 50%;
+    max-width: 1000px;
     margin: 5px 0px 0px 0px;
     padding: 10px 10px 0px 10px;
     
@@ -29,24 +39,15 @@
 .home .favoritegroups {
     display:flex;
     flex-direction: column;
-    flex-grow: 1; 
+    flex-grow: 2;
+    height: 50%;
     color:white;
     background-color:#1d1f21;
     margin: 5px 0px 0px 0px;
     padding: 10px 10px 0px 10px;
 }
 
-.home .recentgroups > div {
-    display: flex;
-    flex-direction: row;
-    justify-content:space-between;
-    background-color: rgba(153, 153, 153, 0.137);
-    margin: 10px;
-    padding: 10px;
-    line-height: 31px;
-}
-
-.home .favoritegroups > div {
+.home .groupObject {
     display: flex;
     flex-direction: row;
     justify-content:space-between;
@@ -61,7 +62,12 @@
     background-color:#1d1f21;
     padding: 10px 15px; 
     width: 15%;
+    min-width: 250px;
     margin: 10px;
+}
+
+.home .friendslist .friendSearch {
+    margin-bottom: 10px;
 }
 
 .home .friendslist .friends {
@@ -77,6 +83,6 @@
     cursor: pointer;
 }
 
-.home .friendslist .friends i:hover {
+.home .friendslist .friends:hover {
     background-color:rgba(153, 153, 153, 0.137);
 }
