@@ -52,6 +52,7 @@ func WS(w http.ResponseWriter, r *http.Request) {
 		log.Println("JSON:")
 		log.Println(msg)
 
+		// TODO make a map[string]function where ["CODE"] => function() { dostuff for code }
 		if msg.Code == "JOIN GROUP" {
 			if !models.GroupExists(msg.Groupid) {
 				models.AddGroup(msg.Groupid)

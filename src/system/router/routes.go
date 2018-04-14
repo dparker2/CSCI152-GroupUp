@@ -19,6 +19,7 @@ func GetRoutes() (rts routes.Routes) {
 	rts = routes.Routes{
 		routes.Route{"Home", "GET", "/", PortalHandler.Index},
 		routes.Route{"Portal", "GET", "/portal{extras:.*}", PortalHandler.Portal},
+		routes.Route{"Login", "POST", "/portal", PortalHandler.Login},
 	}
 
 	return

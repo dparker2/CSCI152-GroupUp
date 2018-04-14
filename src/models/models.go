@@ -6,6 +6,8 @@ import (
 	DB "groupup/src/system/db"
 )
 
+// TODO: Separate files for users/groups/etc
+
 type user struct {
 	Name           string
 	WsConn         *websocket.Conn
