@@ -19,4 +19,3 @@ func Encrypt(password string) (string, error) {
 	str, err := bcrypt.GenerateFromPassword([]byte(password), salt)
 	return string(str), err
 }
-zz

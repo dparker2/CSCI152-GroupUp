@@ -6,7 +6,6 @@ import (
 	"os"
 	"time"
 
-	"groupup/src/models"
 	"groupup/src/system/router"
 
 	"github.com/gorilla/handlers"
@@ -31,8 +30,6 @@ func (s *Server) Init(port string) {
 // Start the server
 func (s *Server) Start() {
 	log.Println("Starting server on port" + s.port)
-
-	models.Init()
 
 	r := router.NewRouter()
 
