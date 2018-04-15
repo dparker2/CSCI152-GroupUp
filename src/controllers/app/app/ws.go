@@ -28,7 +28,20 @@ type wsMessage struct {
 }
 
 func WS(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("token")
+	if err != nil {
+		return
+	}
+
+	defer func(token string) { // When this returns the connection is no longer there, so remove the user.
+		log.Println("REMOVING" + token)
+		if models.UserExists(token) {
+			//models.RemoveUser(token) TODO: Set online to false instead
+		}
+	}(cookie.Value)
+
 	conn, err := upgrader.Upgrade(w, r, nil)
+
 	if err != nil {
 		log.Println(err)
 		return

@@ -1,12 +1,11 @@
-package tests
+package db
 
 import (
-	"groupup/src/system/db"
 	"testing"
 )
 
 func TestConnect(t *testing.T) {
-	DB, err := db.Connect()
+	DB, err := Connect()
 	if err != nil {
 		t.Error(err.Error())
 	}

@@ -15,7 +15,11 @@
                 }, { // Config
                     emulateJSON: true
                 }).then(function(response) { // Success
-                    console.log(response); 
+                    console.log(response);
+                    if (response.data) {
+                        console.log(response.data);
+                        window.location.href = response.data["redirect-path"];
+                    }
                 }, function(response) { // Error
                     console.log(response); 
                 });
