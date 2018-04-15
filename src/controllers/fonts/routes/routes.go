@@ -6,17 +6,11 @@ import (
 	"groupup/pkg/types/routes"
 	"groupup/src/controllers"
 	FontsFileHandler "groupup/src/controllers/fonts/file"
-
-	"github.com/go-xorm/xorm"
 )
 
-var db *xorm.Engine
 var subrs map[string]routes.SubRoutePackage
 
-func Init(c *controllers.MainController, DB *xorm.Engine) {
-	db = DB
-	//StatusHandler.Init(DB)
-
+func Init(c *controllers.MainController) {
 	c.RegisterSubRoute("/fonts",
 		routes.Routes{
 			routes.Route{"globalfonts", "GET", "/{file:.*}", FontsFileHandler.Global},

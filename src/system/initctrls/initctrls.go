@@ -6,16 +6,13 @@ import (
 	cssroutes "groupup/src/controllers/css/routes"
 	fontroutes "groupup/src/controllers/fonts/routes"
 	jsroutes "groupup/src/controllers/js/routes"
-	v1routes "groupup/src/controllers/v1/routes"
-
-	"github.com/go-xorm/xorm"
 )
 
 // InitCtrls initializes all other controllers
-func InitCtrls(c *controllers.MainController, DB *xorm.Engine) {
-	v1routes.Init(c, DB)
-	cssroutes.Init(c, DB)
-	jsroutes.Init(c, DB)
-	fontroutes.Init(c, DB)
-	approutes.Init(c, DB)
+func InitCtrls(c *controllers.MainController) {
+	//v1routes.Init(c)
+	cssroutes.Init(c)
+	jsroutes.Init(c)
+	fontroutes.Init(c)
+	approutes.Init(c)
 }

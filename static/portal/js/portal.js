@@ -7,6 +7,20 @@
                 password: "",
             }
         },
+        methods: {
+            login: function() {
+                this.$http.post('/portal', { // Data
+                    username: this.username,
+                    password: this.password
+                }, { // Config
+                    emulateJSON: true
+                }).then(function(response) { // Success
+                    console.log(response); 
+                }, function(response) { // Error
+                    console.log(response); 
+                });
+            }
+        }
     }
 
     const Register = {

@@ -1,9 +1,9 @@
 package status
 
-import "github.com/go-xorm/xorm"
+import "database/sql"
 
-var db *xorm.Engine
+var db *sql.DB
 
-func Init(DB *xorm.Engine) {
+func Init(DB *sql.DB) {
 	db = DB
 }

@@ -6,17 +6,11 @@ import (
 	"groupup/pkg/types/routes"
 	"groupup/src/controllers"
 	JSFileHandler "groupup/src/controllers/js/file"
-
-	"github.com/go-xorm/xorm"
 )
 
-var db *xorm.Engine
 var subrs map[string]routes.SubRoutePackage
 
-func Init(c *controllers.MainController, DB *xorm.Engine) {
-	db = DB
-	//StatusHandler.Init(DB)
-
+func Init(c *controllers.MainController) {
 	c.RegisterSubRoute("/js",
 		routes.Routes{
 			routes.Route{"globaljs", "GET", "/global/{file:.*}", JSFileHandler.Global},
