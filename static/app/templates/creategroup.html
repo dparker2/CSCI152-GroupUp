@@ -1,7 +1,12 @@
 [[define "creategroup"]]
 <script type="text/x-template" id="tmpl-creategroup">
     <div>
-            Create
+        <div class="createGroupBar">
+            <div id="createTitle">
+                Create A Group!
+            </div>
+            <input v-on:keyup.enter="createGroup" id="createBar" v-model="createGroupName" placeholder="Group Name" />
+        </div>
     </div>
 </script>
 [[end]]

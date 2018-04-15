@@ -1,7 +1,14 @@
 [[define "joingroup"]]
 <script type="text/x-template" id="tmpl-joingroup">
     <div>
-        Join
+        <div class="joinGroupBar">
+            <div id="joinTitle">
+                Join A Group!
+            </div>
+            <input v-on:keyup.enter="joinGroup" id="joinBar" v-model="joinGroupName" placeholder="GroupName_####" />
+        </div>
     </div>
 </script>
 [[end]]
+
+
