@@ -5,15 +5,7 @@ import (
 	TemplateLoader "groupup/src/system/templates"
 	"log"
 	"net/http"
-
-	"github.com/go-xorm/xorm"
 )
-
-var db *xorm.Engine
-
-func Init(DB *xorm.Engine) {
-	db = DB
-}
 
 func App(w http.ResponseWriter, r *http.Request) {
 	//vars := mux.Vars(r)

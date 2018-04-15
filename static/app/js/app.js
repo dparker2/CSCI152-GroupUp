@@ -13,7 +13,7 @@
         template: '#tmpl-home',
         data: function() {
             return {
-
+                
             }
         },
     }

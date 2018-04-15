@@ -9,14 +9,12 @@ import (
 	"groupup/src/models"
 	"groupup/src/system/router"
 
-	"github.com/go-xorm/xorm"
 	"github.com/gorilla/handlers"
 )
 
 // Server stores port and database
 type Server struct {
 	port string
-	Db   *xorm.Engine
 }
 
 // NewServer returns a new instance of Server
@@ -25,10 +23,9 @@ func NewServer() Server {
 }
 
 // Init all vals
-func (s *Server) Init(port string, db *xorm.Engine) {
+func (s *Server) Init(port string) {
 	log.Println("Initializing server...")
 	s.port = ":" + port
-	s.Db = db
 }
 
 // Start the server
@@ -39,7 +36,7 @@ func (s *Server) Start() {
 
 	r := router.NewRouter()
 
-	r.Init(s.Db)
+	r.Init()
 
 	handler := handlers.LoggingHandler(os.Stdout, handlers.CORS(
 		handlers.AllowedOrigins([]string{"*"}),

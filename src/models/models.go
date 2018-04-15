@@ -2,11 +2,18 @@ package models
 
 import (
 	"github.com/gorilla/websocket"
+
+	DB "groupup/src/system/db"
 )
 
+// TODO: Separate files for users/groups/etc
+
 type user struct {
-	Name   string
-	WsConn *websocket.Conn
+	Name           string
+	WsConn         *websocket.Conn
+	CurrentGroups  []*group
+	FavoriteGroups []*group
+	RecentGroups   []*group
 }
 
 type group struct {
@@ -18,6 +25,12 @@ var groups map[string]*group
 
 func Init() {
 	groups = make(map[string]*group)
+
+	db, err := DB.Connect()
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func GroupExists(name string) bool {
