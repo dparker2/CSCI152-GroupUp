@@ -3,7 +3,7 @@ package models
 import "github.com/gorilla/websocket"
 
 type group struct {
-	Users []user
+	Users []*user
 	Name  string
 }
 
@@ -23,20 +23,27 @@ func AddGroup(name string) {
 	}
 }
 
-func AddUserToGroup(name string, conn *websocket.Conn, grpName string) {
-	newUser := user{
-		Name:   name,
-		WsConn: conn,
+func AddUserToGroup(token string, grpName string) {
+	if !GroupExists(grpName) {
+		AddGroup(grpName)
 	}
-	currentUsers := groups[grpName].Users
-	users := append(currentUsers, newUser)
-	groups[grpName].Users = users
+	if UserExists(token) {
+		currentUsers := groups[grpName].Users
+		newUser := users[token]
+		users := append(currentUsers, newUser)
+		groups[grpName].Users = users
+	}
 }
 
 func GetConnectionsInGroup(grpName string) (conn []*websocket.Conn) {
+	if !GroupExists(grpName) {
+		return nil
+	}
 	users := groups[grpName].Users
 	for _, user := range users {
-		conn = append(conn, user.WsConn)
+		if user.WsConn != nil {
+			conn = append(conn, user.WsConn)
+		}
 	}
 	return
 }

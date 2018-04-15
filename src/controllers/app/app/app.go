@@ -7,6 +7,10 @@ import (
 	"net/http"
 )
 
+func init() {
+	setupAPI()
+}
+
 func App(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.URL.Path)
 
