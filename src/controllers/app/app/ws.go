@@ -2,7 +2,6 @@ package app
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -20,64 +19,52 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-type wsMessage struct {
-	Code     string `json:"code"`
-	Groupid  string `json:"groupid"`
-	Chat     string `json:"chat"`
-	Username string `json:"username"`
-}
-
 func WS(w http.ResponseWriter, r *http.Request) {
+	// Get the token cookie
 	cookie, err := r.Cookie("token")
 	if err != nil {
 		return
 	}
+	token := cookie.Value
 
-	defer func(token string) { // When this returns the connection is no longer there, so remove the user.
-		log.Println("REMOVING" + token)
-		if models.UserExists(token) {
-			//models.RemoveUser(token) TODO: Set online to false instead
-		}
-	}(cookie.Value)
+	// Set user offline after disconnection
+	defer models.SetUserStatus(token, 0)
 
+	// Upgrade the connection
 	conn, err := upgrader.Upgrade(w, r, nil)
-
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
+	// Set user online
+	models.SetUserStatus(token, 1)
+	models.SetUserConn(token, conn)
+
 	for {
 		messageType, p, err := conn.ReadMessage()
-		log.Println(messageType)
-		log.Println(p)
 		if err != nil {
 			log.Println(err)
 			return
 		}
 
+		// Decode JSON received, wsMessage defines the supported parameters
 		var msg wsMessage
 		err = json.Unmarshal(p, &msg)
 		if err != nil {
 			panic(err)
 		}
 
-		log.Println("JSON:")
-		log.Println(msg)
-
-		// TODO make a map[string]function where ["CODE"] => function() { dostuff for code }
-		if msg.Code == "JOIN GROUP" {
-			if !models.GroupExists(msg.Groupid) {
-				models.AddGroup(msg.Groupid)
-			}
-
-			models.AddUserToGroup(msg.Username, conn, msg.Groupid)
-		} else if msg.Code == "CHAT" {
-			for _, c := range models.GetConnectionsInGroup(msg.Groupid) {
-				c.WriteMessage(messageType, p)
+		// Call the function the code corresponds to the received code
+		if f, exists := wsAPI[msg.Code]; exists {
+			err := f(wsAPIstruct{
+				UserToken: token,
+				MsgType:   messageType,
+				Msg:       &msg,
+			})
+			if err != nil {
+				log.Println(err.Error())
 			}
 		}
-
-		fmt.Printf("%+v", p)
 	}
 }

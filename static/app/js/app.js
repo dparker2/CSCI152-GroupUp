@@ -4,7 +4,7 @@
     socket.onmessage = function (event) {
         console.log(event.data);
         wsData = JSON.parse(event.data)
-        if (wsData.code == "CHAT") {
+        if (wsData.code == "group/chat") {
             $('.chat-box').append("<p>" + wsData.username + ": " + wsData.chat + "</p>");
         }
     }
@@ -85,10 +85,9 @@
             },
             sendChat: function() {
                 socket.send(JSON.stringify({
-                    code: "CHAT",
+                    code: "group/chat",
                     groupid: this.$route.params.groupid,
                     chat: this.inputMessage,
-                    username: this.$route.params.username,
                 }));
                 this.inputMessage = '';
             },
@@ -98,9 +97,8 @@
             // Need to send after socket has connected
             function send_join() {
                 socket.send(JSON.stringify({
-                    code: "JOIN GROUP",
+                    code: "group/join",
                     groupid: me.$route.params.groupid,
-                    username: me.$route.params.username,
                 }));
             }
             // Make send_join() send after socket is opened, or now if it already is
@@ -118,7 +116,7 @@
             { path: '/group/create', component: CreateGroup },
             { path: '/group/join', component: JoinGroup },
             { path: '/settings', component: Settings },
-            { path: '/group/:groupid/:username', component: Group }
+            { path: '/group/:groupid/', component: Group }
         ],
         linkExactActiveClass: "active-button",
     })
