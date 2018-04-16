@@ -5,8 +5,6 @@ import (
 
 	"groupup/src/system/serv"
 
-	DB "groupup/src/system/db"
-
 	"github.com/joho/godotenv"
 )
 
@@ -26,13 +24,8 @@ func init() {
 }
 
 func main() {
-	db, err := DB.Connect()
-	if err != nil {
-		panic(err)
-	}
 
 	s := serv.NewServer()
-
-	s.Init(port, db)
+	s.Init(port)
 	s.Start()
 }
