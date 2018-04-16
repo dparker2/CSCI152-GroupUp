@@ -1,0 +1,85 @@
+
+#settings{
+    width: 1000px;
+    height: 500px;
+    border-radius: 10px;
+    margin: auto;
+    margin-top: 50px;
+    border-color: white;
+    box-shadow: grey;
+}
+hr{
+    border-top: 1px solid #8c8b8b;
+}
+p{
+    margin-right: 40px;
+    float: left;
+    padding-left: 30px;
+    width: 100px;
+    text-align: right;
+}
+
+.option-list{
+    float: left;
+    background-color:transparent;
+    width: 170px;
+    height: 200px;
+    margin-top: 50px;
+}
+
+.list-button{
+    background-color: transparent;
+    color: #758096;
+    width: 170px;
+    height: 50px;
+    text-align: center;
+    padding-top: 5px;
+    border-color: whilte;
+    border-right:none;
+    font-weight: 100px;
+}
+
+.list-button:hover{
+    background-color: #1d1f21;
+    color: #fff;
+}
+
+.list-button:active{
+    background-color: #23719b;
+    color: #fff;
+}
+
+.settings-content{
+    float:right;
+    background-color: #1d1f21;
+    width: 830px;
+    height: 500px;
+}
+.settings-title{
+    width: 830px;
+    height: 50px;
+    background-color: #3f495b;
+    line-height: 47px;
+    padding-left: 20px;
+    font-size: 20px;
+    color: #cbd8ef;
+    border-radius: 10px 10px 0 0;
+
+}
+.settings-user{
+    height: 50px;
+    line-height: 50px;
+    margin-top: 20px;
+    padding-left: 50px;
+    background-color: transparent;
+}
+.settigns-user, .first-item{
+    margin-top: 40px;
+}
+.user-info{
+    display: flex;
+    background-color: #303338;
+    width: 400px;
+    padding-left: 20px;
+    border-radius: 5px;
+}
