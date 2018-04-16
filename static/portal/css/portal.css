@@ -37,43 +37,13 @@
     margin-top: 5px;
 }
 
-.register-title1{
+.register-title{
     text-align: center;
     font-size: 25px;
     margin-bottom: 5px;
 }
 
-.register-title2{
-    text-align: center;
-    font-size: 25px;
-    margin-bottom: 5px;
-}
-
-.row1{
-    text-align: center;
-    padding: 0px 15px;
-    display: inline-flex;
-}
-
-.row2{
-    text-align: center;
-    padding: 0px 15px;
-    display: inline-flex;
-}
-
-.row3{
-    text-align: center;
-    padding: 0px 15px;
-    display: inline-flex;
-}
-
-.row4{
-    text-align: center;
-    padding: 0px 15px;
-    display: inline-flex;
-}
-
-.row5{
+.registerrow{
     text-align: center;
     padding: 0px 15px;
     display: inline-flex;
