@@ -37,10 +37,12 @@
     }
 
     const RecoverPass = {
-        template: `
-        <div id="recoverpass">
-            D:
-        </div>`,
+        template: '#tmpl-recoverpass',
+        data: function() {
+            return {
+                reg_recover_mail: "Email",
+            }
+        },
     }
 
     const About = {
@@ -72,7 +74,7 @@
             { path: '/', component: Login },
             { path: '/register', component: Register },
             { path: '/recover/user', component: RecoverUser },
-            { path: '/recover/pass/', component: RecoverPass },
+            { path: '/recover/pass', component: RecoverPass },
             { path: '/about', component: About },
             { path: '/help', component: Help },
             { path: '/FAQ', component: FAQ },
