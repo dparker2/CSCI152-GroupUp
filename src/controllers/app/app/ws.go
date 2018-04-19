@@ -1,7 +1,6 @@
 package app
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 
@@ -42,24 +41,18 @@ func WS(w http.ResponseWriter, r *http.Request) {
 	models.SetUserConn(token, conn)
 
 	for {
-		messageType, p, err := conn.ReadMessage()
+		// Decode JSON received, wsMessage defines the supported parameters
+		var msg wsMessage
+		err := conn.ReadJSON(&msg)
 		if err != nil {
 			log.Println(err)
 			return
-		}
-
-		// Decode JSON received, wsMessage defines the supported parameters
-		var msg wsMessage
-		err = json.Unmarshal(p, &msg)
-		if err != nil {
-			panic(err)
 		}
 
 		// Call the function the code corresponds to the received code
 		if f, exists := wsAPI[msg.Code]; exists {
 			err := f(wsAPIstruct{
 				UserToken: token,
-				MsgType:   messageType,
 				Msg:       &msg,
 			})
 			if err != nil {
