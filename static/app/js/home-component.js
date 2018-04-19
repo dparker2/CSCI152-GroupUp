@@ -1,9 +1,11 @@
 
-const Home = {
-    template: '#tmpl-home',
-    data: function() {
-        return {
-            
-        }
-    },
+function Home() {
+    return {
+        template: '#tmpl-home',
+        data: function() {
+            return {
+                
+            }
+        },
+    }
 }
