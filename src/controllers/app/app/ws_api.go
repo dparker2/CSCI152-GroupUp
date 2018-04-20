@@ -9,7 +9,6 @@ type wsMessage struct {
 
 type wsAPIstruct struct {
 	UserToken string
-	MsgType   int
 	Msg       *wsMessage
 }
 
