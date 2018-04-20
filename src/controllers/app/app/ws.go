@@ -49,6 +49,8 @@ func WS(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		log.Println(msg)
+
 		// Call the function the code corresponds to the received code
 		if f, exists := wsAPI[msg.Code]; exists {
 			err := f(wsAPIstruct{

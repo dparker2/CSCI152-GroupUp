@@ -1,0 +1,9 @@
+[[define "chatbox"]]
+<script type="text/javascript" src="/js/app/chatbox-component.js"></script>
+<script type="text/x-template" id="tmpl-chatbox">
+    <div class="chat-box">
+        <div v-for="message in messages">{{ message.user }}: {{ message.msg }}</div>
+        <input v-on:keyup.enter="sendChat" v-model="inputMessage" placeholder="Enter a message..." />
+    </div>
+</script>
+[[end]]
