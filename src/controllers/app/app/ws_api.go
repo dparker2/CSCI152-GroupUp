@@ -5,6 +5,8 @@ type wsMessage struct {
 	Groupid  string `json:"groupid"`
 	Chat     string `json:"chat"`
 	Username string `json:"username"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
 }
 
 type wsAPIstruct struct {

@@ -24,14 +24,14 @@ func AddGroup(name string) {
 }
 
 func AddUserToGroup(token string, grpName string) {
+	// Delete this when create group functionality is there (DB setup too)
 	if !GroupExists(grpName) {
 		AddGroup(grpName)
 	}
 	if UserExists(token) {
-		currentUsers := groups[grpName].Users
 		newUser := users[token]
-		users := append(currentUsers, newUser)
-		groups[grpName].Users = users
+		grp := groups[grpName]
+		grp.addUser(newUser)
 	}
 }
 
@@ -45,5 +45,11 @@ func GetConnectionsInGroup(grpName string) (conn []*websocket.Conn) {
 			conn = append(conn, user.WsConn)
 		}
 	}
+	return
+}
+
+func (g *group) addUser(u *user) {
+	currentUsers := g.Users
+	g.Users = append(currentUsers, u)
 	return
 }

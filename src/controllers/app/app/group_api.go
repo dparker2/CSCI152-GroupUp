@@ -2,7 +2,6 @@ package app
 
 import (
 	"groupup/src/models"
-	"log"
 )
 
 func groupJoin(args wsAPIstruct) error {
@@ -21,11 +20,6 @@ func groupChat(args wsAPIstruct) error {
 	args.Msg.Username = models.GetUsername(args.UserToken) // Fill in username to send out
 	msgJSON := args.Msg
 
-	for _, c := range models.GetConnectionsInGroup(groupid) {
-		err := c.WriteJSON(msgJSON)
-		if err != nil {
-			log.Println(err.Error())
-		}
-	}
+	writeJSONToGroup(groupid, msgJSON)
 	return nil
 }
