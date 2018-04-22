@@ -1,5 +1,5 @@
 
-function JoinGroup() {
+function JoinGroup(ws) {
     return {
         template: '#tmpl-joingroup',
         data: function() {
@@ -9,7 +9,7 @@ function JoinGroup() {
         },
         methods: {
             joinGroup: function() {
-                alert(this.joinGroupName);
+                this.$router.push(this.joinGroupName)
             }
         }
     }

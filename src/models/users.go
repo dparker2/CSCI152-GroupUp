@@ -64,6 +64,15 @@ func GetUsername(token string) (username string) {
 	return
 }
 
+func GetConnection(token string) (conn *websocket.Conn) {
+	userMutex.Lock()
+	if UserExists(token) {
+		conn = users[token].WsConn
+	}
+	userMutex.Unlock()
+	return
+}
+
 // SetUserStatus sets the status of user associated with token
 func SetUserStatus(token string, status int) {
 	userMutex.Lock()

@@ -3,30 +3,27 @@ function Chatbox(ws) {
     return {
         template: '#tmpl-chatbox',
         created: function() {
-            function readChat(parentName, msgs) {
-                return function(event) { // Closure to capture parentName
-                    data = event.data;
-                    if (!data)
-                        return;
-                    data = JSON.parse(data);
-                    code = data.code;
-                    if (!code || code !== "group/chat")
-                        return;
-                    groupid = data.groupid;
-                    if (!groupid || groupid !== parentName)
-                        return;
-                    chat = data.chat;
-                    username = data.username;
-                    if (chat && username) {
-                        msgs.push({
-                            user: username,
-                            msg: chat,
-                        });
-                    }
-                };
-            }
 
-            ws.onmessage = readChat(this.parentName, this.messages);
+            ws.addEventListener('message', function(event) {
+                data = event.data;
+                if (!data)
+                    return;
+                data = JSON.parse(data);
+                code = data.code;
+                if (!code || code !== "group/chat")
+                    return;
+                groupid = data.groupid;
+                if (!groupid || groupid !== this.parentName)
+                    return;
+                chat = data.chat;
+                username = data.username;
+                if (chat && username) {
+                    this.messages.push({
+                        user: username,
+                        msg: chat,
+                    });
+                }
+            }.bind(this));
         },
         data: function() {
             return {
