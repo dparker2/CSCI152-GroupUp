@@ -12,6 +12,7 @@ type user struct {
 	WsConn         *websocket.Conn
 	Status         int
 	Token          string
+	Friends        []*user
 	CurrentGroups  []*group
 	FavoriteGroups []*group
 	RecentGroups   []*group
@@ -53,17 +54,20 @@ func UserExists(token string) bool {
 	}
 }
 
-// GetUserToken returns the token of a given user, assumes it exists
-func GetUserToken(ip string) (token string) {
-	token = users[ip].Token
-	return
-}
-
 // GetUsername returns the username of a user associated with the token
 func GetUsername(token string) (username string) {
 	userMutex.Lock()
 	if UserExists(token) {
 		username = users[token].Name
+	}
+	userMutex.Unlock()
+	return
+}
+
+func GetConnection(token string) (conn *websocket.Conn) {
+	userMutex.Lock()
+	if UserExists(token) {
+		conn = users[token].WsConn
 	}
 	userMutex.Unlock()
 	return
