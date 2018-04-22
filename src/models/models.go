@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	DB "groupup/src/system/db"
 )
 
@@ -12,10 +13,21 @@ func init() {
 	users = make(map[string]*user)
 	groups = make(map[string]*group)
 
-	// Connect to the DB
-	db, err := DB.Connect()
+	// Connect to both databases
+	db, dbAcc, err, errAcc := DB.Connect()
+
+	// Ping both databases to guarantee no connection errors
 	err = db.Ping()
 	if err != nil {
-		panic(err) // If no DB just fail
+		panic(err)
+	} else {
+		fmt.Println("Successfully connected to group db")
+	}
+
+	errAcc = dbAcc.Ping()
+	if errAcc != nil {
+		panic(errAcc)
+	} else {
+		fmt.Println("Successfully connected to the account db")
 	}
 }
