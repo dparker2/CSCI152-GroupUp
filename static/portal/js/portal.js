@@ -40,7 +40,20 @@
         template: '#tmpl-recoverpass',
         data: function() {
             return {
-                reg_recover_mail: "Email",
+                reg_recover_email: "",
+            }
+        },
+    }
+    const check = {
+        template: '#tmpl-check',
+        data: function() {
+            return {
+                security_question1: "",
+                security_answer1: "",
+                security_question2: "",
+                security_answer2: "",
+                security_question3: "",
+                security_answer3: "",
             }
         },
     }
@@ -74,7 +87,10 @@
             { path: '/', component: Login },
             { path: '/register', component: Register },
             { path: '/recover/user', component: RecoverUser },
-            { path: '/recover/pass', component: RecoverPass },
+            { path: '/recover/pass', component: RecoverPass,
+                children: [{ path: '/check/', component: check}]
+            },
+            
             { path: '/about', component: About },
             { path: '/help', component: Help },
             { path: '/FAQ', component: FAQ },
