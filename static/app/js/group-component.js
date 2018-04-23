@@ -36,8 +36,9 @@ function Group(ws) {
         },
         components: {
             'chat-box': Chatbox(ws),
+            'whiteboard': Whiteboard(ws),
         },
-        created: function() {
+        isOpen: function() {
             var me = this;
             // Need to send after socket has connected
             ws.send(JSON.stringify({

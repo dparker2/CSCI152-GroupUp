@@ -7,12 +7,14 @@
         <link rel="stylesheet" type="text/css" href="/css/app/joingroup.css" />
         <link rel="stylesheet" type="text/css" href="/css/app/creategroup.css" />
         <link rel="stylesheet" type="text/css" href="/css/app/home.css" />
+        <link rel="stylesheet" type="text/css" href="/css/app/drawingboard.min.css" />
         [[template "creategroup"]]
         [[template "joingroup"]]
         [[template "home"]]
         [[template "settings"]]
         [[template "chatbox"]]
         [[template "group"]]
+        [[template "whiteboard"]]
     </head>
     <body>
         <div id="app" class="app">
@@ -24,8 +26,7 @@
                             <router-link v-on:click.native="showMenu = false" to="/group/create" tag="li"><i class="plus-icon fi"></i>Create Group</router-link>
                             <router-link v-on:click.native="showMenu = false" to="/group/join" tag="li"><i class="persons-icon fi"></i>Join Group</router-link>
                         </ul>
-                    </div>
-                    GroupUp
+                    </div>GroupUp
                 </div>
                 <div class="text-right column">
                     <router-link to="/settings" tag="button" class="dull-button">Settings</router-link>
