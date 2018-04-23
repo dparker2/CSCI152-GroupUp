@@ -3,7 +3,6 @@ package router
 import (
 	"groupup/pkg/types/routes"
 
-	"github.com/go-xorm/xorm"
 	"github.com/gorilla/mux"
 
 	"groupup/src/controllers"
@@ -14,10 +13,10 @@ type Router struct {
 	Router *mux.Router
 }
 
-func (r *Router) Init(db *xorm.Engine) {
+func (r *Router) Init() {
 	r.Router.Use(Middleware)
 
-	baseRoutes := GetRoutes(db)
+	baseRoutes := GetRoutes()
 	for _, route := range baseRoutes {
 		r.Router.
 			Methods(route.Method).
@@ -28,7 +27,7 @@ func (r *Router) Init(db *xorm.Engine) {
 
 	mainCtrl := new(controllers.MainController)
 
-	initctrls.InitCtrls(mainCtrl, db)
+	initctrls.InitCtrls(mainCtrl)
 
 	mainSubRts := mainCtrl.SubRoutePackages()
 	for name, pack := range mainSubRts {

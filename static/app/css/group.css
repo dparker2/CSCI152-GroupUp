@@ -25,7 +25,8 @@
     background-color: #111;
 }
 
-.chat-wrapper input {
+.chat-box input {
+    margin-top: auto;
     background-color: #222;
     border-style: none;
     box-shadow: none;
@@ -35,6 +36,8 @@
 }
 
 .chat-box {
+    display: flex;
+    flex-direction: column;
     background-color: inherit;
     overflow-y: auto;
     flex: 1;

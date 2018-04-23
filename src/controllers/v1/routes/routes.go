@@ -1,19 +1,18 @@
 package routes
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 
 	"groupup/pkg/types/routes"
 	"groupup/src/controllers"
 	StatusHandler "groupup/src/controllers/v1/status"
-
-	"github.com/go-xorm/xorm"
 )
 
-var db *xorm.Engine
+var db *sql.DB
 
-func Init(c *controllers.MainController, DB *xorm.Engine) {
+func Init(c *controllers.MainController, DB *sql.DB) {
 	db = DB
 	StatusHandler.Init(DB)
 

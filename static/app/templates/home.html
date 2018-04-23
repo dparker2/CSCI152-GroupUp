@@ -1,7 +1,50 @@
 [[define "home"]]
+<script type="text/javascript" src="/js/app/home-component.js"></script>
 <script type="text/x-template" id="tmpl-home">
     <div class="home">
-            <router-link to="/group/test_1234">Test group</router-link>
+        <div class="groups">
+            <div class="recentgroups">
+                <h2> Recent Groups </h2>
+                <hr>
+                <div class="groupObject"> 
+                    CSCI150_0128 <router-link class="joinbtn" to="/group/CSCI150_0128">Join</router-link> 
+                </div>
+                <div class="groupObject"> 
+                    CSCI152_0111 <router-link class="joinbtn" to="/group/CSCI152_0111">Join</router-link> 
+                </div>
+            </div>
+
+            <div class="favoritegroups">
+                <h2> Favorite Groups </h2>
+                <hr>
+                <div class="groupObject"> 
+                    CSCI150_0128 <router-link class="joinbtn" to="/group/CSCI150_0128">Join</router-link> 
+                </div>
+            </div>
+        </div>
+            
+        <div class="friendslist">
+            <h2 style="text-align:center"> Friends List</h2>
+            <form>
+                <input class="friendSearch" type="text" placeholder="Search">
+            </form>
+            <div class="friends">
+                Dave Parker <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
+            </div> 
+            <div class="friends">
+                Michelle Salomon <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
+            </div>
+            <div class="friends">
+                Juan Mejia <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
+            </div>
+            <div class="friends">
+                Garret Kelley <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
+            </div>
+            <div class="friends">
+                Fuller Le <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
+            </div>     
+        </div>
+        
     </div>
 </script>
 [[end]]

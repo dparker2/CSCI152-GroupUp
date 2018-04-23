@@ -1,7 +1,27 @@
 [[define "settings"]]
+<script type="text/javascript" src="/js/app/settings-component.js"></script>
 <script type="text/x-template" id="tmpl-settings">
     <div>
-        <input v-model="message"></input><button v-on:click="sendmsg">Send!</button>
+        <!--<input v-model="message"></input><button v-on:click="sendmsg">Send!</button>-->
+        <div id="settings">
+            <div class="option-list">
+                <button class="list-button">User</button>
+                <button class="list-button">App Settings</button>
+                <button class="list-button">Poof</button>
+            </div>
+            <div class="settings-content">
+                <div class="settings-title"> User Settings </div>
+                <div class="settings-user first-item">
+                    <p>username</p> <div class="user-info">GroupUp_username</div>
+                </div>
+                <div class="settings-user">
+                    <p>Email</p> <div class="user-info">groupup@mail.com</div>
+                </div>
+                <div class="settings-user">
+                        <p>SSN</p> <div class="user-info">618-XX-XXXX</div>
+                    </div>
+            </div>
+        </div> 
     </div>
 </script>
 [[end]]

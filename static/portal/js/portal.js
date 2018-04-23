@@ -7,6 +7,24 @@
                 password: "",
             }
         },
+        methods: {
+            login: function() {
+                this.$http.post('/portal', { // Data
+                    username: this.username,
+                    password: this.password
+                }, { // Config
+                    emulateJSON: true
+                }).then(function(response) { // Success
+                    console.log(response);
+                    if (response.data) {
+                        console.log(response.data);
+                        window.location.href = response.data["redirect-path"];
+                    }
+                }, function(response) { // Error
+                    console.log(response); 
+                });
+            }
+        }
     }
 
     const Register = {
@@ -26,7 +44,7 @@
             }
         },
     }
-
+    
     const RecoverUser = {
         template: '#tmpl-recoveruser',
         data: function() {
