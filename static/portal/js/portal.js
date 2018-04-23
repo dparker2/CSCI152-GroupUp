@@ -93,7 +93,6 @@
             
             { path: '/about', component: About },
             { path: '/help', component: Help },
-            { path: '/FAQ', component: FAQ },
             { path: '/contacts', componenet: Contacts },
             { path: '/privacy', component: Privacy },
             { path: '/news', component: News },
