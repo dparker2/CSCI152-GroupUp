@@ -3,7 +3,7 @@ package db
 import (
 	"database/sql"
 
-	_ "github.com/go-sql-driver/mysql" // MySQL driver for xormz
+	_ "github.com/go-sql-driver/mysql" // MySQL driver
 )
 
 // Connect connects the database
