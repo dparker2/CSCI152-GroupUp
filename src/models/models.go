@@ -34,12 +34,27 @@ func init() {
 		fmt.Println("Successfully connected to the account db")
 	}
 
-	doThing()
 }
 
-func doThing() {
-	result, _ := dbAcc.Exec("INSERT INTO UserInfo (Username) VALUES ('groupup')")
+func VerifyLogin(username string, password string) bool {
+	verify := false
+	//create user object? add to current user object? temporary solution...
+	var passwordDB, email string
 
-	result2, _ := db.Exec("INSERT INTO a_1739 (Admin) VALUES ('spongebob')")
-	fmt.Println(result, result2)
+	//query db for username's info.. e.g. password, email, sec ?'s, etc
+	err := dbAcc.QueryRow("SELECT Pass, Email FROM UserInfo WHERE Username = ?", username).Scan(&passwordDB, &email)
+	switch {
+	case err == sql.ErrNoRows:
+		fmt.Println("No user with that username.")
+	case err != nil:
+		panic(err)
+	default:
+		if password == passwordDB {
+			verify = true
+		} // add incorrect password response
+	}
+	return verify
+	//compare input password with db password
+
+	//send email
 }
