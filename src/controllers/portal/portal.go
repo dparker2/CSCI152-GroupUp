@@ -43,7 +43,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	password := r.Form.Get("password")
 	log.Println(username)
 	log.Println(password)
-	if username == "developer" && password == "1234" { // TODO: Replace with models.VerifyLogin(username, password)
+	if models.VerifyLogin(username, password) { // TODO: Replace with models.VerifyLogin(username, password)
 		// Send back a json object with where the client should go to
 		// and a token to include in the header for authentication
 		w.Header().Set("Content-Type", "application/json")

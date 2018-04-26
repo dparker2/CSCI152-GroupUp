@@ -19,6 +19,8 @@
                     if (response.data) {
                         console.log(response.data);
                         window.location.href = response.data["redirect-path"];
+                    } else {
+                        console.log("Incorrect Password")
                     }
                 }, function(response) { // Error
                     console.log(response); 
