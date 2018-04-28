@@ -29,3 +29,19 @@ func groupChat(args wsAPIstruct) error {
 	}
 	return nil
 }
+
+func groupWhiteboard(args wsAPIstruct) error {
+	log.Println("GroupWhiteboard")
+	groupid := args.Msg.Groupid
+	msgJSON := args.Msg
+
+	log.Println(models.GetConnectionsInGroup(groupid))
+	for _, c := range models.GetConnectionsInGroup(groupid) {
+		err := c.WriteJSON(msgJSON)
+		if err != nil {
+			log.Println(err.Error())
+		}
+	}
+
+	return nil
+}

@@ -5,6 +5,9 @@ type wsMessage struct {
 	Groupid  string `json:"groupid"`
 	Chat     string `json:"chat"`
 	Username string `json:"username"`
+	Coords   string `json:"whiteboardCoords"`
+	Color    string `json:"whiteboardColor"`
+	Mode     string `json:"whiteboardMode"`
 }
 
 type wsAPIstruct struct {
@@ -25,4 +28,5 @@ func setupAPI() {
 	wsAPI = make(map[string]func(wsAPIstruct) error)
 	wsAPI["group/join"] = groupJoin
 	wsAPI["group/chat"] = groupChat
+	wsAPI["group/whiteboard"] = groupWhiteboard
 }

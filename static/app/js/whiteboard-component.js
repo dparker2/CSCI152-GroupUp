@@ -1,15 +1,22 @@
+
 function Whiteboard(ws) {
-    var myBoard;
-    var test = new Array();
     return {
         template: '#tmpl-whiteboard',
         mounted: function(){
-            myBoard = new DrawingBoard.Board("wb");
-            alert(document.getElementById('wb'));
-            var x = "hi michelle salomon";
-            myBoard.ev.bind('board:stopDrawing', this.getWB);
-            myBoard.ev.bind('board:reset', this.sendWB);
-
+            console.log("first");
+            groupBoard = new DrawingBoard.Board("wb");
+            groupBoard.ev.bind('board:stopDrawing', this.sendWB);            
+            
+            ws.addEventListener('message', function(event){
+                data = event.data;
+                if(!data)
+                    return;
+                data = JSON.parse(data);
+                code = data.code;
+                if(!code || code!=="group/whiteboard")
+                    return;   
+                this.drawWB(data); 
+            }.bind(this));
         },
         data: function() {
             return {
@@ -17,18 +24,32 @@ function Whiteboard(ws) {
             }
         },
         methods: {
-            sendWB: function(){
-              myBoard._onCanvasDrop();
-
-
-               //alert(x);
+            
+            drawWB: function(data){
+                groupBoard.coords = JSON.parse(data.whiteboardCoords);
+                groupBoard.setColor(data.whiteboardColor);
+                groupBoard.setMode(data.whiteboardMode, true);
+                if(groupBoard.getMode() == 'filler'){
+                    groupBoard.fill(groupBoard);
+                }
+                groupBoard.isDrawing = true;
+                groupBoard.draw();
             },
-            getWB: function(){
-                //alert("GETWB" + myBoard);
-                var storage = myBoard._getStorage();
-                myBoard.clearWebStorage();
-                test.push(storage);
+
+            sendWB: function() {
+                ws.send(JSON.stringify({
+                    code: "group/whiteboard",
+                    groupid: this.$parent.groupid,
+                    whiteboardCoords: JSON.stringify(groupBoard.coords),
+                    whiteboardColor: groupBoard.color,
+                    whiteboardMode: groupBoard.getMode(),                    
+                }));
+            },
+            /*
+            stopDrawing: function(){                
+                groupBoard.isDrawing = false;
             }
+            */
         }      
     }
 };
