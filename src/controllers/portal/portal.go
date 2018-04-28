@@ -43,12 +43,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	password := r.Form.Get("password")
 	log.Println(username)
 	log.Println(password)
-	if models.VerifyLogin(username, password) { // TODO: Replace with models.VerifyLogin(username, password)
+	userToken, isVerified := models.VerifyLogin(username, password)
+	if isVerified { // TODO: Replace with models.VerifyLogin(username, password)
 		// Send back a json object with where the client should go to
 		// and a token to include in the header for authentication
 		w.Header().Set("Content-Type", "application/json")
-		// First need to make the user
-		userToken := models.NewUser(username)
 		userCookie := http.Cookie{Name: "token", Value: userToken, Path: "/", MaxAge: 86400}
 		http.SetCookie(w, &userCookie)
 		p := loginResponse{ // Ajax POST, so need to redirect on the client side

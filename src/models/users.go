@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"log"
 	"sync"
 
@@ -9,6 +10,11 @@ import (
 
 type user struct {
 	Name           string
+	Email          string
+	UserID         int
+	LockoutStatus  sql.NullInt64
+	SecQuestions   []sql.NullString
+	SecAnswers     []sql.NullString
 	WsConn         *websocket.Conn
 	Status         int
 	Token          string
@@ -21,7 +27,7 @@ type user struct {
 var userMutex = &sync.Mutex{}
 
 // NewUser makes a new user with the given username, token, and IP
-func NewUser(username string) (userToken string) {
+func newUser(username string) (userToken string) {
 	userToken, err := generateRandomString(32)
 	if err != nil {
 		log.Println(err.Error())

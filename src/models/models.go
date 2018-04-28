@@ -36,13 +36,21 @@ func init() {
 
 }
 
-func VerifyLogin(username string, password string) bool {
-	verify := false
-	//create user object? add to current user object? temporary solution...
+//VerifyLogin verifies credentials and then creates user object if verified
+func VerifyLogin(username string, password string) (userToken string, verify bool) {
+	verify = false
+	//create user object and return token
+	userToken = newUser(username)
 	var passwordDB, email string
-
+	var SQ1, SQ2, SQ3, SQA1, SQA2, SQA3 sql.NullString
+	var userID int
+	var lockoutStatus sql.NullInt64
+	var secQuestions, secAnswers []sql.NullString
 	//query db for username's info.. e.g. password, email, sec ?'s, etc
-	err := dbAcc.QueryRow("SELECT Pass, Email FROM UserInfo WHERE Username = ?", username).Scan(&passwordDB, &email)
+	err := dbAcc.QueryRow(
+		"SELECT UserID, Pass, Email, SQ1, SQ2, SQ3, SQA1, SQA2, SQA3, LockoutStatus FROM UserInfo WHERE Username = ?", username,
+	).Scan(
+		&userID, &passwordDB, &email, &SQ1, &SQ2, &SQ3, &SQA1, &SQA2, &SQA3, &lockoutStatus)
 	switch {
 	case err == sql.ErrNoRows:
 		fmt.Println("No user with that username.")
@@ -51,10 +59,21 @@ func VerifyLogin(username string, password string) bool {
 	default:
 		if password == passwordDB {
 			verify = true
+			secQuestions = append(secQuestions, SQ1, SQ2, SQ3)
+			secAnswers = append(secAnswers, SQA1, SQA2, SQA3)
+			readIntoUser(userToken, userID, email, secQuestions[:], secAnswers[:], lockoutStatus)
 		} // add incorrect password response
 	}
-	return verify
-	//compare input password with db password
-
 	//send email
+	return
+}
+
+func readIntoUser(userToken string, userID int, email string, secQuestions []sql.NullString, secAnswers []sql.NullString, lockoutStatus sql.NullInt64) {
+	users[userToken].UserID = userID
+	users[userToken].Email = email
+	for i := 0; i < 3; i++ {
+		users[userToken].SecQuestions = append(users[userToken].SecQuestions, secQuestions[i])
+		users[userToken].SecAnswers = append(users[userToken].SecAnswers, secAnswers[i])
+	}
+	users[userToken].LockoutStatus = lockoutStatus
 }
