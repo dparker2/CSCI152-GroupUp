@@ -1,15 +1,4 @@
-.home {
-    display: flex;
-    flex-direction: row; 
-    justify-content: space-between;
-    height: 90vh;
-}
-
 .home .groups {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    height: 90vh;
     min-width: 250px;
 }
 .home .groups .joinbtn {
@@ -24,38 +13,23 @@
 }
 
 .home .recentgroups {
-    display:flex;
-    flex-direction: column;
-    flex-grow: 1;
     color:rgb(255, 255, 255);
     background-color:#1d1f21;
-    height: 50%;
-    max-width: 1000px;
-    margin: 5px 0px 0px 0px;
     padding: 10px 10px 0px 10px;
     
 }
 
 .home .favoritegroups {
-    display:flex;
-    flex-direction: column;
-    flex-grow: 2;
-    height: 50%;
-    max-width: 1000px;
     color:white;
     background-color:#1d1f21;
-    margin: 5px 0px 0px 0px;
+    margin-top: 5px;
     padding: 10px 10px 0px 10px;
 }
 
 .home .groupObject {
-    display: flex;
-    flex-direction: row;
-    justify-content:space-between;
     background-color: rgba(153, 153, 153, 0.137);
     margin: 10px;
     padding: 10px;
-    line-height: 31px;
 }
 
 .home .friendslist {
@@ -64,7 +38,7 @@
     padding: 10px 15px; 
     width: 15%;
     min-width: 250px;
-    margin: 10px;
+    margin: 0 10px;
 }
 
 .home .friendslist .friendSearch {
