@@ -13,8 +13,8 @@ type user struct {
 	Email          string
 	UserID         int
 	LockoutStatus  sql.NullInt64
-	SecQuestions   []sql.NullString
-	SecAnswers     []sql.NullString
+	SecQuestions   [3]sql.NullString
+	SecAnswers     [3]sql.NullString
 	WsConn         *websocket.Conn
 	Status         int
 	Token          string
@@ -27,19 +27,15 @@ type user struct {
 var userMutex = &sync.Mutex{}
 
 // NewUser makes a new user with the given username, token, and IP
-func newUser(username string) (userToken string) {
+func newUser(username string) (u user) {
 	userToken, err := generateRandomString(32)
 	if err != nil {
 		log.Println(err.Error())
 	}
-	u := user{
+	u = user{
 		Name:  username,
 		Token: userToken,
 	}
-	// Thread safe users modification.
-	userMutex.Lock()
-	users[userToken] = &u
-	userMutex.Unlock()
 	return
 }
 
