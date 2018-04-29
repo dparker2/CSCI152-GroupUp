@@ -36,13 +36,18 @@ func init() {
 
 }
 
-func VerifyLogin(username string, password string) bool {
-	verify := false
-	//create user object? add to current user object? temporary solution...
-	var passwordDB, email string
-
+//VerifyLogin verifies credentials and then creates user object if verified
+func VerifyLogin(username string, password string) (u user, verify bool) {
+	verify = false
+	//create user object and return token
+	u = newUser(username)
+	var passwordDB string
 	//query db for username's info.. e.g. password, email, sec ?'s, etc
-	err := dbAcc.QueryRow("SELECT Pass, Email FROM UserInfo WHERE Username = ?", username).Scan(&passwordDB, &email)
+	err := dbAcc.QueryRow(
+		"SELECT UserID, Pass, Email, SQ1, SQ2, SQ3, SQA1, SQA2, SQA3, LockoutStatus FROM UserInfo WHERE Username = ?", username,
+	).Scan(
+		&u.UserID, &passwordDB, &u.Email, &u.SecQuestions[0], &u.SecQuestions[1], &u.SecQuestions[2],
+		&u.SecAnswers[0], &u.SecAnswers[1], &u.SecAnswers[2], &u.LockoutStatus)
 	switch {
 	case err == sql.ErrNoRows:
 		fmt.Println("No user with that username.")
@@ -51,10 +56,15 @@ func VerifyLogin(username string, password string) bool {
 	default:
 		if password == passwordDB {
 			verify = true
+			insertIntoUsers(u)
 		} // add incorrect password response
 	}
-	return verify
-	//compare input password with db password
-
 	//send email
+	return
+}
+
+func insertIntoUsers(u user) {
+	userMutex.Lock()
+	users[u.Token] = &u
+	userMutex.Unlock()
 }
