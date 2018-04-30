@@ -34,7 +34,7 @@ func groupWhiteboard(args wsAPIstruct) error {
 	groupid := args.Msg.Groupid
 	msgJSON := args.Msg
 
-	for _, c := range models.GetConnectionsInGroup(groupid) {
+	for _, c := range models.GetOtherConnectionsInGroup(args.UserToken, groupid) {
 		err := c.WriteJSON(msgJSON)
 		if err != nil {
 			log.Println(err.Error())

@@ -47,3 +47,16 @@ func GetConnectionsInGroup(grpName string) (conn []*websocket.Conn) {
 	}
 	return
 }
+
+func GetOtherConnectionsInGroup(token string, grpName string) (conn []*websocket.Conn) {
+	if !GroupExists(grpName) {
+		return nil
+	}
+	users := groups[grpName].Users
+	for _, user := range users {
+		if user.Token != token && user.WsConn != nil {
+			conn = append(conn, user.WsConn)
+		}
+	}
+	return
+}
