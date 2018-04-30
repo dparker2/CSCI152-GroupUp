@@ -5,6 +5,9 @@ type wsMessage struct {
 	Groupid  string `json:"groupid"`
 	Chat     string `json:"chat"`
 	Username string `json:"username"`
+	Coords   string `json:"whiteboardCoords"`
+	Color    string `json:"whiteboardColor"`
+	Mode     string `json:"whiteboardMode"`
 	Password string `json:"password"`
 	Email    string `json:"email"`
 }
@@ -28,7 +31,7 @@ func setupAPI() {
 	wsAPI["group/create"] = groupCreate
 	wsAPI["group/join"] = groupJoin
 	wsAPI["group/chat"] = groupChat
-	wsAPI["group/whiteboard/draw"] = groupWhiteboardDraw
+	wsAPI["group/whiteboard"] = groupWhiteboard
 	wsAPI["group/flashcard/new"] = groupFlashcardNew
 	wsAPI["group/flashcard/edit"] = groupFlashcardEdit
 }

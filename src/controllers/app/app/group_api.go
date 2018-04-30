@@ -45,7 +45,17 @@ func groupChat(args wsAPIstruct) error {
 	return nil
 }
 
-func groupWhiteboardDraw(args wsAPIstruct) error {
+func groupWhiteboard(args wsAPIstruct) error {
+	groupid := args.Msg.Groupid
+	msgJSON := args.Msg
+
+	for _, c := range models.GetOtherConnectionsInGroup(args.UserToken, groupid) {
+		err := c.WriteJSON(msgJSON)
+		if err != nil {
+			log.Println(err.Error())
+		}
+	}
+
 	return nil
 }
 

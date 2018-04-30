@@ -74,6 +74,7 @@ function Group(ws) {
         },
         components: {
             'chat-box': Chatbox(ws),
+            'white-board': Whiteboard(ws),
         },
     }
 }
