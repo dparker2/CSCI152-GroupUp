@@ -2,11 +2,15 @@
 (function() {
     const socket = new WebSocket("ws://" + document.location.host + "/app/ws")
 
+    socket.addEventListener('message', function(event) {
+        console.log(event);
+    })
+
     const router = new VueRouter({
         routes: [
             { path: '/', component: Home() },
-            { path: '/group/create', component: CreateGroup() },
-            { path: '/group/join', component: JoinGroup() },
+            { path: '/group/create', component: CreateGroup(socket) },
+            { path: '/group/join', component: JoinGroup(socket) },
             { path: '/settings', component: Settings() },
             { path: '/group/:groupid/', component: Group(socket) }
         ],

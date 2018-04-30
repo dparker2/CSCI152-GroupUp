@@ -19,6 +19,8 @@
                     if (response.data) {
                         console.log(response.data);
                         window.location.href = response.data["redirect-path"];
+                    } else {
+                        console.log("Incorrect Password")
                     }
                 }, function(response) { // Error
                     console.log(response); 
@@ -62,6 +64,7 @@
             }
         },
     }
+
     const check = {
         template: '#tmpl-check',
         data: function() {
@@ -105,10 +108,8 @@
             { path: '/', component: Login },
             { path: '/register', component: Register },
             { path: '/recover/user', component: RecoverUser },
-            { path: '/recover/pass', component: RecoverPass,
-                children: [{ path: '/check/', component: check}]
-            },
-            
+            { path: '/recover/pass', component: RecoverPass },
+            { path: '/recover/pass/check/', component: check },
             { path: '/about', component: About },
             { path: '/help', component: Help },
             { path: '/contacts', componenet: Contacts },

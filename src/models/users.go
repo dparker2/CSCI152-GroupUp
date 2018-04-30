@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"log"
 	"sync"
 
@@ -9,6 +10,11 @@ import (
 
 type user struct {
 	Name           string
+	Email          string
+	UserID         int
+	LockoutStatus  sql.NullInt64
+	SecQuestions   [3]sql.NullString
+	SecAnswers     [3]sql.NullString
 	WsConn         *websocket.Conn
 	Status         int
 	Token          string
@@ -21,19 +27,15 @@ type user struct {
 var userMutex = &sync.Mutex{}
 
 // NewUser makes a new user with the given username, token, and IP
-func NewUser(username string) (userToken string) {
+func newUser(username string) (u user) {
 	userToken, err := generateRandomString(32)
 	if err != nil {
 		log.Println(err.Error())
 	}
-	u := user{
+	u = user{
 		Name:  username,
 		Token: userToken,
 	}
-	// Thread safe users modification.
-	userMutex.Lock()
-	users[userToken] = &u
-	userMutex.Unlock()
 	return
 }
 
@@ -59,6 +61,15 @@ func GetUsername(token string) (username string) {
 	userMutex.Lock()
 	if UserExists(token) {
 		username = users[token].Name
+	}
+	userMutex.Unlock()
+	return
+}
+
+func GetConnection(token string) (conn *websocket.Conn) {
+	userMutex.Lock()
+	if UserExists(token) {
+		conn = users[token].WsConn
 	}
 	userMutex.Unlock()
 	return
