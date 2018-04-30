@@ -35,25 +35,33 @@ function Whiteboard(ws) {
         methods: {
             
             drawWB: function(data){
-                /*var oldDrawing = groupBoard.isDrawing;
-                var oldCoords = groupBoard.coords;
-                var oldColor = groupBoard.color;
-                var oldMode = groupBoard.mode;*/
+                var oldState = {
+                    color: groupBoard.color,
+                    mode: groupBoard.getMode(),
+                }
 
-                groupBoard.isDrawing = true;
-                groupBoard.coords = JSON.parse(data.whiteboardCoords);
-                groupBoard.setColor(data.whiteboardColor);
+                //groupBoard.setColor(data.whiteboardColor);
                 groupBoard.setMode(data.whiteboardMode, true);
-                //console.log(groupBoard.coords);
                 if(groupBoard.getMode() == 'filler'){
                     groupBoard.fill(groupBoard);
                 }
-                groupBoard.draw();
 
-                /*groupBoard.isDrawing = oldDrawing;
-                groupBoard.coords = oldCoords
-                groupBoard.setColor(oldColor);
-                groupBoard.setMode(oldMode, true);*/
+                data.whiteboardCoords = JSON.parse(data.whiteboardCoords);
+
+                var currentMid = {
+                    x: data.whiteboardCoords.old.x + data.whiteboardCoords.current.x>>1,
+                    y: data.whiteboardCoords.old.y + data.whiteboardCoords.current.y>>1,
+                }
+                groupBoard.ctx.beginPath();
+                groupBoard.ctx.moveTo(currentMid.x, currentMid.y);
+                groupBoard.ctx.quadraticCurveTo(data.whiteboardCoords.old.x, 
+                    data.whiteboardCoords.old.y, 
+                    data.whiteboardCoords.oldMid.x, 
+                    data.whiteboardCoords.oldMid.y);
+                groupBoard.ctx.stroke();
+
+                groupBoard.setColor(oldState.color);
+                groupBoard.setMode(oldState.mode, true);
             },
 
             sendWB: function() {
