@@ -2,6 +2,7 @@ package app
 
 import (
 	"groupup/src/models"
+	"log"
 )
 
 func groupCreate(args wsAPIstruct) error {
