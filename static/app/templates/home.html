@@ -1,30 +1,27 @@
 [[define "home"]]
 <script type="text/javascript" src="/js/app/home-component.js"></script>
 <script type="text/x-template" id="tmpl-home">
-    <div class="home">
-        <div class="groups">
-            <div class="recentgroups">
-                <h2> Recent Groups </h2>
+    <div class="home row row-fit">
+        <div class="column previousgroups">
+                <h2>Previous Groups</h2>
                 <hr>
-                <div class="groupObject"> 
-                    CSCI150_0128 <router-link class="joinbtn" to="/group/CSCI150_0128">Join</router-link> 
-                </div>
-                <div class="groupObject"> 
-                    CSCI152_0111 <router-link class="joinbtn" to="/group/CSCI152_0111">Join</router-link> 
-                </div>
-            </div>
-
-            <div class="favoritegroups">
-                <h2> Favorite Groups </h2>
-                <hr>
-                <div class="groupObject"> 
-                    CSCI150_0128 <router-link class="joinbtn" to="/group/CSCI150_0128">Join</router-link> 
-                </div>
-            </div>
+                <router-link tag="button" class="groupbutton" to="/group/CSCI150_0128">CSCI150_0128</router-link>
         </div>
-            
-        <div class="friendslist">
-            <h2 style="text-align:center"> Friends List</h2>
+        
+        <div class="column groups">
+                <h2>Groups</h2>
+                <hr>
+                <router-link tag="button" class="groupbutton" to="/group/CSCI150_0128">CSCI150_0128</router-link>
+                <router-link tag="button" class="groupbutton" to="/group/CSCI150_0128">CSCI150_0128</router-link>
+        </div>
+        
+        <div class="column personalmessage">
+                <h2>Group Tag Search</h2>
+                <input placeholder="Enter a tag">
+        </div>
+
+        <div class="friendslist column">
+            <h2>Friends List</h2>
             <form>
                 <input class="friendSearch" type="text" placeholder="Search">
             </form>
