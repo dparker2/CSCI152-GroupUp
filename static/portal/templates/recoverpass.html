@@ -1,0 +1,12 @@
+[[define "recoverpass"]]
+[[template "check"]]
+<script type="text/x-template" id="tmpl-recoverpass">
+    <div id="register">
+        <label for="reg_email">Please enter Email</label>
+        <input id="reg_email" v-model="reg_recover_email" placeholder = "Email" />
+        <router-link to="/recover/pass/check/"><button class="contrast-button">Next</button></router-link>
+        <router-view>
+        </router-view>
+    </div>
+</script>
+[[end]]

@@ -2,10 +2,48 @@
 function Group(ws) {
     return {
         template: '#tmpl-group',
+        created: function() {
+
+            ws.addEventListener('message', function (event) {
+                    data = event.data;
+                    if (!data)
+                        return;
+                    data = JSON.parse(data);
+                    code = data.code;
+                    if (!code || code !== "group")
+                        return;
+                    if (data.groupid === "") {
+                        this.showError = true
+                    } else {
+                        this.showGroup = true
+                    }
+                }.bind(this));
+
+            // SEPARATE THIS TO USERBOX COMPONENT LATER
+            ws.addEventListener('message', function (event) {
+                data = event.data;
+                if (!data)
+                    return;
+                data = JSON.parse(data);
+                code = data.code;
+                if (!code || code !== "group/join")
+                    return;
+                console.log(data.username + " joined"); // Restrict to only group/join messages.
+            })
+            /////
+            
+            // Need to send after socket has connected
+            ws.send(JSON.stringify({
+                code: "group/join",
+                groupid: this.groupid,
+            }));
+        },
         data: function() {
             return {
                 drawing: false,
                 groupid: this.$route.params.groupid,
+                showGroup: false,
+                showError: false,
             }
         },
         methods: {
@@ -38,13 +76,5 @@ function Group(ws) {
             'chat-box': Chatbox(ws),
             'white-board': Whiteboard(ws),
         },
-        created: function() {
-            var me = this;
-            // Need to send after socket has connected
-            ws.send(JSON.stringify({
-                code: "group/join",
-                groupid: me.groupid,
-            }));
-        }
     }
 }

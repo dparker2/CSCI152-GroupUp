@@ -63,3 +63,12 @@ func WS(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+func writeJSONToGroup(grpName string, msgJSON *wsMessage) {
+	for _, c := range models.GetConnectionsInGroup(grpName) {
+		err := c.WriteJSON(msgJSON)
+		if err != nil {
+			log.Println(err.Error())
+		}
+	}
+}

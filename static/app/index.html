@@ -3,6 +3,7 @@
         <link rel="stylesheet" type="text/css" href="/css/app/frame.css" />
         <link rel="stylesheet" type="text/css" href="/css/app/menu.css" />
         <link rel="stylesheet" type="text/css" href="/css/app/group.css" />
+        <link rel="stylesheet" type="text/css" href="/css/app/chatbox.css" />
         <link rel="stylesheet" type="text/css" href="/css/app/settings.css" />
         <link rel="stylesheet" type="text/css" href="/css/app/joingroup.css" />
         <link rel="stylesheet" type="text/css" href="/css/app/creategroup.css" />
@@ -26,7 +27,14 @@
                             <router-link v-on:click.native="showMenu = false" to="/group/create" tag="li"><i class="plus-icon fi"></i>Create Group</router-link>
                             <router-link v-on:click.native="showMenu = false" to="/group/join" tag="li"><i class="persons-icon fi"></i>Join Group</router-link>
                         </ul>
-                    </div>GroupUp
+                        <h1>Groups</h1>
+                        <ul>
+                            <router-link v-on:click.native="showMenu = false" to="/group/CSCI150_0128" tag="li">CSCI150_0128</router-link>
+                            <router-link v-on:click.native="showMenu = false" to="/group/CSCI150_0128" tag="li">CSCI150_0128</router-link>
+                            <router-link v-on:click.native="showMenu = false" to="/group/CSCI150_0128" tag="li">CSCI150_0128</router-link>
+                        </ul>
+                    </div>
+                    GroupUp
                 </div>
                 <div class="text-right column">
                     <router-link to="/settings" tag="button" class="dull-button">Settings</router-link>

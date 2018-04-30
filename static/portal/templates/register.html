@@ -1,15 +1,29 @@
 [[define "register"]]
 <script type="text/x-template" id="tmpl-register">
     <div id="register">
-        <label for="reg_email">Email</label>
-        <input id="reg_email" v-model="reg_email" />
-        <label for="reg_username">Username</label>
-        <input id="reg_username" v-model="reg_username" />
-        <label for="reg_password1">Password</label>
-        <input id="reg_password1" v-model="reg_password1" />
-        <label for="reg_password2">Confirm Password</label>
-        <input id="reg_password2" v-model="reg_password2" />
-        <button class="contrast-button">Reigster</button>
+        <div class="register-title row-align-center">Account Information</div>
+        <div class="registerrow">
+            <input id="reg_email" v-model="reg_email" placeholder = "Email" />
+            <input id="reg_username" v-model="reg_username" placeholder="Username" />
+        </div>
+        <div class="registerrow">
+            <input id="reg_password1" v-model="reg_password1" placeholder = "Password" />
+            <input id="reg_password2" v-model="reg_password2" placeholder = "Confirm Password" />
+        </div>
+        <div class="register-title row-align-center">Security Questions</div>
+        <div class="registerrow">
+            <input id="security_question1" v-model="security_question1" style = />
+            <input id="security_answer1" v-model="security_answe1" placeholder = "Answer" />
+        </div>
+        <div class="registerrow">
+            <input id="security_question2" v-model="security_question2" />
+            <input id="security_answer2" v-model="security_answe2" placeholder = "Answer" />
+        </div>
+        <div class="registerrow">
+            <input id="security_question3" v-model="security_question3" />
+            <input id="security_answer3" v-model="security_answer3" placeholder = "Answer" />
+        </div>
+        <button class="contrast-button">Register</button>
     </div>
 </script>
 [[end]]
