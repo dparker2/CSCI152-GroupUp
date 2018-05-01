@@ -6,7 +6,7 @@ import (
 )
 
 func groupCreate(args wsAPIstruct) error {
-	args.Msg.Groupid = models.AddGroup(args.Msg.Groupid)
+	args.Msg.Groupid = models.AddGroup(args.Msg.Groupid, args.UserToken)
 	usrConn := models.GetConnection(args.UserToken)
 
 	usrConn.WriteJSON(args.Msg)
