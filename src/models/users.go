@@ -19,9 +19,8 @@ type user struct {
 	Status         int
 	Token          string
 	Friends        []*user
-	CurrentGroups  []*group
-	FavoriteGroups []*group
-	RecentGroups   []*group
+	CurrentGroups  groupList
+	PreviousGroups groupList
 }
 
 var userMutex = &sync.Mutex{}
@@ -91,4 +90,17 @@ func SetUserConn(token string, conn *websocket.Conn) {
 		users[token].WsConn = conn
 	}
 	userMutex.Unlock()
+}
+
+func AddGroupToUser(token string, grpName string) {
+	u := users[token]
+	grp := groups[grpName]
+	u.CurrentGroups.add(grp)
+}
+
+func RemoveGroupFromUser(token string, grpName string) {
+	u := users[token]
+	grp := groups[grpName]
+	u.CurrentGroups.remove(grp)
+	u.PreviousGroups.add(grp)
 }
