@@ -1,10 +1,14 @@
 package models
 
 import (
+	"database/sql"
 	"errors"
+	"fmt"
 	"math/rand"
 	"strconv"
 	"sync"
+
+	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/gorilla/websocket"
 )
@@ -12,6 +16,7 @@ import (
 type group struct {
 	Users userList
 	Name  string
+	Admin string
 	Mutex sync.Mutex
 }
 type groupList []*group
@@ -21,6 +26,21 @@ var groupsMutex = &sync.Mutex{}
 // GroupExists returns whether or not group "name" exists
 func GroupExists(name string) (exists bool) {
 	_, exists = groups[name]
+	if exists == false { //If group doesn't exists in group struct, double checks DB to confirm.
+		var groupexists string
+		err := db.QueryRow("SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name= ?", name).Scan(&groupexists)
+		switch {
+		case err == sql.ErrNoRows:
+			fmt.Println("Group does not exist")
+		case err != nil:
+			panic(err)
+		default:
+			if name == groupexists {
+				fmt.Println("Group" + groupexists + "exists in the DB already")
+				exists = true
+			}
+		}
+	}
 	return
 }
 
@@ -43,21 +63,29 @@ func UserExistsInGroup(token string, grpName string) (b bool) {
 }
 
 // AddGroup adds a group with name
-func AddGroup(name string) (groupid string) {
+func AddGroup(name string, token string) (groupid string) {
 	for {
 		// Generate random 4 digits
 		randFour := 1000 + rand.Intn(9999-1000)
+		fmt.Println(randFour)
 		randID := strconv.Itoa(randFour)
 		groupid = name + "_" + randID
+		username := GetUsername(token)
 
 		// Add group if it doesn't already exist
 		if !GroupExists(groupid) {
 			groupsMutex.Lock()
 			defer groupsMutex.Unlock()
+
+			createGroupInDB(groupid)
+			putAdminInGroupDB(groupid, username)
+
 			groups[groupid] = &group{
 				Users: nil,
 				Name:  groupid,
+				Admin: username,
 			}
+			fmt.Println(groups[groupid])
 			return
 		}
 	}
