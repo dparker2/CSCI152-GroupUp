@@ -4,6 +4,7 @@ type wsMessage struct {
 	Code           string `json:"code"`
 	Groupid        string `json:"groupid"`
 	Chat           string `json:"chat"`
+	Timestamp      string `json:"timestamp"`
 	Username       string `json:"username"`
 	Coords         string `json:"whiteboardCoords"`
 	Color          string `json:"whiteboardColor"`

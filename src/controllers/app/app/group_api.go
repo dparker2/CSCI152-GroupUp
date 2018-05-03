@@ -20,29 +20,36 @@ func groupJoin(args wsAPIstruct) error {
 	usrConn := models.GetConnection(args.UserToken)
 	putInUsername(&args)
 
-	//if models.GroupExists(groupid) { // When we get DB setup, this should check it
-	err := models.AddUserToGroup(userToken, groupid)
-	if err != nil {
+	if models.GroupExists(groupid) { // When we get DB setup, this should check it
+		/*err := models.AddUserToGroup(userToken, groupid)
+		if err != nil {
+			usrConn.WriteJSON(&wsMessage{
+				Code: "group", // No other args shows failure to join
+			})
+			return err
+		}*/
+
+		if !models.UserHasCurrentGroup(userToken, groupid) {
+			err := models.AddUserToGroup(userToken, groupid)
+			if err != nil {
+				usrConn.WriteJSON(&wsMessage{
+					Code: "group", // No other args shows failure to join
+				})
+				return err
+			}
+			//models.AddGroupToUser(userToken, groupid)
+		}
+
 		usrConn.WriteJSON(&wsMessage{
-			Code: "group", // No other args shows failure to join
+			Code:    "group",
+			Groupid: groupid, // "Okay to render"
+			// TODO: Write a function in models to query db and put FullUserList in here.
+			// TODO: Put list of usernames in the group object here. (ie groups[groupid].Users[i].Username)
 		})
-		return err
+
+		writeJSONToGroup(groupid, args.Msg)
+		return nil
 	}
-
-	if !models.UserHasCurrentGroup(userToken, groupid) {
-		models.AddGroupToUser(userToken, groupid)
-	}
-
-	usrConn.WriteJSON(&wsMessage{
-		Code:    "group",
-		Groupid: groupid, // "Okay to render"
-		// TODO: Write a function in models to query db and put FullUserList in here.
-		// TODO: Put list of usernames in the group object here. (ie groups[groupid].Users[i].Username)
-	})
-
-	writeJSONToGroup(groupid, args.Msg)
-	return nil
-	//}
 	//return errors.New("Group does not exist")
 }
 
