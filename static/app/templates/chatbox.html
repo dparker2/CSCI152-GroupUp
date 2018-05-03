@@ -2,7 +2,7 @@
 <script type="text/javascript" src="/js/app/chatbox-component.js"></script>
 <script type="text/x-template" id="tmpl-chatbox">
     <div class="chat-box">
-        <div v-for="message in messages"> <span style="font-size: 12px; color: #484953">[{{ message.timestamp }}]</span> {{ message.user }}: {{ message.msg }}</div>
+        <div v-for="message in messages"> <span class="time-stamp">[{{ message.timestamp }}]</span> {{ message.user }}: {{ message.msg }}</div>
         <input v-on:keyup.enter="sendChat" v-model="inputMessage" placeholder="Enter a message..." />
     </div>
 </script>

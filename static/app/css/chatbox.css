@@ -15,3 +15,7 @@
     overflow-y: auto;
     flex: 1;
 }
+ .time-stamp {
+     font-size: 14px; 
+     color: #808080;
+ }
