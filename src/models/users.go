@@ -18,11 +18,11 @@ type user struct {
 	WsConn         *websocket.Conn
 	Status         int
 	Token          string
-	Friends        []*user
-	CurrentGroups  []*group
-	FavoriteGroups []*group
-	RecentGroups   []*group
+	Friends        userList
+	CurrentGroups  groupList
+	PreviousGroups groupList
 }
+type userList []*user
 
 var userMutex = &sync.Mutex{}
 
@@ -91,4 +91,50 @@ func SetUserConn(token string, conn *websocket.Conn) {
 		users[token].WsConn = conn
 	}
 	userMutex.Unlock()
+}
+
+func UserHasCurrentGroup(token string, grpName string) (b bool) {
+	grp := groups[grpName]
+	u := users[token]
+	b = u.CurrentGroups.contains(grp)
+	return
+}
+
+func AddGroupToUser(token string, grpName string) {
+	u := users[token]
+	grp := groups[grpName]
+	u.CurrentGroups.add(grp)
+}
+
+func RemoveGroupFromUser(token string, grpName string) {
+	u := users[token]
+	grp := groups[grpName]
+	u.CurrentGroups.remove(grp)
+	u.PreviousGroups.add(grp)
+}
+
+func (ul userList) add(u *user) {
+	ul = append(ul, u)
+}
+
+// Remove first occurance of u
+func (ul userList) remove(u *user) {
+	for i := range ul {
+		if ul[i] == u {
+			ul[len(ul)-1], ul[i] = ul[i], ul[len(ul)-1]
+			ul = ul[:len(ul)-1]
+			break
+		}
+	}
+}
+
+func (ul userList) contains(u *user) (b bool) {
+	b = false
+	for i := range ul {
+		if ul[i] == u {
+			b = true
+			return
+		}
+	}
+	return
 }

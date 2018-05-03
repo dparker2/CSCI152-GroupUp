@@ -1,15 +1,17 @@
 package app
 
 type wsMessage struct {
-	Code     string `json:"code"`
-	Groupid  string `json:"groupid"`
-	Chat     string `json:"chat"`
-	Username string `json:"username"`
-	Coords   string `json:"whiteboardCoords"`
-	Color    string `json:"whiteboardColor"`
-	Mode     string `json:"whiteboardMode"`
-	Password string `json:"password"`
-	Email    string `json:"email"`
+	Code           string `json:"code"`
+	Groupid        string `json:"groupid"`
+	Chat           string `json:"chat"`
+	Username       string `json:"username"`
+	Coords         string `json:"whiteboardCoords"`
+	Color          string `json:"whiteboardColor"`
+	Mode           string `json:"whiteboardMode"`
+	Password       string `json:"password"`
+	Email          string `json:"email"`
+	FullUserList   string `json:"fullUserList"`
+	ActiveUserList string `json:"activeUserList"`
 }
 
 type wsAPIstruct struct {
@@ -30,6 +32,7 @@ func setupAPI() {
 	wsAPI = make(map[string]func(wsAPIstruct) error)
 	wsAPI["group/create"] = groupCreate
 	wsAPI["group/join"] = groupJoin
+	wsAPI["group/leave"] = groupLeave
 	wsAPI["group/chat"] = groupChat
 	wsAPI["group/whiteboard"] = groupWhiteboard
 	wsAPI["group/flashcard/new"] = groupFlashcardNew

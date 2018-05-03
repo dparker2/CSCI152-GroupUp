@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
+	"sync"
 
 	_ "github.com/go-sql-driver/mysql"
 
@@ -13,10 +14,14 @@ import (
 )
 
 type group struct {
-	Users []*user
+	Users userList
 	Name  string
 	Admin string
+	Mutex sync.Mutex
 }
+type groupList []*group
+
+var groupsMutex = &sync.Mutex{}
 
 // GroupExists returns whether or not group "name" exists
 func GroupExists(name string) (exists bool) {
@@ -69,6 +74,9 @@ func AddGroup(name string, token string) (groupid string) {
 
 		// Add group if it doesn't already exist
 		if !GroupExists(groupid) {
+      groupsMutex.Lock()
+			defer groupsMutex.Unlock()
+
 			fmt.Println("Creating group " + groupid)
 			_, err := db.Exec("CREATE TABLE " + groupid + " (Admin varchar(50), userList varchar(20), ipAddress varchar(50), User varchar(20), Clock datetime, Message varchar(255), Whiteboard LONGTEXT)")
 			if err != nil {
@@ -108,6 +116,22 @@ func AddUserToGroup(token string, grpName string) error {
 	return nil
 }
 
+func RemoveUserFromGroup(token string, grpName string) error {
+	if !UserExists(token) {
+		return errors.New("RemoveUserFromGroup - user given does not exist")
+	}
+	if !GroupExists(grpName) {
+		return errors.New("RemoveUserFromGroup - group given does not exist")
+	}
+	if !UserExistsInGroup(token, grpName) {
+		return errors.New("RemoveUserFromGroup - user given does not exist in group")
+	}
+	u := users[token]
+	grp := groups[grpName]
+	grp.removeUser(u)
+	return nil
+}
+
 func GetConnectionsInGroup(grpName string) (conn []*websocket.Conn) {
 	if !GroupExists(grpName) {
 		return nil
@@ -135,7 +159,47 @@ func GetOtherConnectionsInGroup(token string, grpName string) (conn []*websocket
 }
 
 func (g *group) addUser(u *user) {
+	g.Mutex.Lock()
+	defer g.Mutex.Unlock()
 	currentUsers := g.Users
 	g.Users = append(currentUsers, u)
+	return
+}
+
+func (g *group) removeUser(u *user) {
+	g.Mutex.Lock()
+	defer g.Mutex.Unlock()
+	for i := range g.Users {
+		if g.Users[i] == u {
+			g.Users[len(g.Users)-1], g.Users[i] = g.Users[i], g.Users[len(g.Users)-1]
+			g.Users = g.Users[:len(g.Users)-1]
+			break
+		}
+	}
+}
+
+func (gl groupList) add(g *group) {
+	gl = append(gl, g)
+}
+
+// Remove first occurance of g
+func (gl groupList) remove(g *group) {
+	for i := range gl {
+		if gl[i] == g {
+			gl[len(gl)-1], gl[i] = gl[i], gl[len(gl)-1]
+			gl = gl[:len(gl)-1]
+			break
+		}
+	}
+}
+
+func (gl groupList) contains(g *group) (b bool) {
+	b = false
+	for i := range gl {
+		if gl[i] == g {
+			b = true
+			return
+		}
+	}
 	return
 }
