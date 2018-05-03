@@ -20,3 +20,19 @@ func putAdminInGroupDB(groupid string, admin string) (err error) {
 
 	return
 }
+
+func WriteChatToDB(groupid string, username string, msg string) (err error) {
+
+	chatstmt, err := db.Prepare("INSERT INTO " + groupid + " (user, Clock, Message) VALUES (?, current_timestamp(),  ?)")
+	fmt.Println("Inserting chat to DB...")
+	if err != nil {
+		panic(err)
+	}
+	_, err = chatstmt.Exec(username, msg)
+
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
+	return
+}

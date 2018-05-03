@@ -65,6 +65,7 @@ func groupChat(args wsAPIstruct) error {
 	putInUsername(&args)
 
 	writeJSONToGroup(groupid, args.Msg)
+	models.WriteChatToDB(groupid, args.Msg.Username, args.Msg.Chat)
 	return nil
 }
 
