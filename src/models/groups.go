@@ -74,26 +74,18 @@ func AddGroup(name string, token string) (groupid string) {
 
 		// Add group if it doesn't already exist
 		if !GroupExists(groupid) {
-      groupsMutex.Lock()
+			groupsMutex.Lock()
 			defer groupsMutex.Unlock()
 
-			fmt.Println("Creating group " + groupid)
-			_, err := db.Exec("CREATE TABLE " + groupid + " (Admin varchar(50), userList varchar(20), ipAddress varchar(50), User varchar(20), Clock datetime, Message varchar(255), Whiteboard LONGTEXT)")
-			if err != nil {
-				panic(err)
-			}
-
-			adminstmt, err := db.Prepare("INSERT INTO " + groupid + " (Admin) VALUES (?)")
-			if err != nil {
-				panic(err)
-			}
-			_, err = adminstmt.Exec(username)
+			createGroupInDB(groupid)
+			putAdminInGroupDB(groupid, username)
 
 			groups[groupid] = &group{
 				Users: nil,
 				Name:  groupid,
 				Admin: username,
 			}
+			fmt.Println(groups[groupid])
 			return
 		}
 	}
