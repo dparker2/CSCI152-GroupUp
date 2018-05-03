@@ -10,7 +10,7 @@ import (
 )
 
 type group struct {
-	Users []*user
+	Users userList
 	Name  string
 	Mutex sync.Mutex
 }
@@ -76,8 +76,6 @@ func AddUserToGroup(token string, grpName string) error {
 	}
 	newUser := users[token]
 	grp := groups[grpName]
-	grp.Mutex.Lock()
-	defer grp.Mutex.Unlock()
 	grp.addUser(newUser)
 	return nil
 }
@@ -94,8 +92,6 @@ func RemoveUserFromGroup(token string, grpName string) error {
 	}
 	u := users[token]
 	grp := groups[grpName]
-	grp.Mutex.Lock()
-	defer grp.Mutex.Unlock()
 	grp.removeUser(u)
 	return nil
 }
@@ -159,4 +155,15 @@ func (gl groupList) remove(g *group) {
 			break
 		}
 	}
+}
+
+func (gl groupList) contains(g *group) (b bool) {
+	b = false
+	for i := range gl {
+		if gl[i] == g {
+			b = true
+			return
+		}
+	}
+	return
 }

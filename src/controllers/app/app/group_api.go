@@ -28,13 +28,18 @@ func groupJoin(args wsAPIstruct) error {
 		})
 		return err
 	}
-	models.AddGroupToUser(userToken, groupid)
+
+	if !models.UserHasCurrentGroup(userToken, groupid) {
+		models.AddGroupToUser(userToken, groupid)
+	}
+
 	usrConn.WriteJSON(&wsMessage{
 		Code:    "group",
 		Groupid: groupid, // "Okay to render"
 		// TODO: Write a function in models to query db and put FullUserList in here.
 		// TODO: Put list of usernames in the group object here. (ie groups[groupid].Users[i].Username)
 	})
+
 	writeJSONToGroup(groupid, args.Msg)
 	return nil
 	//}
@@ -50,7 +55,7 @@ func groupLeave(args wsAPIstruct) error {
 	if err != nil {
 		return err
 	}
-	models.RemoveGroupFromUser(userToken, groupid)
+	// models.RemoveGroupFromUser(userToken, groupid) This needs to be put in like a "remove group" API function
 	writeJSONToGroup(groupid, args.Msg)
 	return nil
 }
