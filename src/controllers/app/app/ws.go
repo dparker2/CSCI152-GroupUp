@@ -74,3 +74,12 @@ func writeJSONToGroup(grpName string, msgJSON *wsMessage) {
 		}
 	}
 }
+
+func writeJSONToOthersInGroup(grpName string, token string, msgJSON *wsMessage) {
+	for _, c := range models.GetOtherConnectionsInGroup(token, grpName) {
+		err := c.WriteJSON(msgJSON)
+		if err != nil {
+			log.Println(err.Error())
+		}
+	}
+}
