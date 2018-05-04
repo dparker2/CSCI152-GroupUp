@@ -45,6 +45,60 @@
                 security_answer3: "",
             }
         },
+        methods: {
+            register: function() {
+                if( this.validateRegister() ) {
+                    this.$http.post('/register', { // Data
+                        reg_email: this.reg_email,
+                        reg_username: this.reg_username,
+                        reg_password1: this.reg_password1,
+                        reg_password2: this.reg_password2,
+                        security_question1: this.security_question1,
+                        security_answer1: this.security_answer1,
+                        security_question2: this.security_question2,
+                        security_answer2: this.security_answer2,
+                        security_question3: this.security_question3,
+                        security_answer3: this.security_answer3
+                    }, { // Config
+                        emulateJSON: true
+                    }).then(function(response) { // Success
+                        console.log(response);
+                        if (response.data) {
+                            console.log(response.data);
+                            alert("Account registered!")
+                            window.location.href = response.data["redirect-path"];
+                        } else {
+                            console.log("Something went wrong")
+                        }
+                    }, function(response) { // Error
+                        console.log(response);
+                    });
+                } else {
+                    alert("Please fill in the entire form.")
+                }
+            },
+            validateRegister: function() {
+                return this.validatePass() && this.validateUsername() && this.validateEmail()
+            },
+            validatePass: function() {
+                if(this.reg_password1 === ""){
+                    return false
+                }
+                return (this.reg_password1 === this.reg_password2)
+            },
+            validateUsername: function() {
+                if(this.reg_username === ""){
+                    return false
+                }
+                return true
+            },
+            validateEmail: function() {
+                if(this.reg_email === ""){
+                    return false
+                }
+                return true
+            }
+        }
     }
     
     const RecoverUser = {

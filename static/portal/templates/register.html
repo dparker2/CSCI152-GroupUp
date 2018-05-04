@@ -13,17 +13,17 @@
         <div class="register-title row-align-center">Security Questions</div>
         <div class="registerrow">
             <input id="security_question1" v-model="security_question1" style = />
-            <input id="security_answer1" v-model="security_answe1" placeholder = "Answer" />
+            <input id="security_answer1" v-model="security_answer1" placeholder = "Answer" />
         </div>
         <div class="registerrow">
             <input id="security_question2" v-model="security_question2" />
-            <input id="security_answer2" v-model="security_answe2" placeholder = "Answer" />
+            <input id="security_answer2" v-model="security_answer2" placeholder = "Answer" />
         </div>
         <div class="registerrow">
             <input id="security_question3" v-model="security_question3" />
             <input id="security_answer3" v-model="security_answer3" placeholder = "Answer" />
         </div>
-        <button class="contrast-button">Reigster</button>
+        <a v-on:click="register"><button class="contrast-button">Register</button></a>
     </div>
 </script>
 [[end]]
