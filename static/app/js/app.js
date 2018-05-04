@@ -1,6 +1,14 @@
 
 (function() {
-    const socket = new WebSocket("ws://" + document.location.host + "/app/ws")
+
+    function start(websocketServerLocation){
+        socket = new WebSocket(websocketServerLocation);
+        socket.onclose = function(){
+            // Try to reconnect in 5 seconds
+            setTimeout(function(){start(websocketServerLocation)}, 5000);
+        };
+    }
+    start("ws://" + document.location.host + "/app/ws");
 
     socket.addEventListener('message', function(event) {
         console.log(event);

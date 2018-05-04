@@ -1,0 +1,27 @@
+.user-list > div {
+    font-size: 22px;
+    font-weight: 500;
+    padding: 5px 0 5px 28px;
+    margin-left: 15px;
+    position: relative;
+}
+
+.user-list svg {
+    position: absolute;
+    left: 5px;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+}
+
+.active:hover {
+    background-color: #444;
+}
+
+.inactive:hover {
+    background-color: #222;
+}
+
+.inactive {
+    color: #666;
+}

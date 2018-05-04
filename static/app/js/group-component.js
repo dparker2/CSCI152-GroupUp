@@ -2,7 +2,7 @@
 function Group(ws) {
     return {
         template: '#tmpl-group',
-        created: function() {
+        mounted: function() {
 
             ws.addEventListener('message', function (event) {
                     data = event.data;
@@ -20,10 +20,19 @@ function Group(ws) {
                 }.bind(this));
             
             // Need to send after socket has connected
-            ws.send(JSON.stringify({
-                code: "group/join",
-                groupid: this.groupid,
-            }));
+            if (ws.readyState === 1) {
+                ws.send(JSON.stringify({
+                    code: "group/join",
+                    groupid: this.groupid,
+                }));
+            } else {
+                ws.onopen = function() {
+                    ws.send(JSON.stringify({
+                        code: "group/join",
+                        groupid: this.groupid,
+                    }));
+                }.bind(this)
+            }
         },
         beforeDestroy: function() {
             ws.send(JSON.stringify({

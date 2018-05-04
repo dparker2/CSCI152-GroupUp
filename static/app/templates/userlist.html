@@ -1,8 +1,13 @@
 [[define "userlist"]]
+<link rel="stylesheet" type="text/css" href="/css/app/userlist.css" />
 <script type="text/javascript" src="/js/app/userlist-component.js"></script>
 <script type="text/x-template" id="tmpl-userlist">
-    <div>
-        <div class="active" v-for="user in activeUsers">{{ user }}</div>
+    <div class="user-list">
+    <div class="active" v-for="user in activeUsers">            
+        <svg height="16" width="16">
+            <circle cx="8" cy="8" r="8" stroke="black" stroke-width="0" fill="green" />
+        </svg>{{ user }}
+    </div>
         <div class="inactive" v-for="user in inactiveUsers">{{ user }}</div>
     </div>
 </script>

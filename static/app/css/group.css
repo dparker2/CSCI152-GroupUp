@@ -49,7 +49,7 @@ span.chat-username:after {
     content: ':';
 }
 
-.user-list {
+.user-wrapper {
     padding: 10px;
     max-width: 20%;
 }
