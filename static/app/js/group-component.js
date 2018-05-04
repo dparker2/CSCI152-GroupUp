@@ -31,7 +31,7 @@ function Group(ws) {
                         code: "group/join",
                         groupid: this.groupid,
                     }));
-                }.bind(this)
+                }.bind(this);
             }
         },
         beforeDestroy: function() {

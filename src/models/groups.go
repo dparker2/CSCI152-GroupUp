@@ -201,16 +201,17 @@ func (g *group) removeUser(u *user) {
 	}
 }
 
-func (gl groupList) add(g *group) {
-	gl = append(gl, g)
+func (gl *groupList) add(g *group) {
+	*gl = append(*gl, g)
 }
 
 // Remove first occurance of g
-func (gl groupList) remove(g *group) {
-	for i := range gl {
-		if gl[i] == g {
-			gl[len(gl)-1], gl[i] = gl[i], gl[len(gl)-1]
-			gl = gl[:len(gl)-1]
+func (gl *groupList) remove(g *group) {
+	list := *gl
+	for i, grp := range list {
+		if grp == g {
+			list[len(list)-1], list[i] = list[i], list[len(list)-1]
+			list = list[:len(list)-1]
 			break
 		}
 	}

@@ -30,6 +30,7 @@ func setupAPI() {
 	//    to support more data parameters sent from the client, add those if needed. They'll be automatically
 	//    decoded and added to the struct when sent.
 	wsAPI = make(map[string]func(wsAPIstruct) error)
+	wsAPI["home"] = home
 	wsAPI["group/create"] = groupCreate
 	wsAPI["group/join"] = groupJoin
 	wsAPI["group/leave"] = groupLeave

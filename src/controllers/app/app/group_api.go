@@ -31,7 +31,7 @@ func groupJoin(args wsAPIstruct) error {
 		}
 
 		if !models.UserHasCurrentGroup(userToken, groupid) {
-			models.AddGroupToUser(userToken, groupid)
+			models.AddGroupToUsersCurrentGroups(userToken, groupid)
 		}
 
 		usrConn.WriteJSON(&wsMessage{

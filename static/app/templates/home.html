@@ -5,14 +5,13 @@
         <div class="column previousgroups">
                 <h2>Previous Groups</h2>
                 <hr>
-                <router-link tag="button" class="groupbutton" to="/group/CSCI150_0128">CSCI150_0128</router-link>
+                <router-link v-for="group in previousGroups" tag="button" class="groupbutton" :to="'/group/' + group">{{ group }}</router-link>
         </div>
         
         <div class="column groups">
                 <h2>Groups</h2>
                 <hr>
-                <router-link tag="button" class="groupbutton" to="/group/CSCI150_0128">CSCI150_0128</router-link>
-                <router-link tag="button" class="groupbutton" to="/group/CSCI150_0128">CSCI150_0128</router-link>
+                <router-link v-for="group in currentGroups" tag="button" class="groupbutton" :to="'/group/' + group">{{ group }}</router-link>
         </div>
         
         <div class="column personalmessage">

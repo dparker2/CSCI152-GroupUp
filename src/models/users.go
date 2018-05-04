@@ -75,6 +75,25 @@ func GetConnection(token string) (conn *websocket.Conn) {
 	return
 }
 
+func GetCurrentGroups(token string) (list []string) {
+	usr := users[token]
+	log.Println(usr)
+	currGrps := usr.CurrentGroups
+	for _, grp := range currGrps {
+		list = append(list, grp.Name)
+	}
+	return
+}
+
+func GetPreviousGroups(token string) (list []string) {
+	usr := users[token]
+	currGrps := usr.PreviousGroups
+	for _, grp := range currGrps {
+		list = append(list, grp.Name)
+	}
+	return
+}
+
 // SetUserStatus sets the status of user associated with token
 func SetUserStatus(token string, status int) {
 	userMutex.Lock()
@@ -100,7 +119,7 @@ func UserHasCurrentGroup(token string, grpName string) (b bool) {
 	return
 }
 
-func AddGroupToUser(token string, grpName string) {
+func AddGroupToUsersCurrentGroups(token string, grpName string) {
 	u := users[token]
 	grp := groups[grpName]
 	u.CurrentGroups.add(grp)
