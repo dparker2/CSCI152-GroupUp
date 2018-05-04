@@ -54,18 +54,18 @@ func groupJoin(args wsAPIstruct) error {
 				Chat:      message,
 			})
 		}
-		/*
-			fullUserlist := models.GetFullUserList(groupid)
-			for _, user := range fullUserlist {
-				username := user[0]
-				status := user[1]
-				usrConn.WriteJSON(&wsMessage{
-					Code:     "group/join",
-					Groupid:  groupid,
-					Username: username,
-					Status:   status,
-				})
-			}*/
+
+		fullUserlist := models.GetFullUserListWithStatus(groupid)
+		for _, user := range fullUserlist {
+			username := user[0]
+			status := user[1]
+			usrConn.WriteJSON(&wsMessage{
+				Code:     "group/join",
+				Groupid:  groupid,
+				Username: username,
+				Status:   status,
+			})
+		}
 		writeJSONToGroup(groupid, args.Msg)
 		return nil
 	}

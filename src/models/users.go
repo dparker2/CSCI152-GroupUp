@@ -138,3 +138,14 @@ func (ul userList) contains(u *user) (b bool) {
 	}
 	return
 }
+
+func (ul userList) containsUsername(u string) (b bool) {
+	b = false
+	for i := range ul {
+		if ul[i].Name == u {
+			b = true
+			return
+		}
+	}
+	return
+}

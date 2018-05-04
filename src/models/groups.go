@@ -226,3 +226,20 @@ func (gl groupList) contains(g *group) (b bool) {
 	}
 	return
 }
+
+// GetFullUserListWithStatus will get the full user list with their status by comparing current and database list.
+func GetFullUserListWithStatus(groupid string) (listWithStatus [][]string) {
+	dbList := GetFullUserListFromDB(groupid)
+	activeList := groups[groupid].Users
+
+	for _, dbUsername := range dbList {
+		var userAndStatus []string
+		status := "0"
+		if activeList.containsUsername(dbUsername) {
+			status = "1"
+		}
+		userAndStatus = append(userAndStatus, dbUsername, status)
+		listWithStatus = append(listWithStatus, userAndStatus)
+	}
+	return
+}
