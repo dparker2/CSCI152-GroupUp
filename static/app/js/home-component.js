@@ -7,5 +7,8 @@ function Home() {
                 
             }
         },
+        components: {
+            'chat-box': Chatbox(),
+        }, 
     }
 }

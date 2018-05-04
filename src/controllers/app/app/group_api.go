@@ -2,10 +2,11 @@ package app
 
 import (
 	"groupup/src/models"
+	"log"
 )
 
 func groupCreate(args wsAPIstruct) error {
-	args.Msg.Groupid = models.AddGroup(args.Msg.Groupid)
+	args.Msg.Groupid = models.AddGroup(args.Msg.Groupid, args.UserToken)
 	usrConn := models.GetConnection(args.UserToken)
 
 	usrConn.WriteJSON(args.Msg)
@@ -27,14 +28,36 @@ func groupJoin(args wsAPIstruct) error {
 		})
 		return err
 	}
+
+	if !models.UserHasCurrentGroup(userToken, groupid) {
+		models.AddGroupToUser(userToken, groupid)
+	}
+
 	usrConn.WriteJSON(&wsMessage{
 		Code:    "group",
 		Groupid: groupid, // "Okay to render"
+		// TODO: Write a function in models to query db and put FullUserList in here.
+		// TODO: Put list of usernames in the group object here. (ie groups[groupid].Users[i].Username)
 	})
+
 	writeJSONToGroup(groupid, args.Msg)
 	return nil
 	//}
 	//return errors.New("Group does not exist")
+}
+
+func groupLeave(args wsAPIstruct) error {
+	groupid := args.Msg.Groupid
+	userToken := args.UserToken
+	putInUsername(&args)
+
+	err := models.RemoveUserFromGroup(userToken, groupid)
+	if err != nil {
+		return err
+	}
+	// models.RemoveGroupFromUser(userToken, groupid) This needs to be put in like a "remove group" API function
+	writeJSONToGroup(groupid, args.Msg)
+	return nil
 }
 
 func groupChat(args wsAPIstruct) error {
@@ -45,7 +68,17 @@ func groupChat(args wsAPIstruct) error {
 	return nil
 }
 
-func groupWhiteboardDraw(args wsAPIstruct) error {
+func groupWhiteboard(args wsAPIstruct) error {
+	groupid := args.Msg.Groupid
+	msgJSON := args.Msg
+
+	for _, c := range models.GetOtherConnectionsInGroup(args.UserToken, groupid) {
+		err := c.WriteJSON(msgJSON)
+		if err != nil {
+			log.Println(err.Error())
+		}
+	}
+
 	return nil
 }
 

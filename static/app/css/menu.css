@@ -2,17 +2,25 @@
     position: absolute;
     background-color: #eee;
     color: #000;
-    max-height: 0;
+    height: calc(100vh - 58px);
+    width: 0px;
+    left: 0;
+    top: 58px;
     overflow: hidden;
-    transition: all 0.2s ease-out;
+    transition: width 0.1s ease-out;
 }
 
 .menu.show {
-    max-height: 500px;
-    transition: max-height 0.5s ease-out;
+    width: 270px;
+    transition: width 0.3s ease-out;
+}
+
+.menu h1 {
+    margin: 10px;
 }
 
 .menu ul {
+    width: 270px;
     margin: 0;
     padding: 0;
 }

@@ -1,18 +1,10 @@
 .home {
-    display: flex;
-    flex-direction: row; 
+    padding-top: 10px;
     justify-content: space-between;
-    height: 90vh;
+    flex-grow: 1;
 }
 
-.home .groups {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    height: 90vh;
-    min-width: 250px;
-}
-.home .groups .joinbtn {
+.home .joinbtn {
     background-color: white;
     color: black;
     text-align:center;
@@ -23,48 +15,35 @@
     color:white;
 }
 
-.home .recentgroups {
-    display:flex;
-    flex-direction: column;
-    flex-grow: 1;
-    color:rgb(255, 255, 255);
-    background-color:#1d1f21;
-    height: 50%;
-    max-width: 1000px;
-    margin: 5px 0px 0px 0px;
-    padding: 10px 10px 0px 10px;
-    
-}
-
-.home .favoritegroups {
-    display:flex;
-    flex-direction: column;
-    flex-grow: 2;
-    height: 50%;
-    max-width: 1000px;
-    color:white;
-    background-color:#1d1f21;
-    margin: 5px 0px 0px 0px;
-    padding: 10px 10px 0px 10px;
-}
-
-.home .groupObject {
-    display: flex;
-    flex-direction: row;
-    justify-content:space-between;
-    background-color: rgba(153, 153, 153, 0.137);
-    margin: 10px;
+.home .column {
+    max-width: 20%;
     padding: 10px;
-    line-height: 31px;
 }
 
-.home .friendslist {
-    color:white;
-    background-color:#1d1f21;
-    padding: 10px 15px; 
-    width: 15%;
+.home .column.personalmessage {
+    display: flex;
+    flex-direction: column;
+    max-width: 39%;
+    flex-grow: 2;
+}
+
+.home > div {
     min-width: 250px;
-    margin: 10px;
+}
+
+.home div {
+    color: white;
+    background-color: #1d1f21;
+}
+
+.home h2 {
+    text-align: center;
+}
+
+.home .groupbutton {
+    background-color: rgb(153, 153, 153);
+    width: 100%;
+    margin-top: 10px;
 }
 
 .home .friendslist .friendSearch {
@@ -72,7 +51,7 @@
 }
 
 .home .friendslist .friends {
-    margin: 5px;
+    padding: 5px;
     background: #1d1f21;
     line-height: 24px;
 }

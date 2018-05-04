@@ -38,6 +38,12 @@ function Group(ws) {
                 groupid: this.groupid,
             }));
         },
+        beforeDestroy: function() {
+            ws.send(JSON.stringify({
+                code: "group/leave",
+                groupid: this.groupid,
+            }));
+        },
         data: function() {
             return {
                 drawing: false,
@@ -74,6 +80,7 @@ function Group(ws) {
         },
         components: {
             'chat-box': Chatbox(ws),
+            'white-board': Whiteboard(ws),
         },
     }
 }

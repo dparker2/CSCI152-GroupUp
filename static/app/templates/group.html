@@ -1,17 +1,17 @@
 [[define "group"]]
 <script type="text/javascript" src="/js/app/group-component.js"></script>
 <script type="text/x-template" id="tmpl-group">
-    <div class="group-frame">
+    <div class="group-frame row row-fit">
         <div v-if="showGroup">
             <div class="group-name">{{ groupid }}</div>
-            <div class="row">
-                <div class="chat-wrapper size-5of12">
+            <div class="group row row-fit">
+                <div class="chat-wrapper column">
                     <chat-box></chat-box>
                 </div>
-                <div class="study-mode size-5of12">
-                    <canvas width="2000px" height="1000px" id="whiteboard" v-on:mousedown="startDraw" v-on:mousemove="draw" v-on:mouseup="endDraw"></canvas>
+                <div class="study-mode column">
+                    <white-board></white-board>
                 </div>
-                <div class="user-list">
+                <div class="user-list column">
                     Hello
                 </div>
             </div>
