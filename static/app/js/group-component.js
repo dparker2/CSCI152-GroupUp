@@ -50,6 +50,7 @@ function Group(ws) {
                 groupid: this.$route.params.groupid,
                 showGroup: false,
                 showError: false,
+                studyMode: 'whiteboard'
             }
         },
         methods: {
@@ -81,6 +82,7 @@ function Group(ws) {
         components: {
             'chat-box': Chatbox(ws),
             'white-board': Whiteboard(ws),
+            'flash-cards': Flashcards(ws)
         },
     }
 }

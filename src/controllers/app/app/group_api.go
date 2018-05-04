@@ -50,6 +50,7 @@ func groupJoin(args wsAPIstruct) error {
 		writeJSONToGroup(groupid, args.Msg)
 		return nil
 	}
+	return nil
 	//return errors.New("Group does not exist")
 }
 

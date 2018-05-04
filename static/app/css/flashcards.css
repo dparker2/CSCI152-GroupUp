@@ -1,0 +1,100 @@
+
+
+
+/* entire container, keeps perspective */
+.flip-container {
+	perspective: 1000px;
+}
+
+.flip-container.flip .flipper {
+	transform: rotateY(180deg);
+}
+
+.flip-container, .front, .back {
+	width: 100%;
+	height: 500px;
+	overflow-y: hidden; 
+	overflow-x: hidden; 
+}
+
+/* flip speed goes here */
+.flipper {
+	transition: 0.5s;
+	transform-style: preserve-3d;
+	position: relative;
+}
+
+/* hide back of pane during swap */
+.front, .back {
+	backface-visibility: hidden;
+	background-color: white;
+	color: black;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* front pane, placed above back */
+.front {
+	z-index: 2;
+	/* for firefox 31 */
+	transform: rotateY(0deg);
+}
+
+/* back, initially hidden pane */
+.back {
+	transform: rotateY(180deg);
+}
+
+textarea {
+	resize: none;
+	width: 90%;
+	height: 80%;
+}
+
+.card-label {
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	padding: 30px;
+}
+
+.flip-button {
+	position: absolute;
+	top: 12px;
+	right: 14px;
+}
+
+.saveButton {
+	position: absolute;
+	bottom: 12px;
+	right: 14px;
+}
+.fi.fi-save, .fi.fi-spinner-rotate-forward {
+	font-size: 20px;
+	cursor: pointer;
+}
+
+.arrow {
+	margin-top: auto;
+	margin-bottom: auto;
+	position: absolute;	
+	font-size: 30px;
+	opacity: 0.35;
+	cursor: pointer;
+}
+.right {
+	right: 14px;
+}
+.left {
+	left: 14px;	
+}
+.arrow:hover {
+	opacity: 1;
+	transition: all 0.3s ease;
+}
