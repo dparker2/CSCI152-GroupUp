@@ -1,0 +1,9 @@
+[[define "userlist"]]
+<script type="text/javascript" src="/js/app/userlist-component.js"></script>
+<script type="text/x-template" id="tmpl-userlist">
+    <div>
+        <div class="active" v-for="user in activeUsers">{{ user }}</div>
+        <div class="inactive" v-for="user in inactiveUsers">{{ user }}</div>
+    </div>
+</script>
+[[end]]

@@ -18,19 +18,6 @@ function Group(ws) {
                         this.showGroup = true
                     }
                 }.bind(this));
-
-            // SEPARATE THIS TO USERBOX COMPONENT LATER
-            ws.addEventListener('message', function (event) {
-                data = event.data;
-                if (!data)
-                    return;
-                data = JSON.parse(data);
-                code = data.code;
-                if (!code || code !== "group/join")
-                    return;
-                console.log(data.username + " joined"); // Restrict to only group/join messages.
-            })
-            /////
             
             // Need to send after socket has connected
             ws.send(JSON.stringify({
@@ -81,6 +68,7 @@ function Group(ws) {
         components: {
             'chat-box': Chatbox(ws),
             'white-board': Whiteboard(ws),
+            'user-list': Userlist(ws),
         },
     }
 }
