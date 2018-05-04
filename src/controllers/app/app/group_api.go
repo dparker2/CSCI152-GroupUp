@@ -1,6 +1,7 @@
 package app
 
 import (
+	"errors"
 	"groupup/src/models"
 	"log"
 )
@@ -21,23 +22,16 @@ func groupJoin(args wsAPIstruct) error {
 	putInUsername(&args)
 
 	if models.GroupExists(groupid) { // When we get DB setup, this should check it
-		/*err := models.AddUserToGroup(userToken, groupid)
+		err := models.AddUserToGroup(userToken, groupid)
 		if err != nil {
 			usrConn.WriteJSON(&wsMessage{
 				Code: "group", // No other args shows failure to join
 			})
 			return err
-		}*/
+		}
 
 		if !models.UserHasCurrentGroup(userToken, groupid) {
-			err := models.AddUserToGroup(userToken, groupid)
-			if err != nil {
-				usrConn.WriteJSON(&wsMessage{
-					Code: "group", // No other args shows failure to join
-				})
-				return err
-			}
-			//models.AddGroupToUser(userToken, groupid)
+			models.AddGroupToUser(userToken, groupid)
 		}
 
 		usrConn.WriteJSON(&wsMessage{
@@ -47,10 +41,35 @@ func groupJoin(args wsAPIstruct) error {
 			// TODO: Put list of usernames in the group object here. (ie groups[groupid].Users[i].Username)
 		})
 
+		fullChatLog := models.GetChatLogFromDB(groupid)
+		for _, chat := range fullChatLog {
+			timestamp := chat[0]
+			username := chat[1]
+			message := chat[2]
+			usrConn.WriteJSON(&wsMessage{
+				Code:      "group/chat",
+				Groupid:   groupid,
+				Username:  username,
+				Timestamp: timestamp,
+				Chat:      message,
+			})
+		}
+		/*
+			fullUserlist := models.GetFullUserList(groupid)
+			for _, user := range fullUserlist {
+				username := user[0]
+				status := user[1]
+				usrConn.WriteJSON(&wsMessage{
+					Code:     "group/join",
+					Groupid:  groupid,
+					Username: username,
+					Status:   status,
+				})
+			}*/
 		writeJSONToGroup(groupid, args.Msg)
 		return nil
 	}
-	//return errors.New("Group does not exist")
+	return errors.New("Group does not exist")
 }
 
 func groupLeave(args wsAPIstruct) error {

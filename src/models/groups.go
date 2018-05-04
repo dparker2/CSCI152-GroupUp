@@ -27,17 +27,44 @@ var groupsMutex = &sync.Mutex{}
 func GroupExists(name string) (exists bool) {
 	_, exists = groups[name]
 	if exists == false { //If group doesn't exists in group struct, double checks DB to confirm.
-		var groupexists string
-		err := db.QueryRow("SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name= ?", name).Scan(&groupexists)
+		var groupid string
+		err := db.QueryRow("SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name= ?", name).Scan(&groupid)
 		switch {
 		case err == sql.ErrNoRows:
 			fmt.Println("Group does not exist")
 		case err != nil:
 			panic(err)
 		default:
-			if name == groupexists {
-				fmt.Println("Group" + groupexists + "exists in the DB already")
+			if name == groupid {
+				fmt.Println("Group" + groupid + "exists in the DB already")
+				stmt, err := db.Query("SELECT Admin, userList FROM " + name)
+				if err != nil {
+					panic(err)
+				}
+				var adminname string
+				var userslist userList
+
+				defer stmt.Close()
+				for stmt.Next() {
+					var findAdminName sql.NullString
+					var findUsernames sql.NullString
+					var currentUser user
+					err = stmt.Scan(&findAdminName, &findUsernames)
+					if findAdminName.Valid {
+						adminname = findAdminName.String
+					}
+					if findUsernames.Valid {
+						currentUser.Name = findUsernames.String
+						userslist.add(&currentUser)
+					}
+				}
+				groups[name] = &group{
+					Users: make(userList, 0),
+					Name:  name,
+					Admin: adminname,
+				}
 				exists = true
+				fmt.Println(groups[name])
 			}
 		}
 	}
@@ -77,11 +104,11 @@ func AddGroup(name string, token string) (groupid string) {
 			groupsMutex.Lock()
 			defer groupsMutex.Unlock()
 
-			createGroupInDB(groupid)
-			putAdminInGroupDB(groupid, username)
+			CreateGroupInDB(groupid)
+			PutAdminInGroupDB(groupid, username)
 
 			groups[groupid] = &group{
-				Users: nil,
+				Users: make(userList, 0),
 				Name:  groupid,
 				Admin: username,
 			}
@@ -105,6 +132,9 @@ func AddUserToGroup(token string, grpName string) error {
 	newUser := users[token]
 	grp := groups[grpName]
 	grp.addUser(newUser)
+	username := GetUsername(token)
+	AddUserToGroupDB(grpName, username)
+	fmt.Println(grp)
 	return nil
 }
 
@@ -121,6 +151,7 @@ func RemoveUserFromGroup(token string, grpName string) error {
 	u := users[token]
 	grp := groups[grpName]
 	grp.removeUser(u)
+	fmt.Println(grp)
 	return nil
 }
 

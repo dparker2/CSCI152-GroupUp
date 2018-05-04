@@ -1,18 +1,17 @@
 package app
 
 type wsMessage struct {
-	Code           string `json:"code"`
-	Groupid        string `json:"groupid"`
-	Chat           string `json:"chat"`
-	Timestamp      string `json:"timestamp"`
-	Username       string `json:"username"`
-	Coords         string `json:"whiteboardCoords"`
-	Color          string `json:"whiteboardColor"`
-	Mode           string `json:"whiteboardMode"`
-	Password       string `json:"password"`
-	Email          string `json:"email"`
-	FullUserList   string `json:"fullUserList"`
-	ActiveUserList string `json:"activeUserList"`
+	Code      string `json:"code"`
+	Groupid   string `json:"groupid"`
+	Chat      string `json:"chat"`
+	Timestamp string `json:"timestamp"`
+	Username  string `json:"username"`
+	Coords    string `json:"whiteboardCoords"`
+	Color     string `json:"whiteboardColor"`
+	Mode      string `json:"whiteboardMode"`
+	Password  string `json:"password"`
+	Email     string `json:"email"`
+	Status    string `json:"status"`
 }
 
 type wsAPIstruct struct {
