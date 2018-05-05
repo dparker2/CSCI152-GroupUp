@@ -12,6 +12,7 @@ type wsMessage struct {
 	Password  string `json:"password"`
 	Email     string `json:"email"`
 	Status    string `json:"status"`
+	Query     string `json:"query"`
 }
 
 type wsAPIstruct struct {
@@ -39,4 +40,5 @@ func setupAPI() {
 	wsAPI["group/whiteboard"] = groupWhiteboard
 	wsAPI["group/flashcard/new"] = groupFlashcardNew
 	wsAPI["group/flashcard/edit"] = groupFlashcardEdit
+	wsAPI["app/search/users"] = searchUsers
 }

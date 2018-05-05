@@ -18,24 +18,21 @@
 
         <div class="friendslist column">
             <h2>Friends List</h2>
-            <form>
-                <input class="friendSearch" type="text" placeholder="Search">
-            </form>
-            <div class="friends">
-                Dave Parker <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
-            </div> 
-            <div class="friends">
-                Michelle Salomon <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
+            <input v-on:keyup="searchUsers" v-model="searchQuery" class="friendSearch" type="text" placeholder="Search">
+            <div class="innerlist">
+                <div v-for="result in friendsResults" class="friends">
+                    {{ result }} <i class="fi fi-plus-a"> </i>
+                </div>  
+                <div v-if="!searchQuery" v-for="friend in onlineFriends" class="friends">
+                    <svg height="10" width="10">
+                        <circle cx="5" cy="5" r="5" stroke="black" stroke-width="0" fill="green" />
+                    </svg>{{ friend }} <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
+                </div>
+                <div v-if="!searchQuery" v-for="friend in offlineFriends" class="friends">
+                    {{ friend }}<i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
+                </div>  
+                </div> 
             </div>
-            <div class="friends">
-                Juan Mejia <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
-            </div>
-            <div class="friends">
-                Garret Kelley <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
-            </div>
-            <div class="friends">
-                Fuller Le <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
-            </div>     
         </div>
         
     </div>

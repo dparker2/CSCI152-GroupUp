@@ -18,7 +18,8 @@ type user struct {
 	WsConn        *websocket.Conn
 	Status        int
 	Token         string
-	Friends       userList
+	OnlineFriends userList
+	AllFriends    []string
 	CurrentGroups groupList
 }
 type userList []*user
@@ -55,6 +56,14 @@ func UserExists(token string) bool {
 	}
 }
 
+func UserExistsByUsername(username string) bool {
+	if token, exists := userTokens[username]; exists {
+		return UserExists(token)
+	} else {
+		return false
+	}
+}
+
 // GetUsername returns the username of a user associated with the token
 func GetUsername(token string) (username string) {
 	userMutex.Lock()
@@ -80,6 +89,22 @@ func GetCurrentGroups(token string) (list []string) {
 	currGrps := usr.CurrentGroups
 	for _, grp := range currGrps {
 		list = append(list, grp.Name)
+	}
+	return
+}
+
+func GetOnlineFriendsList(token string) (list []string) {
+	for _, usr := range users[token].OnlineFriends {
+		list = append(list, usr.Name)
+	}
+	return
+}
+
+func GetOfflineFriendsList(token string) (list []string) {
+	for _, friend := range users[token].AllFriends {
+		if !users[token].OnlineFriends.containsUsername(friend) {
+			list = append(list, friend)
+		}
 	}
 	return
 }
@@ -123,16 +148,16 @@ func RemoveGroupFromUser(token string, grpName string) {
 	db_RemoveGroupFromUsersGroups(u.UserID, grpName)
 }
 
-func (ul userList) add(u *user) {
-	ul = append(ul, u)
+func (ul *userList) add(u *user) {
+	*ul = append(*ul, u)
 }
 
 // Remove first occurance of u
-func (ul userList) remove(u *user) {
-	for i := range ul {
-		if ul[i] == u {
-			ul[len(ul)-1], ul[i] = ul[i], ul[len(ul)-1]
-			ul = ul[:len(ul)-1]
+func (ul *userList) remove(u *user) {
+	for i := range *ul {
+		if (*ul)[i].Name == u.Name {
+			(*ul)[len((*ul))-1], (*ul)[i] = (*ul)[i], (*ul)[len((*ul))-1]
+			(*ul) = (*ul)[:len((*ul))-1]
 			break
 		}
 	}

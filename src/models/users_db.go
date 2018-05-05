@@ -2,6 +2,27 @@ package models
 
 import "log"
 
+func SearchUsersInDB(str string) (usrs []string, err error) {
+	stmt, err := dbAcc.Prepare("SELECT Username FROM UserInfo WHERE Username LIKE CONCAT('%', ? ,'%') ORDER BY Username ASC LIMIT 20")
+	if err != nil {
+		return nil, err
+	}
+	usernames, err := stmt.Query(str)
+	if err != nil {
+		return nil, err
+	}
+	for usernames.Next() {
+		var u string
+		err = usernames.Scan(&u)
+		if err != nil {
+			log.Println(err.Error())
+			return
+		}
+		usrs = append(usrs, u)
+	}
+	return
+}
+
 func db_AddGroupToUsersGroups(uuid int, groupid string) error {
 	log.Println("adding group to db")
 	stmt, err := dbAcc.Prepare("INSERT INTO GroupMapping (UserID, SubbedGroup) VALUES (?, ?)")
@@ -38,6 +59,27 @@ func db_GetUsersGroups(uuid int) (sl []string, err error) {
 			return
 		}
 		sl = append(sl, g)
+	}
+	return
+}
+
+func db_GetUsersFriends(uuid int) (sl []string, err error) {
+	stmt, err := dbAcc.Prepare("SELECT Username FROM UserInfo WHERE UserID IN (SELECT f.followedID FROM FriendTest f INNER JOIN UserInfo u ON u.UserID = f.followerID WHERE f.followerID = ?)")
+	if err != nil {
+		return nil, err
+	}
+	friends, err := stmt.Query(uuid)
+	if err != nil {
+		return nil, err
+	}
+	for friends.Next() {
+		var f string
+		err = friends.Scan(&f)
+		if err != nil {
+			log.Println(err.Error())
+			return
+		}
+		sl = append(sl, f)
 	}
 	return
 }

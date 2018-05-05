@@ -72,8 +72,21 @@
     border-top-left-radius: 0;
 }
 
+.home .friends svg {
+    margin-right: 8px;
+}
+
+.home .friendslist {
+    display: flex;
+    flex-direction: column;
+}
+
 .home .friendslist .friendSearch {
     margin-bottom: 10px;
+}
+
+.home .friendslist .innerlist {
+    overflow-y: auto;
 }
 
 .home .friendslist .friends {

@@ -12,7 +12,7 @@ function Userlist(ws) {
                 code = data.code;
                 if (!code || code !== "group/join")
                     return;
-                if (data.username && !data.status || data.status === "0") {
+                if (data.username && data.status === "0") {
                     var index = this.inactiveUsers.indexOf(data.username);
                     if (index > -1) { // In inactive users
                         this.inactiveUsers.splice(index, 1);
@@ -22,6 +22,10 @@ function Userlist(ws) {
                     }
                 } else {
                     this.activeUsers.push(data.username)
+                    var index = this.inactiveUsers.indexOf(data.username);
+                    if (index > -1) { // In inactive users
+                        this.inactiveUsers.splice(index, 1);
+                    }
                 }
             }.bind(this));
 
