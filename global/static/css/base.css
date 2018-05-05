@@ -43,6 +43,15 @@ button.contrast-button:active {
     background-color: #00943D;
 }
 
+button.back-button {
+    background-color: #00B24A;
+    float: right;
+}
+
+button.back-button:active {
+    background-color: #00943D;
+}
+
 button.dull-button {
     background-color: #ddd;
 }
