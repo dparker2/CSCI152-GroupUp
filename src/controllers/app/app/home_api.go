@@ -7,14 +7,6 @@ func home(args wsAPIstruct) error {
 	usrConn := models.GetConnection(args.UserToken)
 	putInUsername(&args)
 
-	prevGrps := models.GetPreviousGroups(userToken)
-	for _, grpName := range prevGrps {
-		usrConn.WriteJSON(&wsMessage{
-			Code:    "app/previous/add",
-			Groupid: grpName,
-		})
-	}
-
 	currGrps := models.GetCurrentGroups(userToken)
 	for _, grpName := range currGrps {
 		usrConn.WriteJSON(&wsMessage{

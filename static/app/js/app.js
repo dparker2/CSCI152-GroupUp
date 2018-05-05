@@ -1,11 +1,17 @@
 
 (function() {
+    var socket;
 
     function start(websocketServerLocation){
         socket = new WebSocket(websocketServerLocation);
         socket.onclose = function(){
             // Try to reconnect in 5 seconds
             setTimeout(function(){start(websocketServerLocation)}, 5000);
+        };
+        socket.onopen = function() {
+            socket.send(JSON.stringify({
+                code: "home",
+            }));
         };
     }
     start("ws://" + document.location.host + "/app/ws");
@@ -22,33 +28,16 @@
         code = data.code;
         if (!code || !code.startsWith("app/current"))
             return;
+        var index = vm.currentGroups.indexOf(data.groupid);
         if (code.endsWith("add")) {
-            console.log(data)
-            vm.currentGroups.push(data.groupid)
+            if (index === -1) {
+                vm.currentGroups.push(data.groupid)
+            }
         } else if (code.endsWith("remove")) {
-            var index = vm.currentGroups.indexOf(data.groupid);
-            if (index > -1) {
-                vm.currentGroups.slice(index, 1);
+            if (index !== -1) {
+                vm.currentGroups.splice(index, 1);
             }
         }
-    }.bind(vm));
-    
-    socket.addEventListener('message', function (event) {
-        data = event.data;
-        if (!data)
-            return;
-        data = JSON.parse(data);
-        code = data.code;
-        if (!code || !code.startsWith("app/previous"))
-            return;
-            if (code.endsWith("add")) {
-                vm.previousGroups.push(data.groupid)
-            } else if (code.endsWith("remove")) {
-                var index = vm.previousGroups.indexOf(data.groupid);
-                if (index > -1) {
-                    vm.previousGroups.slice(index, 1);
-                }
-            }
     }.bind(vm));
 
     const router = new VueRouter({
@@ -68,7 +57,6 @@
         data: {
             showMenu: false,
             currentGroups: [],
-            previousGroups: [],
         },
      })
 }());

@@ -15,6 +15,27 @@ func groupCreate(args wsAPIstruct) error {
 	return nil
 }
 
+func groupRemove(args wsAPIstruct) error {
+	groupid := args.Msg.Groupid
+	userToken := args.UserToken
+	usrConn := models.GetConnection(args.UserToken)
+	username := models.GetUsername(userToken)
+
+	models.RemoveGroupFromUser(userToken, groupid)
+
+	usrConn.WriteJSON(&wsMessage{
+		Code:    "app/current/remove",
+		Groupid: groupid,
+	})
+
+	writeJSONToGroup(groupid, &wsMessage{
+		Code:     "group/leave",
+		Username: username,
+		Groupid:  groupid,
+	})
+	return nil
+}
+
 func groupJoin(args wsAPIstruct) error {
 	groupid := args.Msg.Groupid
 	userToken := args.UserToken
@@ -32,6 +53,10 @@ func groupJoin(args wsAPIstruct) error {
 
 		if !models.UserHasCurrentGroup(userToken, groupid) {
 			models.AddGroupToUsersCurrentGroups(userToken, groupid)
+			usrConn.WriteJSON(&wsMessage{
+				Code:    "app/current/add",
+				Groupid: groupid,
+			})
 		}
 
 		usrConn.WriteJSON(&wsMessage{
@@ -81,7 +106,6 @@ func groupLeave(args wsAPIstruct) error {
 	if err != nil {
 		return err
 	}
-	// models.RemoveGroupFromUser(userToken, groupid) This needs to be put in like a "remove group" API function
 	writeJSONToGroup(groupid, args.Msg)
 	return nil
 }

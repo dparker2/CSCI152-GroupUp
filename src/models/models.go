@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	DB "groupup/src/system/db"
+	"log"
 )
 
 var users map[string]*user
@@ -56,6 +57,14 @@ func VerifyLogin(username string, password string) (u user, verify bool) {
 	default:
 		if password == passwordDB {
 			verify = true
+			groupNames, err := db_GetUsersGroups(u.UserID)
+			if err != nil {
+				log.Println(err.Error())
+				return u, false
+			}
+			userGroups := groupNamesToObjects(groupNames)
+			u.CurrentGroups = userGroups
+			log.Println(u)
 			insertIntoUsers(u)
 		} // add incorrect password response
 	}
@@ -67,4 +76,13 @@ func insertIntoUsers(u user) {
 	userMutex.Lock()
 	users[u.Token] = &u
 	userMutex.Unlock()
+}
+
+func groupNamesToObjects(groupNames []string) (gl groupList) {
+	for _, g := range groupNames {
+		if GroupExists(g) {
+			gl = append(gl, groups[g])
+		}
+	}
+	return
 }

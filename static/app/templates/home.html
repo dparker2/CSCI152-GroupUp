@@ -2,16 +2,13 @@
 <script type="text/javascript" src="/js/app/home-component.js"></script>
 <script type="text/x-template" id="tmpl-home">
     <div class="home row row-fit">
-        <div class="column previousgroups">
-                <h2>Previous Groups</h2>
-                <hr>
-                <router-link v-for="group in previousGroups" tag="button" class="groupbutton" :to="'/group/' + group">{{ group }}</router-link>
-        </div>
-        
         <div class="column groups">
                 <h2>Groups</h2>
                 <hr>
-                <router-link v-for="group in currentGroups" tag="button" class="groupbutton" :to="'/group/' + group">{{ group }}</router-link>
+                <div class="groupbutton" v-for="group in currentGroups">
+                    <router-link tag="button" :to="'/group/' + group">{{ group }}</router-link>
+                    <button v-on:click="removeCurrentGroup(group)"><i class="fi fi-close-a"></i></button>
+                </div>
         </div>
         
         <div class="column personalmessage">

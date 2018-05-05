@@ -19,11 +19,18 @@ function Home(ws) {
         data: function() {
             return {
                 currentGroups: this.$parent.currentGroups,
-                previousGroups: this.$parent.previousGroups,
+            }
+        },
+        methods: {
+            removeCurrentGroup: function(groupid) {
+                ws.send(JSON.stringify({
+                    code: "group/remove",
+                    groupid: groupid,
+                }));
             }
         },
         components: {
             'chat-box': Chatbox(),
-        }, 
+        },
     }
 }

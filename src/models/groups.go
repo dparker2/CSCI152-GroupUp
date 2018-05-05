@@ -94,7 +94,6 @@ func AddGroup(name string, token string) (groupid string) {
 	for {
 		// Generate random 4 digits
 		randFour := 1000 + rand.Intn(9999-1000)
-		fmt.Println(randFour)
 		randID := strconv.Itoa(randFour)
 		groupid = name + "_" + randID
 		username := GetUsername(token)
@@ -112,7 +111,6 @@ func AddGroup(name string, token string) (groupid string) {
 				Name:  groupid,
 				Admin: username,
 			}
-			fmt.Println(groups[groupid])
 			return
 		}
 	}
@@ -134,7 +132,6 @@ func AddUserToGroup(token string, grpName string) error {
 	grp.addUser(newUser)
 	username := GetUsername(token)
 	AddUserToGroupDB(grpName, username)
-	fmt.Println(grp)
 	return nil
 }
 
@@ -151,7 +148,6 @@ func RemoveUserFromGroup(token string, grpName string) error {
 	u := users[token]
 	grp := groups[grpName]
 	grp.removeUser(u)
-	fmt.Println(grp)
 	return nil
 }
 
@@ -207,11 +203,10 @@ func (gl *groupList) add(g *group) {
 
 // Remove first occurance of g
 func (gl *groupList) remove(g *group) {
-	list := *gl
-	for i, grp := range list {
-		if grp == g {
-			list[len(list)-1], list[i] = list[i], list[len(list)-1]
-			list = list[:len(list)-1]
+	for i := range *gl {
+		if (*gl)[i].Name == g.Name {
+			(*gl)[len((*gl))-1], (*gl)[i] = (*gl)[i], (*gl)[len((*gl))-1]
+			(*gl) = (*gl)[:len((*gl))-1]
 			break
 		}
 	}
@@ -220,7 +215,7 @@ func (gl *groupList) remove(g *group) {
 func (gl groupList) contains(g *group) (b bool) {
 	b = false
 	for i := range gl {
-		if gl[i] == g {
+		if gl[i].Name == g.Name {
 			b = true
 			return
 		}

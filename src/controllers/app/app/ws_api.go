@@ -32,6 +32,7 @@ func setupAPI() {
 	wsAPI = make(map[string]func(wsAPIstruct) error)
 	wsAPI["home"] = home
 	wsAPI["group/create"] = groupCreate
+	wsAPI["group/remove"] = groupRemove
 	wsAPI["group/join"] = groupJoin
 	wsAPI["group/leave"] = groupLeave
 	wsAPI["group/chat"] = groupChat

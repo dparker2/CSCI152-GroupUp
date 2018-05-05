@@ -9,18 +9,17 @@ import (
 )
 
 type user struct {
-	Name           string
-	Email          string
-	UserID         int
-	LockoutStatus  sql.NullInt64
-	SecQuestions   [3]sql.NullString
-	SecAnswers     [3]sql.NullString
-	WsConn         *websocket.Conn
-	Status         int
-	Token          string
-	Friends        userList
-	CurrentGroups  groupList
-	PreviousGroups groupList
+	Name          string
+	Email         string
+	UserID        int
+	LockoutStatus sql.NullInt64
+	SecQuestions  [3]sql.NullString
+	SecAnswers    [3]sql.NullString
+	WsConn        *websocket.Conn
+	Status        int
+	Token         string
+	Friends       userList
+	CurrentGroups groupList
 }
 type userList []*user
 
@@ -85,15 +84,6 @@ func GetCurrentGroups(token string) (list []string) {
 	return
 }
 
-func GetPreviousGroups(token string) (list []string) {
-	usr := users[token]
-	currGrps := usr.PreviousGroups
-	for _, grp := range currGrps {
-		list = append(list, grp.Name)
-	}
-	return
-}
-
 // SetUserStatus sets the status of user associated with token
 func SetUserStatus(token string, status int) {
 	userMutex.Lock()
@@ -123,13 +113,14 @@ func AddGroupToUsersCurrentGroups(token string, grpName string) {
 	u := users[token]
 	grp := groups[grpName]
 	u.CurrentGroups.add(grp)
+	db_AddGroupToUsersGroups(u.UserID, grpName)
 }
 
 func RemoveGroupFromUser(token string, grpName string) {
 	u := users[token]
 	grp := groups[grpName]
 	u.CurrentGroups.remove(grp)
-	u.PreviousGroups.add(grp)
+	db_RemoveGroupFromUsersGroups(u.UserID, grpName)
 }
 
 func (ul userList) add(u *user) {
