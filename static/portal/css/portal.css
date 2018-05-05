@@ -45,10 +45,6 @@
 
 .registerrow {
     text-align: center;
-    padding: 0px 15px;
     display: inline-flex;
-}
-
-.registerrow input:first-child {
-    margin-right: 5px;
+    width: 450px;
 }
