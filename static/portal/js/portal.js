@@ -43,10 +43,12 @@
                 security_answer2: "",
                 security_question3: "",
                 security_answer3: "",
+                errorList: [],
             }
         },
         methods: {
             register: function() {
+                this.errorList = []
                 if( this.validateRegister() ) {
                     this.$http.post('/register', { // Data
                         reg_email: this.reg_email,
@@ -65,7 +67,6 @@
                         console.log(response);
                         if (response.data) {
                             console.log(response.data);
-                            alert("Account registered!")
                             window.location.href = response.data["redirect-path"];
                         } else {
                             console.log("Something went wrong")
@@ -73,30 +74,39 @@
                     }, function(response) { // Error
                         console.log(response);
                     });
-                } else {
-                    alert("Please fill in the entire form.")
-                }
+                } 
             },
             validateRegister: function() {
-                return this.validatePass() && this.validateUsername() && this.validateEmail()
+                var validPass = this.validatePass();
+                var validUser = this.validateUsername();
+                var validEmail = this.validateEmail();
+                return validPass && validUser && validEmail
             },
             validatePass: function() {
-                if(this.reg_password1 === ""){
+                if(this.reg_password1 === "" || this.hasWhitespace(this.reg_password1) || (this.reg_password1 !== this.reg_password2)) {
+                    console.log(this.errorList)
+                    this.errorList.push("Invalid password. Your password must exist and not contain any spaces.")
+                    console.log(this.errorList)
                     return false
                 }
-                return (this.reg_password1 === this.reg_password2)
+                return true
             },
             validateUsername: function() {
-                if(this.reg_username === ""){
+                if(this.reg_username === "" || this.hasWhitespace(this.reg_username)) {
+                    this.errorList.push("Invalid username. Your username must exist and not contain any spaces.")
                     return false
                 }
                 return true
             },
             validateEmail: function() {
-                if(this.reg_email === ""){
+                if(this.reg_email === "" || this.hasWhitespace(this.reg_email)){
+                    this.errorList.push("Invalid email. Your email must exist and not contain any spaces.")
                     return false
                 }
                 return true
+            },
+            hasWhitespace: function(myString) {
+                return myString.indexOf(" ") >= 0
             }
         }
     }
