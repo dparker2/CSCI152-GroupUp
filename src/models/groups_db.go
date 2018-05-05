@@ -18,6 +18,31 @@ func CreateGroupInDB(groupid string) (err error) {
 	return
 }
 
+// SearchGroupsInDB returns a list of string arrays where
+//   0 index is groupname
+//   1 index is number of users
+//   2 index is creator
+func SearchGroupsInDB(str string) (usrs [][]string, err error) {
+	/*stmt, err := dbAcc.Prepare("SELECT Username FROM UserInfo WHERE Username LIKE CONCAT('%', ? ,'%') ORDER BY Username ASC LIMIT 20")
+	if err != nil {
+		return nil, err
+	}
+	usernames, err := stmt.Query(str)
+	if err != nil {
+		return nil, err
+	}
+	for usernames.Next() {
+		var u string
+		err = usernames.Scan(&u)
+		if err != nil {
+			log.Println(err.Error())
+			return
+		}
+		usrs = append(usrs, u)
+	}*/
+	return
+}
+
 // PutAdminInGroupDB adds admin to database
 func PutAdminInGroupDB(groupid string, admin string) (err error) {
 	adminstmt, err := db.Prepare("INSERT INTO " + groupid + " (Admin) VALUES (?)")

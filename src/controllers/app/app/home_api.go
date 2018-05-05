@@ -62,6 +62,27 @@ func searchUsers(args wsAPIstruct) error {
 	return nil
 }
 
+func searchGroups(args wsAPIstruct) error {
+	usrConn := models.GetConnection(args.UserToken)
+	query := args.Msg.Query
+
+	grps, err := models.SearchGroupsInDB(query)
+	if err != nil {
+		return err
+	}
+	for _, group := range grps {
+		usrConn.WriteJSON(&wsMessage{
+			Code:     "app/search/groups",
+			Groupid:  group[0],
+			Status:   group[1],
+			Username: group[2],
+			Query:    query,
+		})
+	}
+
+	return nil
+}
+
 func friendsAdd(args wsAPIstruct) error {
 	usrConn := models.GetConnection(args.UserToken)
 	friendName := args.Msg.Username

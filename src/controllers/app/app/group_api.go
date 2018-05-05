@@ -29,7 +29,7 @@ func groupRemove(args wsAPIstruct) error {
 	})
 
 	writeJSONToGroup(groupid, &wsMessage{
-		Code:     "group/leave",
+		Code:     "group/remove",
 		Username: username,
 		Groupid:  groupid,
 	})

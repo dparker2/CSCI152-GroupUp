@@ -11,9 +11,21 @@
                 </div>
         </div>
         
-        <div class="column personalmessage">
-                <h2>Group Tag Search</h2>
-                <input placeholder="Enter a tag">
+        <div class="column group-search">
+                <h2>Group Search</h2>
+                <input v-on:keyup="searchGroups" v-model="groupSearchQuery" placeholder="Enter a tag">
+                <div v-if="groupSearchQuery.length > 2" class="group-search-head">
+                    <div>Group</div>
+                    <div>Users Online</div>
+                    <div>Total Users</div>
+                    <div>Creator</div>
+                </div>
+                <div class="groupbutton group-info" v-for="group in groupsResults">
+                    <router-link tag="button" :to="'/group/' + group.groupid">{{ group.groupid }}</router-link>
+                    <div>{{ group.onlineUsers }}</div>
+                    <div>{{ group.allUsers }}</div>
+                    <div>{{ group.creator }}</div>
+                </div>
         </div>
 
         <div class="friendslist column">

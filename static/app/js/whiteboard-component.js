@@ -4,7 +4,7 @@ function Whiteboard(ws) {
         template: '#tmpl-whiteboard',
         mounted: function(){
             console.log("first");
-            groupBoard = new DrawingBoard.Board("wb");
+            groupBoard = new DrawingBoard.Board("wb" + this.$parent.groupid);
             groupBoard.ev.bind('board:drawing', this.sendWB);            
             
             ws.addEventListener('message', function(event){

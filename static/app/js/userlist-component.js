@@ -45,6 +45,26 @@ function Userlist(ws) {
                     }
                 }
             }.bind(this));
+
+            ws.addEventListener('message', function (event) {
+                data = event.data;
+                if (!data)
+                    return;
+                data = JSON.parse(data);
+                code = data.code;
+                if (!code || code !== "group/remove")
+                    return;
+                if (data.username) {
+                    var activeIndex = this.activeUsers.indexOf(data.username);
+                    var inactiveIndex = this.inactiveUsers.indexOf(data.username);
+                    if (activeIndex > -1) { // In active users
+                        this.activeUsers.splice(activeIndex, 1);
+                    }
+                    if (inactiveIndex > -1) {
+                        this.inactiveUsers.splice(inactiveIndex, 1);
+                    }
+                }
+            }.bind(this));
         },
         data: function() {
             return {

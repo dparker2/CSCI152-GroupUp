@@ -24,11 +24,50 @@
     padding: 10px;
 }
 
-.home .column.personalmessage {
+.home .column.group-search {
     display: flex;
     flex-direction: column;
     max-width: 49%;
     flex-grow: 2;
+}
+
+.home .group-search-head {
+    display: flex;
+    flex-direction: row;
+}
+
+.home .group-search-head div {
+    flex: 1;
+    text-align: center;
+}
+
+.home .group-search-head div:first-child {
+    flex: 4;
+}
+
+.home .group-search-head div:last-child {
+    flex: 2;
+}
+
+.home .group-info {
+    display: flex;
+    flex-direction: row;
+}
+
+.home .group-info > div {
+    flex: 1;
+    text-align: center;
+}
+
+.home .group-info > div:last-child {
+    flex: 2;
+}
+
+.home .column.group-search .group-info button {
+    flex: 4;
+    border-radius: 3px;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .home > div {

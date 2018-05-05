@@ -41,6 +41,7 @@ func setupAPI() {
 	wsAPI["group/flashcard/new"] = groupFlashcardNew
 	wsAPI["group/flashcard/edit"] = groupFlashcardEdit
 	wsAPI["app/search/users"] = searchUsers
+	wsAPI["app/search/groups"] = searchGroups
 	wsAPI["app/friends/add"] = friendsAdd
 	wsAPI["app/friends/remove"] = friendsRemove
 }

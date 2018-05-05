@@ -49,6 +49,13 @@ function Home(ws) {
                 if (code.endsWith("users") && data.query && data.query === this.searchQuery) {
                     this.friendsResults.push(data.username)
                 }
+                if (code.endsWith("groups") && data.query && data.query === this.groupSearchQuery) {
+                    this.groupsResults.push({
+                        groupid: data.groupid,
+                        users: data.status,
+                        creator: data.username,
+                    })
+                }
             }.bind(this));
         },
         data: function() {
@@ -58,6 +65,8 @@ function Home(ws) {
                 offlineFriends: [],
                 friendsResults: [],
                 searchQuery: "",
+                groupSearchQuery: "",
+                groupsResults: [],
             }
         },
         methods: {
@@ -73,6 +82,15 @@ function Home(ws) {
                     ws.send(JSON.stringify({
                         code: "app/search/users",
                         query: this.searchQuery,
+                    }))
+                }
+            },
+            searchGroups: function() {
+                this.groupsResults = []
+                if (this.groupSearchQuery.length > 2) {
+                    ws.send(JSON.stringify({
+                        code: "app/search/groups",
+                        query: this.groupSearchQuery,
                     }))
                 }
             },
