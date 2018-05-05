@@ -4,16 +4,11 @@ function Home(ws) {
         template: '#tmpl-home',
         created: function() {
             // Need to send after socket has connected
+            console.log(ws.readyState)
             if (ws.readyState === 1) {
                 ws.send(JSON.stringify({
                     code: "home",
                 }));
-            } else {
-                ws.onopen = function() {
-                    ws.send(JSON.stringify({
-                        code: "home",
-                    }));
-                }.bind(this);
             }
 
             ws.addEventListener('message', function (event) {
@@ -24,18 +19,22 @@ function Home(ws) {
                 code = data.code;
                 if (!code || !code.startsWith("app/friends"))
                     return;
+                var offlineIndex = this.offlineFriends.indexOf(data.username)
+                var onlineIndex = this.onlineFriends.indexOf(data.username)
                 if (code.endsWith("online")) {
-                    var index = this.offlineFriends.indexOf(data.username)
-                    if (index !== -1) {
-                        this.offlineFriends.splice(index, 1)
+                    if (offlineIndex !== -1) {
+                        this.offlineFriends.splice(offlineIndex, 1)
                     }
-                    this.onlineFriends.push(data.username)
+                    if (onlineIndex === -1) {
+                        this.onlineFriends.push(data.username)
+                    }
                 } else if (code.endsWith("offline")) {
-                    var index = this.onlineFriends.indexOf(data.username)
-                    if (index !== -1) {
-                        this.onlineFriends.splice(index, 1)
+                    if (onlineIndex !== -1) {
+                        this.onlineFriends.splice(onlineIndex, 1)
                     }
-                    this.offlineFriends.push(data.username)
+                    if (offlineIndex === -1) {
+                        this.offlineFriends.push(data.username)
+                    }
                 }
             }.bind(this));
 
@@ -76,6 +75,12 @@ function Home(ws) {
                         query: this.searchQuery,
                     }))
                 }
+            },
+            addFriend: function(username) {
+                ws.send(JSON.stringify({
+                    code: "app/friends/add",
+                    username: username,
+                }))
             }
         },
         components: {

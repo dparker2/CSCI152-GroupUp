@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 	"sync"
 
@@ -83,6 +84,15 @@ func GetConnection(token string) (conn *websocket.Conn) {
 	return
 }
 
+func GetConnectionByUsername(username string) (conn *websocket.Conn) {
+	userMutex.Lock()
+	if UserExistsByUsername(username) {
+		conn = users[userTokens[username]].WsConn
+	}
+	userMutex.Unlock()
+	return
+}
+
 func GetCurrentGroups(token string) (list []string) {
 	usr := users[token]
 	log.Println(usr)
@@ -104,6 +114,19 @@ func GetOfflineFriendsList(token string) (list []string) {
 	for _, friend := range users[token].AllFriends {
 		if !users[token].OnlineFriends.containsUsername(friend) {
 			list = append(list, friend)
+		}
+	}
+	return
+}
+
+func GetOnlineFollowers(token string) (list []string, err error) {
+	totalFollowers, err := db_GetUsersFollowersDB(users[token].UserID)
+	if err != nil {
+		return nil, err
+	}
+	for _, follower := range totalFollowers {
+		if UserExistsByUsername(follower) {
+			list = append(list, follower)
 		}
 	}
 	return
@@ -132,6 +155,21 @@ func UserHasCurrentGroup(token string, grpName string) (b bool) {
 	u := users[token]
 	b = u.CurrentGroups.contains(grp)
 	return
+}
+
+func AddFriendToUser(token string, friendname string) error {
+	usr := users[token]
+	uuid := usr.UserID
+
+	for _, friend := range usr.AllFriends {
+		if friend == friendname {
+			return errors.New("User already friend")
+		}
+	}
+
+	usr.AllFriends = append(usr.AllFriends, friendname)
+	err := db_AddFriendToUser(uuid, friendname)
+	return err
 }
 
 func AddGroupToUsersCurrentGroups(token string, grpName string) {

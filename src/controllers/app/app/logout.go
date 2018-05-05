@@ -17,10 +17,31 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 		}
 		http.SetCookie(w, &logoutCookie)
 	}
+
+	userToken := cookie.Value
+
+	letFollowersKnow(userToken, &wsMessage{
+		Code:     "app/friends/offline",
+		Username: models.GetUsername(userToken),
+	})
 	// TODO: Call something like "leaveGroup_helper or something that basically does what groupleave does.
-	if models.UserExists(cookie.Value) {
-		models.RemoveUser(cookie.Value)
+	if models.UserExists(userToken) {
+		models.RemoveUser(userToken)
 	}
 	http.Redirect(w, r, "/", http.StatusFound)
+	return
+}
+
+func letFollowersKnow(token string, msg *wsMessage) (err error) {
+	onlineFollowers, err := models.GetOnlineFollowers(token)
+	if err != nil {
+		return
+	}
+	for _, friendName := range onlineFollowers {
+		if models.UserExistsByUsername(friendName) {
+			conn := models.GetConnectionByUsername(friendName)
+			err = conn.WriteJSON(msg)
+		}
+	}
 	return
 }

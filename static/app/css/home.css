@@ -97,7 +97,7 @@
 }
 
 .home .friendslist .friends i {
-    margin: 0px 5px;
+    padding: 0px 5px;
     float: right;
     line-height: 24px;
     cursor: pointer;

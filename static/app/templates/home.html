@@ -18,10 +18,10 @@
 
         <div class="friendslist column">
             <h2>Friends List</h2>
-            <input v-on:keyup="searchUsers" v-model="searchQuery" class="friendSearch" type="text" placeholder="Search">
+            <input v-on:keyup="searchUsers" v-model="searchQuery" class="friendSearch" type="text" placeholder="Search all users">
             <div class="innerlist">
                 <div v-for="result in friendsResults" class="friends">
-                    {{ result }} <i class="fi fi-plus-a"> </i>
+                    {{ result }} <i v-on:click="addFriend(result)" class="fi fi-plus-a"> </i>
                 </div>  
                 <div v-if="!searchQuery" v-for="friend in onlineFriends" class="friends">
                     <svg height="10" width="10">

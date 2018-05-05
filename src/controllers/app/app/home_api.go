@@ -34,6 +34,11 @@ func home(args wsAPIstruct) error {
 		})
 	}
 
+	letFollowersKnow(userToken, &wsMessage{
+		Code:     "app/friends/online",
+		Username: args.Msg.Username,
+	})
+
 	return nil
 }
 
@@ -53,6 +58,32 @@ func searchUsers(args wsAPIstruct) error {
 			Query:    query,
 		})
 	}
+
+	return nil
+}
+
+func friendsAdd(args wsAPIstruct) error {
+	usrConn := models.GetConnection(args.UserToken)
+	friendName := args.Msg.Username
+
+	err := models.AddFriendToUser(args.UserToken, friendName)
+	if err != nil {
+		return err
+	}
+
+	code := "app/friends/offline"
+	if models.UserExistsByUsername(friendName) {
+		code = "app/friends/online"
+	}
+	usrConn.WriteJSON(&wsMessage{
+		Code:     code,
+		Username: friendName,
+	})
+
+	return nil
+}
+
+func friendsRemove(args wsAPIstruct) error {
 
 	return nil
 }

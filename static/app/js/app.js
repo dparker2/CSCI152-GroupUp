@@ -9,6 +9,7 @@
             setTimeout(function(){start(websocketServerLocation)}, 5000);
         };
         socket.onopen = function() {
+            console.log(socket.readyState)
             socket.send(JSON.stringify({
                 code: "home",
             }));

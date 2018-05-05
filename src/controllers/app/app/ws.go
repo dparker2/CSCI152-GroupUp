@@ -48,6 +48,10 @@ func WS(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 			// TODO: Put a function here that is like "cleanupuser" where it removes them from the group theyre active in and puts them offline, etc
 			//i.e. our disconnect and removing them from everything.
+			letFollowersKnow(token, &wsMessage{
+				Code:     "app/friends/offline",
+				Username: models.GetUsername(token),
+			})
 			return
 		}
 
