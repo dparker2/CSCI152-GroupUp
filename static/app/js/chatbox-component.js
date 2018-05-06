@@ -18,13 +18,14 @@ function Chatbox(ws) {
                 
                 chat = data.chat;
                 username = data.username;
-                //tstamp = data.timestamp;
+                d = new Date(data.timestamp);
+                tstamp = d.toLocaleString()
 
                 if (chat && username) {
                     this.messages.push({
                         user: username,
                         msg: chat,
-                        //timestamp: tstamp
+                        timestamp: tstamp
                     });
                 }
             }.bind(this));
@@ -45,17 +46,6 @@ function Chatbox(ws) {
                 }));
                 this.inputMessage = '';
             },
-            /*
-            timestamp: function() {
-                var time = new Date();                
-                var stamp = time.toLocaleString('en-US', { hour12: true });
-                /*
-                var date = time.getMonth() + "/" + time.getDay() + "/" + time.getFullYear();
-                var time = time.getHours() + ":" + time.getMinutes();
-                var stamp = date + '-' + time;
-                return stamp.toString();
-            }
-              */
         },
     }
 };

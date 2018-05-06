@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -78,17 +79,16 @@ func AddUserToGroupDB(groupid string, username string) (err error) {
 }
 
 // WriteChatToDB stores chat into the DB
-func WriteChatToDB(groupid string, username string, msg string) (err error) {
-
-	chatstmt, err := db.Prepare("INSERT INTO " + groupid + " (user, Clock, Message) VALUES (?, current_timestamp(),  ?)")
+func WriteChatToDB(groupid string, timestamp string, username string, msg string) (err error) {
+	chatstmt, err := db.Prepare("INSERT INTO " + groupid + " (user, Clock, Message) VALUES (?, ?, ?)")
 	fmt.Println("Inserting chat to DB...")
 	if err != nil {
-		panic(err)
+		return err
 	}
-	_, err = chatstmt.Exec(username, msg)
+	_, err = chatstmt.Exec(username, timestamp, msg)
 
 	if err != nil {
-		panic(err)
+		return err
 	}
 	return
 }
@@ -97,7 +97,8 @@ func WriteChatToDB(groupid string, username string, msg string) (err error) {
 func GetChatLogFromDB(groupid string) (chatLog [][]string) {
 	chatstmt, err := db.Query("SELECT user, Clock, Message FROM " + groupid + " WHERE Message IS NOT NULL")
 	if err != nil {
-		panic(err)
+		log.Println(err.Error())
+		return
 	}
 
 	defer chatstmt.Close()
@@ -107,8 +108,11 @@ func GetChatLogFromDB(groupid string) (chatLog [][]string) {
 		var message string
 		err = chatstmt.Scan(&username, &timestamp, &message)
 		if err != nil {
-			panic(err)
+			log.Println(err.Error())
+			return
 		}
+		ts, _ := time.Parse("2006-01-02 15:04:05", timestamp)
+		timestamp = ts.Format(time.RFC3339)
 		var aChat []string
 		aChat = append(aChat, timestamp, username, message)
 		chatLog = append(chatLog, aChat)
