@@ -1,36 +1,37 @@
 [[define "flashcards"]]
 <script type="text/javascript" src="/js/app/flashcards-component.js"></script>
 <script type="text/x-template" id="tmpl-flashcards">
-    <div class="flash-card">     
-        <div v-if="view == 'list'" class="list-wrapper" v-for="card in deck">
-            {{ card.index }}
-            <div v-bind:id="'card'+card.index" class="list-item"> {{ card.front }}</div>
-            <div class="list-item">{{ card.back }}</div>                     
+    <div class="flash-card"> 
+        <div style="display:flex; flex-direction:column" v-if="view == 'list'">    
+        <template v-for="card in deck">
+            <div v-bind:style="{ order: card.index-1 }"  class="list-wrapper" >
+                {{ card.index }}
+                <div v-bind:id="'card'+card.index" class="list-item"> {{ card.front }}</div>
+                <div class="list-item">{{ card.back }}</div>                     
+            </div>
+        </template>
         </div>
 
-        <button id="add-button" class="list-add-button" v-if="view == 'list'"> + </button>
+        <button id="add-button" class="list-add-button" v-if="view == 'list'" v-on:click="sendNewCard()"> + </button>
+
         <div v-else="view == 'card'"  id="flipContainer" class="flip-container">
             <div class="flipper">
                 <div class="front">
                     <button class="list-button" v-on:click="view ='list'"> + </button>
                     <label v-on:dblclick ="editCard()"  v-show="cardLabel" class="card-label"> {{ frontText }} </label>
                     <textarea id="frontText" v-show="cardText" v-model="frontText"  rows="10" cols="50"></textarea>
-                    <div class="card-num"> {{ index + 1}} / {{ deckSize }} </div>
+                    <div class="card-num"> {{ currentCard }} / {{ deck.length }} </div>
                     <i class="fi fi-spinner-rotate-forward flip-button" v-on:click="flipCard()"></i> 
-                    <i class="fi fi-save saveButton" v-on:click="saveEdit()" v-show="saveIcon"></i>
+                    <i class="fi fi-save saveButton" v-on:click="saveEdit('front')" v-show="saveIcon"></i>
                     <i class="fi fi-angle-right right arrow " v-show="navArrow" v-on:click="nextCard"></i>
                     <i class="fi fi-angle-left left arrow " v-show="navArrow" v-on:click="prevCard"></i>
-                    <button class="accordion">Section 1</button>
-            <div class="panel">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicingconsequat.</p>
-            </div>
                 </div>
                 <div class="back">
                     <label v-on:dblclick="editCard()" v-show="cardLabel" class="card-label"> {{ backText }} </label>
                     <textarea id="backText" v-show="cardText" v-model="backText" rows="10" cols="50"></textarea>
-                    <div class="card-num"> {{ index + 1 }} / {{}} </div>
+                    <div class="card-num"> {{ currentCard }} / {{ deck.length }} </div>
                     <i class="fi fi-spinner-rotate-forward flip-button" v-on:click="flipCard()"></i>
-                    <i class="fi fi-save saveButton" v-on:click="saveEdit()" v-show="saveIcon"></i>
+                    <i class="fi fi-save saveButton" v-on:click="saveEdit('back')" v-show="saveIcon"></i>
                     <i class="fi fi-angle-right right arrow"></i>
                     <i class="fi fi-angle-left left arrow" v-show="navArrow"></i>
                 </div>

@@ -13,13 +13,14 @@ function Flashcards(ws) {
                 code = data.code;
                 if (!code || code !== "group/flashcard")
                     return;
-    
-                this.deck.push({
-                    front: data.front,
-                    back: data.back,
-                    index: data.index
-                });
                 
+                if(data.front){
+                    
+                }
+                if(data.front){
+
+                }
+                this.addCard(data.index, data.front, data.back)
 
                 // do something important group/flashcard/new
             }.bind(this));
@@ -28,22 +29,30 @@ function Flashcards(ws) {
             return { 
                 cardText: false,
                 cardLabel: true,
-                index: 0,
+                currentCard: 1,
                 saveIcon: false,
                 navArrow: true,
                 frontText: 'Double click to edit',
                 backText: 'Double click to edit',
                 deck: [],
                 view: 'card',
-                deckSize: 0
+                deckSize: 0,
             }
         },
         methods: {
+            addCard: function(index, front, back) {
+                
+
+            },
+            updateCard: function() {
+                
+            },
             setDeck: function() {
+        
                 this.deck.push({
                     front: "michelle",
                     back: "salomon",
-                    index: 1
+                    index: 4
                 });
 
                 this.deck.push({
@@ -55,6 +64,11 @@ function Flashcards(ws) {
                 this.deck.push({
                     front: "hellow",
                     back: "world",
+                    index: 1
+                });
+                this.deck.push({
+                    front: "number",
+                    back: "three",
                     index: 3
                 });
                 this.deckSize = this.deck.length;
@@ -63,11 +77,18 @@ function Flashcards(ws) {
             flipCard: function() {
                 document.getElementById('flipContainer').classList.toggle('flip');
             }, 
-            saveEdit: function() {
+            saveEdit: function(side) {
                 this.cardLabel = !this.cardLabel; 
                 this.cardText = !this.cardText;
                 this.saveIcon = false;
                 this.navArrow = true;
+
+                if(side == 'front'){
+                    this.sendFront();
+                }
+                else{
+                    this.sendBack();
+                }
             },
             editCard: function() {
                 this.cardLabel = !this.cardLabel; 
@@ -77,40 +98,38 @@ function Flashcards(ws) {
             },
             nextCard: function () {
                 // check if index not out of bounds
-                if(this.index < this.deck.length){
-                    this.frontText = this.deck[this.index].front;
-                    this.backText = this.deck[this.index].back;
-                    this.index = ++this.index;
+                while(this.deck[this.currentCard].index != this.currentCard){
+                    this.currentCard =  (1 + this.currentCard) % this.deck.length;
                 }
             },
             prevCard: function () {
                 // check if index not out of bounds
-                if(this.index > 0){
-                    this.index = --this.index;                
-                    this.frontText =this.deck[this.index].front;
-                    this.backText = this.deck[this.index].back;
+                while(this.deck[this.currentCard].index != this.currentCard){
+                    this.currentCard =  (this.currentCard - 1) % this.deck.length;
                 }
             },
-            sendCard: function() {
+            sendNewCard: function() {
                 ws.send(JSON.stringify({
                     code: "group/flashcards/new",
                     groupid: this.$parent.groupid,
+                    index: -1
                 }));
-
+            },
+            sendFront: function () {
                 ws.send(JSON.stringify({
                     code: "group/flashcards/editFront",
                     groupid: this.$parent.groupid,
                     front: this.frontText,
                     index: this.cardIndex
                 }));
-
+            },
+            sendBack: function () {
                 ws.send(JSON.stringify({
                     code: "group/flashcards/editBack",
                     groupid: this.$parent.groupid,
                     back: this.backText,
                     index: this.cardIndex
                 }));
-
             }
         }
     }
