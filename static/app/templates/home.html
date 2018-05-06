@@ -23,7 +23,7 @@
                 <div class="groupbutton group-info" v-for="group in groupsResults">
                     <router-link tag="button" :to="'/group/' + group.groupid">{{ group.groupid }}</router-link>
                     <div>{{ group.onlineUsers }}</div>
-                    <div>{{ group.allUsers }}</div>
+                    <div>{{ group.users }}</div>
                     <div>{{ group.creator }}</div>
                 </div>
         </div>
