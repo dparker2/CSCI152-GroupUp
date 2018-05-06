@@ -12,6 +12,18 @@
     display: flex;
     flex-direction: column;
     background-color: inherit;
-    overflow-y: auto;
     flex: 1;
+}
+
+.chat-box .chats {
+    overflow-y: auto;
+}
+
+.chat-box div {
+    background: transparent;
+} 
+
+.time-stamp {
+    font-size: 14px; 
+    color: #808080;
 }
