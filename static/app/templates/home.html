@@ -2,44 +2,49 @@
 <script type="text/javascript" src="/js/app/home-component.js"></script>
 <script type="text/x-template" id="tmpl-home">
     <div class="home row row-fit">
-        <div class="column previousgroups">
-                <h2>Previous Groups</h2>
-                <hr>
-                <router-link tag="button" class="groupbutton" to="/group/CSCI150_0128">CSCI150_0128</router-link>
-        </div>
-        
         <div class="column groups">
                 <h2>Groups</h2>
                 <hr>
-                <router-link tag="button" class="groupbutton" to="/group/CSCI150_0128">CSCI150_0128</router-link>
-                <router-link tag="button" class="groupbutton" to="/group/CSCI150_0128">CSCI150_0128</router-link>
+                <div class="groupbutton" v-for="group in currentGroups">
+                    <router-link tag="button" :to="'/group/' + group">{{ group }}</router-link>
+                    <button v-on:click="removeCurrentGroup(group)"><i class="fi fi-close-a"></i></button>
+                </div>
         </div>
         
-        <div class="column personalmessage">
-                <h2>Group Tag Search</h2>
-                <input placeholder="Enter a tag">
+        <div class="column group-search">
+                <h2>Group Search</h2>
+                <input v-on:keyup="searchGroups" v-model="groupSearchQuery" placeholder="Enter a tag">
+                <div v-if="groupSearchQuery.length > 2" class="group-search-head">
+                    <div>Group</div>
+                    <div>Users Online</div>
+                    <div>Total Users</div>
+                    <div>Creator</div>
+                </div>
+                <div class="groupbutton group-info" v-for="group in groupsResults">
+                    <router-link tag="button" :to="'/group/' + group.groupid">{{ group.groupid }}</router-link>
+                    <div>{{ group.onlineUsers }}</div>
+                    <div>{{ group.allUsers }}</div>
+                    <div>{{ group.creator }}</div>
+                </div>
         </div>
 
         <div class="friendslist column">
             <h2>Friends List</h2>
-            <form>
-                <input class="friendSearch" type="text" placeholder="Search">
-            </form>
-            <div class="friends">
-                Dave Parker <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
-            </div> 
-            <div class="friends">
-                Michelle Salomon <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
+            <input v-on:keyup="searchUsers" v-model="searchQuery" class="friendSearch" type="text" placeholder="Search all users">
+            <div class="innerlist">
+                <div v-for="result in friendsResults" class="friends">
+                    {{ result }} <i v-on:click="addFriend(result)" class="fi fi-plus-a"> </i>
+                </div>  
+                <div v-if="!searchQuery" v-for="friend in onlineFriends" class="friends">
+                    <svg height="10" width="10">
+                        <circle cx="5" cy="5" r="5" stroke="black" stroke-width="0" fill="green" />
+                    </svg>{{ friend }} <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
+                </div>
+                <div v-if="!searchQuery" v-for="friend in offlineFriends" class="friends">
+                    {{ friend }}<i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
+                </div>  
+                </div> 
             </div>
-            <div class="friends">
-                Juan Mejia <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
-            </div>
-            <div class="friends">
-                Garret Kelley <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
-            </div>
-            <div class="friends">
-                Fuller Le <i class="fi fi-more-v-a"> </i>  <i class="fi fi-hipchat"> </i>
-            </div>     
         </div>
         
     </div>

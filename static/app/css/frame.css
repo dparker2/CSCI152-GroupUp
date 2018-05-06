@@ -17,6 +17,10 @@
     cursor: pointer;
 }
 
+.header {
+    flex-shrink: 0;
+}
+
 .header * {
     font-weight: 500;
 }

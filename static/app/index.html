@@ -18,6 +18,7 @@
         [[template "group"]]
         [[template "whiteboard"]]
         [[template "flashcards"]]
+        [[template "userlist"]]
     </head>
     <body>
         <div id="app" class="app">
@@ -31,9 +32,7 @@
                         </ul>
                         <h1>Groups</h1>
                         <ul>
-                            <router-link v-on:click.native="showMenu = false" to="/group/CSCI150_0128" tag="li">CSCI150_0128</router-link>
-                            <router-link v-on:click.native="showMenu = false" to="/group/CSCI150_0128" tag="li">CSCI150_0128</router-link>
-                            <router-link v-on:click.native="showMenu = false" to="/group/CSCI150_0128" tag="li">CSCI150_0128</router-link>
+                            <router-link v-for="group in currentGroups" v-on:click.native="showMenu = false" :to="'/group/' + group" tag="li">{{ group }}</router-link>
                         </ul>
                     </div>
                     GroupUp
@@ -44,7 +43,7 @@
                 </div>
             </div>
             <hr />
-            <router-view></router-view>
+            <router-view :key="$route.fullPath"></router-view>
         </div>
     </body>
     <script type="text/javascript" src="/js/app/app.js"></script>

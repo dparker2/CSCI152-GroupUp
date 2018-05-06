@@ -27,17 +27,44 @@ var groupsMutex = &sync.Mutex{}
 func GroupExists(name string) (exists bool) {
 	_, exists = groups[name]
 	if exists == false { //If group doesn't exists in group struct, double checks DB to confirm.
-		var groupexists string
-		err := db.QueryRow("SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name= ?", name).Scan(&groupexists)
+		var groupid string
+		err := db.QueryRow("SELECT table_name FROM information_schema.tables WHERE TABLE_SCHEMA='StudyGroup' AND table_name= ?", name).Scan(&groupid)
 		switch {
 		case err == sql.ErrNoRows:
 			fmt.Println("Group does not exist")
 		case err != nil:
 			panic(err)
 		default:
-			if name == groupexists {
-				fmt.Println("Group" + groupexists + "exists in the DB already")
+			if name == groupid {
+				fmt.Println("Group" + groupid + "exists in the DB already")
+				stmt, err := db.Query("SELECT Admin, userList FROM " + name)
+				if err != nil {
+					panic(err)
+				}
+				var adminname string
+				var userslist userList
+
+				defer stmt.Close()
+				for stmt.Next() {
+					var findAdminName sql.NullString
+					var findUsernames sql.NullString
+					var currentUser user
+					err = stmt.Scan(&findAdminName, &findUsernames)
+					if findAdminName.Valid {
+						adminname = findAdminName.String
+					}
+					if findUsernames.Valid {
+						currentUser.Name = findUsernames.String
+						userslist.add(&currentUser)
+					}
+				}
+				groups[name] = &group{
+					Users: make(userList, 0),
+					Name:  name,
+					Admin: adminname,
+				}
 				exists = true
+				fmt.Println(groups[name])
 			}
 		}
 	}
@@ -67,7 +94,6 @@ func AddGroup(name string, token string) (groupid string) {
 	for {
 		// Generate random 4 digits
 		randFour := 1000 + rand.Intn(9999-1000)
-		fmt.Println(randFour)
 		randID := strconv.Itoa(randFour)
 		groupid = name + "_" + randID
 		username := GetUsername(token)
@@ -77,15 +103,14 @@ func AddGroup(name string, token string) (groupid string) {
 			groupsMutex.Lock()
 			defer groupsMutex.Unlock()
 
-			createGroupInDB(groupid)
-			putAdminInGroupDB(groupid, username)
+			CreateGroupInDB(groupid)
+			PutAdminInGroupDB(groupid, username)
 
 			groups[groupid] = &group{
-				Users: nil,
+				Users: make(userList, 0),
 				Name:  groupid,
 				Admin: username,
 			}
-			fmt.Println(groups[groupid])
 			return
 		}
 	}
@@ -105,6 +130,8 @@ func AddUserToGroup(token string, grpName string) error {
 	newUser := users[token]
 	grp := groups[grpName]
 	grp.addUser(newUser)
+	username := GetUsername(token)
+	AddUserToGroupDB(grpName, username)
 	return nil
 }
 
@@ -170,16 +197,16 @@ func (g *group) removeUser(u *user) {
 	}
 }
 
-func (gl groupList) add(g *group) {
-	gl = append(gl, g)
+func (gl *groupList) add(g *group) {
+	*gl = append(*gl, g)
 }
 
 // Remove first occurance of g
-func (gl groupList) remove(g *group) {
-	for i := range gl {
-		if gl[i] == g {
-			gl[len(gl)-1], gl[i] = gl[i], gl[len(gl)-1]
-			gl = gl[:len(gl)-1]
+func (gl *groupList) remove(g *group) {
+	for i := range *gl {
+		if (*gl)[i].Name == g.Name {
+			(*gl)[len((*gl))-1], (*gl)[i] = (*gl)[i], (*gl)[len((*gl))-1]
+			(*gl) = (*gl)[:len((*gl))-1]
 			break
 		}
 	}
@@ -188,10 +215,27 @@ func (gl groupList) remove(g *group) {
 func (gl groupList) contains(g *group) (b bool) {
 	b = false
 	for i := range gl {
-		if gl[i] == g {
+		if gl[i].Name == g.Name {
 			b = true
 			return
 		}
+	}
+	return
+}
+
+// GetFullUserListWithStatus will get the full user list with their status by comparing current and database list.
+func GetFullUserListWithStatus(groupid string) (listWithStatus [][]string) {
+	dbList := GetFullUserListFromDB(groupid)
+	activeList := groups[groupid].Users
+
+	for _, dbUsername := range dbList {
+		var userAndStatus []string
+		status := "0"
+		if activeList.containsUsername(dbUsername) {
+			status = "1"
+		}
+		userAndStatus = append(userAndStatus, dbUsername, status)
+		listWithStatus = append(listWithStatus, userAndStatus)
 	}
 	return
 }

@@ -2,7 +2,7 @@
 function Group(ws) {
     return {
         template: '#tmpl-group',
-        created: function() {
+        mounted: function() {
 
             ws.addEventListener('message', function (event) {
                     data = event.data;
@@ -18,25 +18,21 @@ function Group(ws) {
                         this.showGroup = true
                     }
                 }.bind(this));
-
-            // SEPARATE THIS TO USERBOX COMPONENT LATER
-            ws.addEventListener('message', function (event) {
-                data = event.data;
-                if (!data)
-                    return;
-                data = JSON.parse(data);
-                code = data.code;
-                if (!code || code !== "group/join")
-                    return;
-                console.log(data.username + " joined"); // Restrict to only group/join messages.
-            })
-            /////
             
             // Need to send after socket has connected
-            ws.send(JSON.stringify({
-                code: "group/join",
-                groupid: this.groupid,
-            }));
+            if (ws.readyState === 1) {
+                ws.send(JSON.stringify({
+                    code: "group/join",
+                    groupid: this.groupid,
+                }));
+            } else {
+                ws.onopen = function() {
+                    ws.send(JSON.stringify({
+                        code: "group/join",
+                        groupid: this.groupid,
+                    }));
+                }.bind(this);
+            }
         },
         beforeDestroy: function() {
             ws.send(JSON.stringify({
@@ -82,7 +78,8 @@ function Group(ws) {
         components: {
             'chat-box': Chatbox(ws),
             'white-board': Whiteboard(ws),
-            'flash-cards': Flashcards(ws)
+            'flash-cards': Flashcards(ws),
+            'user-list': Userlist(ws),
         },
     }
 }

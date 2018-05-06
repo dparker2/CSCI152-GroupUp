@@ -9,7 +9,7 @@ html {
 body * {
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 div {
@@ -40,6 +40,15 @@ button.contrast-button {
 }
 
 button.contrast-button:active {
+    background-color: #00943D;
+}
+
+button.back-button {
+    background-color: #00B24A;
+    float: right;
+}
+
+button.back-button:active {
     background-color: #00943D;
 }
 
