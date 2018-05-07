@@ -23,10 +23,7 @@ func CreateGroupInDB(groupid string) (err error) {
 //   1 index is number of users
 //   2 index is creator
 func SearchGroupsInDB(str string) (grps [][]string, err error) {
-	rows, err := db.Query("SELECT * FROM TableIndex WHERE TableName LIKE CONCAT('%', ? ,'%') ORDER BY TableName ASC LIMIT 20", str)
-	if err != nil {
-		return nil, err
-	}
+	rows, err := db.Query("SELECT * FROM GroupIndex WHERE GroupID LIKE CONCAT('%', ? ,'%') ORDER BY GroupID ASC LIMIT 20", str)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +47,43 @@ func PutAdminInGroupDB(groupid string, admin string) (err error) {
 		panic(err)
 	}
 	_, err = adminstmt.Exec(admin)
+	PutInGroupIndex(groupid, admin)
+	return
+}
 
+func PutInGroupIndex(groupid string, creator string) (err error) {
+	stmt, err := db.Prepare("INSERT INTO GroupIndex (GroupID, SubbedUsers, Creator) VALUES (?, 0, ?)")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(groupid, creator)
+	return
+}
+
+func RemoveFromGroupIndex(groupid string) (err error) {
+	stmt, err := db.Prepare("DELETE FROM GroupIndex WHERE GroupID = ?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(groupid)
+	return
+}
+
+func IncreaseGroupIndexSubs(groupid string) (err error) {
+	stmt, err := db.Prepare("UPDATE GroupIndex SET SubbedUsers = SubbedUsers + 1 WHERE GroupID = ?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(groupid)
+	return
+}
+
+func DecreaseGroupIndexSubs(groupid string) (err error) {
+	stmt, err := db.Prepare("UPDATE GroupIndex SET SubbedUsers = SubbedUsers - 1 WHERE GroupID = ?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(groupid)
 	return
 }
 
