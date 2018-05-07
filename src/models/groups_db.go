@@ -176,11 +176,18 @@ func GetFlashcardsFromDB(groupid string) (flashcards [][]string, err error) {
 
 func UpdateFlashcardFront(groupid string, index string, front string, uuid int) (err error) {
 	stmt, err := db.Prepare("UPDATE Flashcards SET Front = ?, UserID = ? WHERE (GroupID = ? AND FlashcardIndex = ?)")
-	log.Println("UPDATE CARD")
-	log.Println(groupid, index, front, uuid)
 	if err != nil {
-		return err
+		return
 	}
 	_, err = stmt.Exec(front, uuid, groupid, index)
+	return
+}
+
+func UpdateFlashcardBack(groupid string, index string, back string, uuid int) (err error) {
+	stmt, err := db.Prepare("UPDATE Flashcards SET Back = ?, UserID = ? WHERE (GroupID = ? AND FlashcardIndex = ?)")
+	if err != nil {
+		return
+	}
+	_, err = stmt.Exec(back, uuid, groupid, index)
 	return
 }

@@ -170,7 +170,18 @@ func groupFlashcardEditFront(args wsAPIstruct) error {
 	return nil
 }
 
-func groupFlashcardEditBack(ars wsAPIstruct) error {
+func groupFlashcardEditBack(args wsAPIstruct) error {
+	groupid := args.Msg.Groupid
+	index := args.Msg.Index
+	back := args.Msg.Back
+	uuid := models.GetUserID(args.UserToken)
+
+	err := models.UpdateFlashcardBack(groupid, index, back, uuid)
+	if err != nil {
+		return err
+	}
+	writeJSONToGroup(groupid, args.Msg)
+
 	return nil
 }
 

@@ -74,34 +74,10 @@ function Group(ws) {
             }
         },
         methods: {
-            startDraw: function(e) {
-                if (!this.drawing) {
-                    this.drawing = true;
-                    var x = e.x - e.target.offsetLeft;
-                    var y = e.y - e.target.offsetTop;
-                    whiteboardCtx.moveTo(x, y);
-                    whiteboardCtx.beginPath();
-                }
-            },
-            draw: function(e) {
-                if (this.drawing) {
-                    console.log(e);
-                    var x = e.x - e.target.offsetLeft;
-                    var y = e.y - e.target.offsetTop;
-                    whiteboardCtx.lineTo(x, y);
-                    whiteboardCtx.stroke();
-                }
-            },
-            endDraw: function() {
-                if (this.drawing) {
-                    this.drawing = false;
-                    whiteboardCtx.closePath();
-                }
-            },
-            addCard: function(index) {
+            addCard: function(index, front, back) {
                 this.deck.push({
-                    front: "",
-                    back: "",
+                    front: front,
+                    back: back,
                     index: index
                 })
             },
@@ -118,7 +94,6 @@ function Group(ws) {
                 }
             },
             findCard: function(index){
-                
                 for(var card_location = 0; card_location < this.deck.length; card_location++){
                     if(this.deck[card_location].index == index){
                         return card_location;
