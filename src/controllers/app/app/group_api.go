@@ -96,7 +96,7 @@ func groupJoin(args wsAPIstruct) error {
 			front := card[1]
 			back := card[2]
 			usrConn.WriteJSON(&wsMessage{
-				Code:    "group/flashcards",
+				Code:    "group/flashcards/new",
 				Groupid: groupid,
 				Front:   front,
 				Back:    back,
@@ -155,7 +155,18 @@ func groupFlashcardNew(args wsAPIstruct) (err error) {
 	return
 }
 
-func groupFlashcardEditFront(ars wsAPIstruct) error {
+func groupFlashcardEditFront(args wsAPIstruct) error {
+	groupid := args.Msg.Groupid
+	index := args.Msg.Index
+	front := args.Msg.Front
+	uuid := models.GetUserID(args.UserToken)
+
+	err := models.UpdateFlashcardFront(groupid, index, front, uuid)
+	if err != nil {
+		return err
+	}
+	writeJSONToGroup(groupid, args.Msg)
+
 	return nil
 }
 

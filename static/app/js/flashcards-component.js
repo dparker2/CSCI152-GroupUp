@@ -7,8 +7,8 @@ function Flashcards(ws) {
         },
         data: function() {
             return { 
-                cardText: false,
-                cardLabel: true,
+                isShowingCardText: true,
+                isEditingCardText: false,
                 currentCard: 1,
                 saveIcon: false,
                 navArrow: true,
@@ -23,23 +23,10 @@ function Flashcards(ws) {
             
             flipCard: function() {
                 document.getElementById('flipContainer').classList.toggle('flip');
-            }, 
-            saveEdit: function(side) {
-                this.cardLabel = !this.cardLabel; 
-                this.cardText = !this.cardText;
-                this.saveIcon = false;
-                this.navArrow = true;
-
-                if(side == 'front'){
-                    this.sendFront();
-                }
-                else{
-                    this.sendBack();
-                }
             },
             showEditView: function() {
-                this.cardLabel = !this.cardLabel; 
-                this.cardText = !this.cardText;
+                this.isShowingCardText = !this.isShowingCardText; 
+                this.isEditingCardText = !this.isEditingCardText;
                 this.saveIcon = true;
                 this.navArrow = false;
             },
@@ -62,11 +49,13 @@ function Flashcards(ws) {
                 }));
             },
             sendFront: function () {
+                this.isEditingCardText = !this.isEditingCardText;
+                this.isShowingCardText = !this.isShowingCardText;
                 ws.send(JSON.stringify({
                     code: "group/flashcards/editfront",
                     groupid: this.$parent.groupid,
                     front: this.frontText,
-                    index: this.cardIndex
+                    index: this.currentCard.toString()
                 }));
             },
             sendBack: function () {
@@ -74,7 +63,7 @@ function Flashcards(ws) {
                     code: "group/flashcards/editback",
                     groupid: this.$parent.groupid,
                     back: this.backText,
-                    index: this.cardIndex
+                    index: this.currentCard
                 }));
             }
         }

@@ -162,6 +162,7 @@ func GetFlashcardsFromDB(groupid string) (flashcards [][]string, err error) {
 		var front string
 		var back string
 		err = rows.Scan(&index, &front, &back)
+		fmt.Println("TEST", index, front, back)
 		if err != nil {
 			return nil, err
 		}
@@ -170,5 +171,16 @@ func GetFlashcardsFromDB(groupid string) (flashcards [][]string, err error) {
 		flashcards = append(flashcards, card)
 	}
 	fmt.Println(flashcards)
+	return
+}
+
+func UpdateFlashcardFront(groupid string, index string, front string, uuid int) (err error) {
+	stmt, err := db.Prepare("UPDATE Flashcards SET Front = ?, UserID = ? WHERE (GroupID = ? AND FlashcardIndex = ?)")
+	log.Println("UPDATE CARD")
+	log.Println(groupid, index, front, uuid)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(front, uuid, groupid, index)
 	return
 }

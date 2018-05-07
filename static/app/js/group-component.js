@@ -27,8 +27,8 @@ function Group(ws) {
                     code = data.code;
                     if (!code || !code.startsWith("group/flashcards"))
                         return;    
-    
-                    if(code.endsWith("new")){                    
+                    
+                    if(code.endsWith("new")){       
                         this.addCard(data.index, data.front, data.back)
                     }
                     if(code.endsWith("editfront")){
