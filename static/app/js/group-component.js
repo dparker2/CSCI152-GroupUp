@@ -18,6 +18,29 @@ function Group(ws) {
                         this.showGroup = true
                     }
                 }.bind(this));
+
+                ws.addEventListener('message', function(event) {
+                    data = event.data;
+                    if (!data)
+                        return;
+                    data = JSON.parse(data);
+                    code = data.code;
+                    if (!code || !code.startsWith("group/flashcards"))
+                        return;    
+    
+                    if(code.endsWith("new")){                    
+                        this.addCard(data.index, data.front, data.back)
+                    }
+                    if(code.endsWith("editfront")){
+                        this.editFront(data.index, data.front)
+                    }
+                    if(code.endsWith("editback")){
+                        this.editBack(data.index, data.back)
+                    }
+                
+    
+                    // do something important group/flashcard/new
+                }.bind(this));
             
             // Need to send after socket has connected
             if (ws.readyState === 1) {
@@ -46,7 +69,8 @@ function Group(ws) {
                 groupid: this.$route.params.groupid,
                 showGroup: false,
                 showError: false,
-                studyMode: 'whiteboard'
+                studyMode: 'whiteboard',
+                deck: []
             }
         },
         methods: {
@@ -74,6 +98,34 @@ function Group(ws) {
                     whiteboardCtx.closePath();
                 }
             },
+            addCard: function(index) {
+                this.deck.push({
+                    front: "",
+                    back: "",
+                    index: index
+                })
+            },
+            editFront: function(index, front) {
+                var card_location = this.findCard(index);
+                if(card_location !== -1){
+                    this.deck[card_location].front = front;
+                }
+            },
+            editBack: function(index, back) {
+                var card_location = this.findCard(index);
+                if(card_location !== -1){
+                    this.deck[card_location].back = back;
+                }
+            },
+            findCard: function(index){
+                
+                for(var card_location = 0; card_location < this.deck.length; card_location++){
+                    if(this.deck[card_location].index == index){
+                        return card_location;
+                    }
+                }
+                return -1;
+            }, 
         },
         components: {
             'chat-box': Chatbox(ws),

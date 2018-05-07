@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -133,5 +134,41 @@ func GetFullUserListFromDB(groupid string) (fullUserList []string) {
 		}
 		fullUserList = append(fullUserList, currentUser)
 	}
+	return
+}
+
+func InsertCardToDB(groupid string, uuid int) (index string, err error) {
+	stmt, err := db.Prepare("INSERT INTO Flashcards (GroupID, UserID) VALUES (?, ?)")
+	if err != nil {
+		return
+	}
+	result, err := stmt.Exec(groupid, uuid)
+	id, err := result.LastInsertId()
+	index = strconv.FormatInt(id, 10)
+
+	return
+}
+
+func GetFlashcardsFromDB(groupid string) (flashcards [][]string, err error) {
+	rows, err := db.Query("SELECT FlashcardIndex, Front, Back FROM Flashcards WHERE GroupID = ?", groupid)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println("Get flashcards was called")
+	fmt.Println(rows)
+
+	for rows.Next() {
+		var index string
+		var front string
+		var back string
+		err = rows.Scan(&index, &front, &back)
+		if err != nil {
+			return nil, err
+		}
+		var card []string
+		card = append(card, index, front, back)
+		flashcards = append(flashcards, card)
+	}
+	fmt.Println(flashcards)
 	return
 }

@@ -13,6 +13,9 @@ type wsMessage struct {
 	Email     string `json:"email"`
 	Status    string `json:"status"`
 	Query     string `json:"query"`
+	Index     string `json:"index"`
+	Front     string `json:"front"`
+	Back      string `json:"back"`
 }
 
 type wsAPIstruct struct {
@@ -38,10 +41,11 @@ func setupAPI() {
 	wsAPI["group/leave"] = groupLeave
 	wsAPI["group/chat"] = groupChat
 	wsAPI["group/whiteboard"] = groupWhiteboard
-	wsAPI["group/flashcard/new"] = groupFlashcardNew
-	wsAPI["group/flashcard/edit"] = groupFlashcardEdit
 	wsAPI["app/search/users"] = searchUsers
 	wsAPI["app/search/groups"] = searchGroups
 	wsAPI["app/friends/add"] = friendsAdd
 	wsAPI["app/friends/remove"] = friendsRemove
+	wsAPI["group/flashcards/new"] = groupFlashcardNew
+	wsAPI["group/flashcards/editfront"] = groupFlashcardEditFront
+	wsAPI["group/flashcards/editback"] = groupFlashcardEditBack
 }

@@ -18,7 +18,7 @@
             <div class="flipper">
                 <div class="front">
                     <button class="list-button" v-on:click="view ='list'"> + </button>
-                    <label v-on:dblclick ="editCard()"  v-show="cardLabel" class="card-label"> {{ frontText }} </label>
+                    <label v-on:dblclick ="showEditView()"  v-show="cardLabel" class="card-label"> {{ frontText }} </label>
                     <textarea id="frontText" v-show="cardText" v-model="frontText"  rows="10" cols="50"></textarea>
                     <div class="card-num"> {{ currentCard }} / {{ deck.length }} </div>
                     <i class="fi fi-spinner-rotate-forward flip-button" v-on:click="flipCard()"></i> 
@@ -27,7 +27,7 @@
                     <i class="fi fi-angle-left left arrow " v-show="navArrow" v-on:click="prevCard"></i>
                 </div>
                 <div class="back">
-                    <label v-on:dblclick="editCard()" v-show="cardLabel" class="card-label"> {{ backText }} </label>
+                    <label v-on:dblclick="showEditView()" v-show="cardLabel" class="card-label"> {{ backText }} </label>
                     <textarea id="backText" v-show="cardText" v-model="backText" rows="10" cols="50"></textarea>
                     <div class="card-num"> {{ currentCard }} / {{ deck.length }} </div>
                     <i class="fi fi-spinner-rotate-forward flip-button" v-on:click="flipCard()"></i>

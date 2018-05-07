@@ -3,27 +3,7 @@ function Flashcards(ws) {
     return {
         template: '#tmpl-flashcards',
         created: function() {
-            this.setDeck();   /** TEST **/
             
-            ws.addEventListener('message', function(event) {
-                data = event.data;
-                if (!data)
-                    return;
-                data = JSON.parse(data);
-                code = data.code;
-                if (!code || code !== "group/flashcard")
-                    return;
-                
-                if(data.front){
-                    
-                }
-                if(data.front){
-
-                }
-                this.addCard(data.index, data.front, data.back)
-
-                // do something important group/flashcard/new
-            }.bind(this));
         },
         data: function() {
             return { 
@@ -34,46 +14,13 @@ function Flashcards(ws) {
                 navArrow: true,
                 frontText: 'Double click to edit',
                 backText: 'Double click to edit',
-                deck: [],
+                deck: this.$parent.deck,
                 view: 'card',
                 deckSize: 0,
             }
         },
         methods: {
-            addCard: function(index, front, back) {
-                
-
-            },
-            updateCard: function() {
-                
-            },
-            setDeck: function() {
-        
-                this.deck.push({
-                    front: "michelle",
-                    back: "salomon",
-                    index: 4
-                });
-
-                this.deck.push({
-                    front: "group",
-                    back: "up",
-                    index: 2
-                });
-
-                this.deck.push({
-                    front: "hellow",
-                    back: "world",
-                    index: 1
-                });
-                this.deck.push({
-                    front: "number",
-                    back: "three",
-                    index: 3
-                });
-                this.deckSize = this.deck.length;
-                
-            }, 
+            
             flipCard: function() {
                 document.getElementById('flipContainer').classList.toggle('flip');
             }, 
@@ -90,7 +37,7 @@ function Flashcards(ws) {
                     this.sendBack();
                 }
             },
-            editCard: function() {
+            showEditView: function() {
                 this.cardLabel = !this.cardLabel; 
                 this.cardText = !this.cardText;
                 this.saveIcon = true;
@@ -112,12 +59,11 @@ function Flashcards(ws) {
                 ws.send(JSON.stringify({
                     code: "group/flashcards/new",
                     groupid: this.$parent.groupid,
-                    index: -1
                 }));
             },
             sendFront: function () {
                 ws.send(JSON.stringify({
-                    code: "group/flashcards/editFront",
+                    code: "group/flashcards/editfront",
                     groupid: this.$parent.groupid,
                     front: this.frontText,
                     index: this.cardIndex
@@ -125,7 +71,7 @@ function Flashcards(ws) {
             },
             sendBack: function () {
                 ws.send(JSON.stringify({
-                    code: "group/flashcards/editBack",
+                    code: "group/flashcards/editback",
                     groupid: this.$parent.groupid,
                     back: this.backText,
                     index: this.cardIndex

@@ -4,7 +4,7 @@
             <label for="username">Username</label>
             <input id="username" v-model="username" />
             <label for="password">Password</label>
-            <input id="password" v-model="password" />
+            <input id="password" v-model="password" v-on:keyup.enter="login" />
             <div class="row links">
                 <router-link to="/register" class="text-left size-1of3">Create Account</router-link>
                 <router-link to="/recover/user" class="text-center size-1of3" href="#">Forgot Username</router-link>
