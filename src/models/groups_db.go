@@ -100,6 +100,7 @@ func AddUserToGroupDB(groupid string, username string) (err error) {
 	case err == sql.ErrNoRows:
 		fmt.Println("User doesn't already exist in userList, adding...")
 		_, err = addstmt.Exec(username)
+		IncreaseGroupIndexSubs(groupid)
 	case err != nil:
 		panic(err)
 	default:
@@ -107,6 +108,15 @@ func AddUserToGroupDB(groupid string, username string) (err error) {
 			fmt.Println("User already exists in DB userList")
 		}
 	}
+	return
+}
+
+func RemoveUserFromGroupDB(groupid string, username string) (err error) {
+	stmt, err := db.Prepare("DELETE FROM " + groupid + " WHERE userList = ?")
+	if err != nil {
+		panic(err)
+	}
+	_, err = stmt.Exec(username)
 	return
 }
 

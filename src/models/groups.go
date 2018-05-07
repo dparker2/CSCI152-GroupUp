@@ -132,7 +132,6 @@ func AddUserToGroup(token string, grpName string) error {
 	grp.addUser(newUser)
 	username := GetUsername(token)
 	AddUserToGroupDB(grpName, username)
-	IncreaseGroupIndexSubs(grpName)
 	return nil
 }
 
@@ -149,7 +148,6 @@ func RemoveUserFromGroup(token string, grpName string) error {
 	u := users[token]
 	grp := groups[grpName]
 	grp.removeUser(u)
-	DecreaseGroupIndexSubs(grpName)
 	return nil
 }
 
