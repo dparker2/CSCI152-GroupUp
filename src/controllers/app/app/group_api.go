@@ -4,6 +4,7 @@ import (
 	"errors"
 	"groupup/src/models"
 	"log"
+	"time"
 )
 
 func groupCreate(args wsAPIstruct) error {
@@ -113,9 +114,11 @@ func groupLeave(args wsAPIstruct) error {
 func groupChat(args wsAPIstruct) error {
 	groupid := args.Msg.Groupid
 	putInUsername(&args)
+	t := time.Now().UTC().Format(time.RFC3339)
+	args.Msg.Timestamp = t
 
 	writeJSONToGroup(groupid, args.Msg)
-	models.WriteChatToDB(groupid, args.Msg.Username, args.Msg.Chat)
+	models.WriteChatToDB(groupid, t, args.Msg.Username, args.Msg.Chat)
 	return nil
 }
 
