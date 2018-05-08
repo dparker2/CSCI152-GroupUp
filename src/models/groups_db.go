@@ -23,24 +23,21 @@ func CreateGroupInDB(groupid string) (err error) {
 //   0 index is groupname
 //   1 index is number of users
 //   2 index is creator
-func SearchGroupsInDB(str string) (usrs [][]string, err error) {
-	/*stmt, err := dbAcc.Prepare("SELECT Username FROM UserInfo WHERE Username LIKE CONCAT('%', ? ,'%') ORDER BY Username ASC LIMIT 20")
+func SearchGroupsInDB(str string) (grps [][]string, err error) {
+	rows, err := db.Query("SELECT * FROM GroupIndex WHERE GroupID LIKE CONCAT('%', ? ,'%') ORDER BY GroupID ASC LIMIT 20", str)
 	if err != nil {
 		return nil, err
 	}
-	usernames, err := stmt.Query(str)
-	if err != nil {
-		return nil, err
-	}
-	for usernames.Next() {
-		var u string
-		err = usernames.Scan(&u)
+	for rows.Next() {
+		var groupname, subs, creator string
+		err = rows.Scan(&groupname, &subs, &creator)
 		if err != nil {
-			log.Println(err.Error())
-			return
+			panic(err)
 		}
-		usrs = append(usrs, u)
-	}*/
+		var result []string
+		result = append(result, groupname, subs, creator)
+		grps = append(grps, result)
+	}
 	return
 }
 
@@ -51,7 +48,43 @@ func PutAdminInGroupDB(groupid string, admin string) (err error) {
 		panic(err)
 	}
 	_, err = adminstmt.Exec(admin)
+	PutInGroupIndex(groupid, admin)
+	return
+}
 
+func PutInGroupIndex(groupid string, creator string) (err error) {
+	stmt, err := db.Prepare("INSERT INTO GroupIndex (GroupID, SubbedUsers, Creator) VALUES (?, 0, ?)")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(groupid, creator)
+	return
+}
+
+func RemoveFromGroupIndex(groupid string) (err error) {
+	stmt, err := db.Prepare("DELETE FROM GroupIndex WHERE GroupID = ?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(groupid)
+	return
+}
+
+func IncreaseGroupIndexSubs(groupid string) (err error) {
+	stmt, err := db.Prepare("UPDATE GroupIndex SET SubbedUsers = SubbedUsers + 1 WHERE GroupID = ?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(groupid)
+	return
+}
+
+func DecreaseGroupIndexSubs(groupid string) (err error) {
+	stmt, err := db.Prepare("UPDATE GroupIndex SET SubbedUsers = SubbedUsers - 1 WHERE GroupID = ?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(groupid)
 	return
 }
 
@@ -68,6 +101,7 @@ func AddUserToGroupDB(groupid string, username string) (err error) {
 	case err == sql.ErrNoRows:
 		fmt.Println("User doesn't already exist in userList, adding...")
 		_, err = addstmt.Exec(username)
+		IncreaseGroupIndexSubs(groupid)
 	case err != nil:
 		panic(err)
 	default:
@@ -75,6 +109,15 @@ func AddUserToGroupDB(groupid string, username string) (err error) {
 			fmt.Println("User already exists in DB userList")
 		}
 	}
+	return
+}
+
+func RemoveUserFromGroupDB(groupid string, username string) (err error) {
+	stmt, err := db.Prepare("DELETE FROM " + groupid + " WHERE userList = ?")
+	if err != nil {
+		panic(err)
+	}
+	_, err = stmt.Exec(username)
 	return
 }
 

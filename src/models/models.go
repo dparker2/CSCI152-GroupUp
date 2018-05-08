@@ -36,7 +36,6 @@ func init() {
 	} else {
 		fmt.Println("Successfully connected to the account db")
 	}
-
 }
 
 //VerifyLogin verifies credentials and then creates user object if verified
