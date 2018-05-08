@@ -1,0 +1,29 @@
+.chat-box input {
+    margin-top: auto;
+    background-color: #222;
+    border-style: none;
+    box-shadow: none;
+    border-radius: 5px;
+    border: 1px solid #555;
+    color: #eee;
+}
+
+.chat-box {
+    display: flex;
+    flex-direction: column;
+    background-color: inherit;
+    flex: 1;
+}
+
+.chat-box .chats {
+    overflow-y: auto;
+}
+
+.chat-box div {
+    background: transparent;
+} 
+
+.time-stamp {
+    font-size: 14px; 
+    color: #808080;
+}

@@ -15,12 +15,17 @@ function Chatbox(ws) {
                 groupid = data.groupid;
                 if (!groupid || groupid !== this.parentName)
                     return;
+                
                 chat = data.chat;
                 username = data.username;
+                d = new Date(data.timestamp);
+                tstamp = d.toLocaleString()
+
                 if (chat && username) {
                     this.messages.push({
                         user: username,
                         msg: chat,
+                        timestamp: tstamp
                     });
                 }
             }.bind(this));

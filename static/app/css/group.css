@@ -1,10 +1,14 @@
 .group-frame {
-    height: calc(100% - 57px);
-    padding-top: 10px;
+    justify-content: space-between;
+    flex-grow: 1
 }
 
-.group-frame > .row {
-    height: 100%;
+.group-frame > div {
+    width: 100%;
+}
+
+.group {
+    max-height: calc(100vh - 58px);
 }
 
 .group-name {
@@ -25,33 +29,12 @@
     background-color: #111;
 }
 
-.chat-box input {
-    margin-top: auto;
-    background-color: #222;
-    border-style: none;
-    box-shadow: none;
-    border-radius: 5px;
-    border: 1px solid #555;
-    color: #eee;
-}
-
-.chat-box {
-    display: flex;
-    flex-direction: column;
-    background-color: inherit;
-    overflow-y: auto;
-    flex: 1;
-}
-
 .chat-box p {
     margin: 0;
 }
 
 .study-mode {
-    height: 100%;
-    width: 100%;
     overflow: auto;
-    margin: 0 10px;
 }
 
 .study-mode canvas {
@@ -66,6 +49,7 @@ span.chat-username:after {
     content: ':';
 }
 
-.user-list {
-    width: auto;
+.user-wrapper {
+    padding: 10px;
+    max-width: 20%;
 }

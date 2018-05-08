@@ -46,6 +46,12 @@ func WS(w http.ResponseWriter, r *http.Request) {
 		err := conn.ReadJSON(&msg)
 		if err != nil {
 			log.Println(err)
+			// TODO: Put a function here that is like "cleanupuser" where it removes them from the group theyre active in and puts them offline, etc
+			//i.e. our disconnect and removing them from everything.
+			letFollowersKnow(token, &wsMessage{
+				Code:     "app/friends/offline",
+				Username: models.GetUsername(token),
+			})
 			return
 		}
 
@@ -66,6 +72,15 @@ func WS(w http.ResponseWriter, r *http.Request) {
 
 func writeJSONToGroup(grpName string, msgJSON *wsMessage) {
 	for _, c := range models.GetConnectionsInGroup(grpName) {
+		err := c.WriteJSON(msgJSON)
+		if err != nil {
+			log.Println(err.Error())
+		}
+	}
+}
+
+func writeJSONToOthersInGroup(grpName string, token string, msgJSON *wsMessage) {
+	for _, c := range models.GetOtherConnectionsInGroup(token, grpName) {
 		err := c.WriteJSON(msgJSON)
 		if err != nil {
 			log.Println(err.Error())

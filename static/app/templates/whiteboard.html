@@ -1,0 +1,10 @@
+[[define "whiteboard"]]
+<script type="text/javascript" src="/js/app/whiteboard-component.js"></script>
+<script src="/js/app/drawingboard.min.js"></script>
+<script type="text/x-template" id="tmpl-whiteboard">
+    <div id=whiteboard-wrapper>
+        <div :id="'wb' + $parent.groupid" style="width: 2000px; height: 2000px; "></div>
+        <!--<div id="wb2" style="width: 300px; height: 300px; border-style: solid;"></div>-->
+    </div>
+</script>
+[[end]]

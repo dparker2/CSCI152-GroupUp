@@ -1,18 +1,10 @@
 .home {
-    display: flex;
-    flex-direction: row; 
+    padding-top: 10px;
     justify-content: space-between;
-    height: 90vh;
+    flex-grow: 1;
 }
 
-.home .groups {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    height: 90vh;
-    min-width: 250px;
-}
-.home .groups .joinbtn {
+.home .joinbtn {
     background-color: white;
     color: black;
     text-align:center;
@@ -23,62 +15,128 @@
     color:white;
 }
 
-.home .recentgroups {
-    display:flex;
-    flex-direction: column;
-    flex-grow: 1;
-    color:rgb(255, 255, 255);
-    background-color:#1d1f21;
-    height: 50%;
-    max-width: 1000px;
-    margin: 5px 0px 0px 0px;
-    padding: 10px 10px 0px 10px;
-    
+.home i {
+    float: right;
 }
 
-.home .favoritegroups {
-    display:flex;
+.home .column {
+    max-width: 25%;
+    padding: 10px;
+}
+
+.home .column.group-search {
+    display: flex;
     flex-direction: column;
+    max-width: 49%;
     flex-grow: 2;
-    height: 50%;
-    max-width: 1000px;
-    color:white;
-    background-color:#1d1f21;
-    margin: 5px 0px 0px 0px;
-    padding: 10px 10px 0px 10px;
 }
 
-.home .groupObject {
+.home .group-search-head {
     display: flex;
     flex-direction: row;
-    justify-content:space-between;
-    background-color: rgba(153, 153, 153, 0.137);
-    margin: 10px;
-    padding: 10px;
-    line-height: 31px;
+}
+
+.home .group-search-head div {
+    flex: 1;
+    text-align: center;
+}
+
+.home .group-search-head div:first-child {
+    flex: 4;
+}
+
+.home .group-search-head div:last-child {
+    flex: 2;
+}
+
+.home .group-info {
+    display: flex;
+    flex-direction: row;
+}
+
+.home .group-info > div {
+    flex: 1;
+    text-align: center;
+}
+
+.home .group-info > div:last-child {
+    flex: 2;
+}
+
+.home .column.group-search .group-info button {
+    flex: 4;
+    border-radius: 3px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.home > div {
+    min-width: 250px;
+}
+
+.home div {
+    color: white;
+    background-color: #1d1f21;
+}
+
+.home h2 {
+    font-size: 28px;
+    text-align: center;
+}
+
+.home .groupbutton {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.home .groupbutton i {
+    font-size: 12px;
+}
+
+.home .groupbutton button {
+    background-color: rgb(153, 153, 153);
+}
+
+.home .groupbutton button:first-child {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    flex-grow: 1;
+    margin-right: 1px;
+    font-weight: 500;
+}
+
+.home .groupbutton button:last-child {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}
+
+.home .friends svg {
+    margin-right: 8px;
 }
 
 .home .friendslist {
-    color:white;
-    background-color:#1d1f21;
-    padding: 10px 15px; 
-    width: 15%;
-    min-width: 250px;
-    margin: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .home .friendslist .friendSearch {
     margin-bottom: 10px;
 }
 
+.home .friendslist .innerlist {
+    overflow-y: auto;
+}
+
 .home .friendslist .friends {
-    margin: 5px;
+    padding: 5px;
     background: #1d1f21;
     line-height: 24px;
+    font-weight: 500;
 }
 
 .home .friendslist .friends i {
-    margin: 0px 5px;
+    padding: 0px 5px;
     float: right;
     line-height: 24px;
     cursor: pointer;

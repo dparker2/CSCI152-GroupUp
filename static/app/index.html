@@ -3,16 +3,20 @@
         <link rel="stylesheet" type="text/css" href="/css/app/frame.css" />
         <link rel="stylesheet" type="text/css" href="/css/app/menu.css" />
         <link rel="stylesheet" type="text/css" href="/css/app/group.css" />
+        <link rel="stylesheet" type="text/css" href="/css/app/chatbox.css" />
         <link rel="stylesheet" type="text/css" href="/css/app/settings.css" />
         <link rel="stylesheet" type="text/css" href="/css/app/joingroup.css" />
         <link rel="stylesheet" type="text/css" href="/css/app/creategroup.css" />
         <link rel="stylesheet" type="text/css" href="/css/app/home.css" />
+        <link rel="stylesheet" type="text/css" href="/css/app/drawingboard.min.css" />
         [[template "creategroup"]]
         [[template "joingroup"]]
         [[template "home"]]
         [[template "settings"]]
         [[template "chatbox"]]
         [[template "group"]]
+        [[template "whiteboard"]]
+        [[template "userlist"]]
     </head>
     <body>
         <div id="app" class="app">
@@ -24,6 +28,10 @@
                             <router-link v-on:click.native="showMenu = false" to="/group/create" tag="li"><i class="plus-icon fi"></i>Create Group</router-link>
                             <router-link v-on:click.native="showMenu = false" to="/group/join" tag="li"><i class="persons-icon fi"></i>Join Group</router-link>
                         </ul>
+                        <h1>Groups</h1>
+                        <ul>
+                            <router-link v-for="group in currentGroups" v-on:click.native="showMenu = false" :to="'/group/' + group" tag="li">{{ group }}</router-link>
+                        </ul>
                     </div>
                     GroupUp
                 </div>
@@ -33,7 +41,7 @@
                 </div>
             </div>
             <hr />
-            <router-view></router-view>
+            <router-view :key="$route.fullPath"></router-view>
         </div>
     </body>
     <script type="text/javascript" src="/js/app/app.js"></script>
