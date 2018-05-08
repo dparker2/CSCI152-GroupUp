@@ -23,6 +23,7 @@ func groupRemove(args wsAPIstruct) error {
 	username := models.GetUsername(userToken)
 
 	models.RemoveGroupFromUser(userToken, groupid)
+	models.RemoveUserFromGroupDB(groupid, username)
 
 	usrConn.WriteJSON(&wsMessage{
 		Code:    "app/current/remove",

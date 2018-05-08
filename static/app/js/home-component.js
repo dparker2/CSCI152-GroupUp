@@ -1,5 +1,25 @@
 
 function Home(ws) {
+    var throttle = function(func, limit) {
+        var lastFunc
+        var lastRan
+        return function() {
+          const context = this
+          const args = arguments
+          if (!lastRan) {
+            func.apply(context, args)
+            lastRan = Date.now()
+          } else {
+            clearTimeout(lastFunc)
+            lastFunc = setTimeout(function() {
+              if ((Date.now() - lastRan) >= limit) {
+                func.apply(context, args)
+                lastRan = Date.now()
+              }
+            }, limit - (Date.now() - lastRan))
+          }
+        }
+      }
     return {
         template: '#tmpl-home',
         created: function() {
@@ -65,8 +85,10 @@ function Home(ws) {
                 offlineFriends: [],
                 friendsResults: [],
                 searchQuery: "",
+                previousSearchQuery: "",
                 groupSearchQuery: "",
                 groupsResults: [],
+                previousGroupSearchQuery: "",
             }
         },
         methods: {
@@ -76,30 +98,39 @@ function Home(ws) {
                     groupid: groupid,
                 }));
             },
-            searchUsers: function() {
-                this.friendsResults = []
-                if (this.searchQuery.length > 2) {
+            searchUsers: throttle(function() {
+                if (this.searchQuery.length > 2 && this.previousSearchQuery !== this.searchQuery) {
+                    this.previousSearchQuery = this.searchQuery
                     ws.send(JSON.stringify({
                         code: "app/search/users",
                         query: this.searchQuery,
                     }))
+                    this.friendsResults = []
+                } else if (this.searchQuery.length <= 2) {
+                    this.previousSearchQuery = this.searchQuery
+                    this.friendsResults = []
                 }
-            },
-            searchGroups: function() {
-                this.groupsResults = []
-                if (this.groupSearchQuery.length > 2) {
+            }, 250),
+            searchGroups: throttle(function() {
+                if (this.groupSearchQuery.length > 2 && this.previousGroupSearchQuery !== this.groupSearchQuery) {
+                    this.previousGroupSearchQuery = this.groupSearchQuery
                     ws.send(JSON.stringify({
                         code: "app/search/groups",
                         query: this.groupSearchQuery,
                     }))
+                    this.groupsResults = []
+                } else if (this.groupSearchQuery.length <= 2) {
+                    this.previousGroupSearchQuery = this.groupSearchQuery
+                    this.groupsResults = []
                 }
-            },
+            }, 250),
             addFriend: function(username) {
                 ws.send(JSON.stringify({
                     code: "app/friends/add",
                     username: username,
                 }))
-            }
+            },
+
         },
         components: {
         },
