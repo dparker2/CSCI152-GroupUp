@@ -124,7 +124,8 @@ func CreateAccount(username, password, email string) bool {
 	default:
 		return true
 	}
-  
+}
+
 func groupNamesToObjects(groupNames []string) (gl groupList) {
 	for _, g := range groupNames {
 		if GroupExists(g) {
