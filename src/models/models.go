@@ -92,6 +92,39 @@ func insertIntoUsers(u user) {
 	userMutex.Unlock()
 }
 
+// VerifyRegister checks for existence of username and email in dbAcc
+func VerifyRegister(username string, email string) (verify bool) {
+	return (!usernameTaken(username) && !emailTaken(email))
+}
+
+func usernameTaken(username string) (exists bool) {
+	row := dbAcc.QueryRow("SELECT EXISTS(SELECT 1 FROM UserInfo WHERE Username = ?)", username)
+	if err := row.Scan(&exists); err != nil {
+		return false
+	}
+	return exists
+}
+
+func emailTaken(email string) (exists bool) {
+	row := dbAcc.QueryRow("SELECT EXISTS(SELECT 1 FROM UserInfo WHERE Email = ?)", email)
+	if err := row.Scan(&exists); err != nil {
+		return false
+	}
+	return exists
+}
+
+func CreateAccount(username, password, email string) bool {
+	_, err := dbAcc.Exec("INSERT INTO UserInfo (Username, Pass, Email) VALUES (?, ?, ?)", username, password, email)
+	switch {
+	case err == sql.ErrNoRows:
+		fmt.Println("Something went wrong inserting the data.")
+		return false
+	case err != nil:
+		panic(err)
+	default:
+		return true
+	}
+  
 func groupNamesToObjects(groupNames []string) (gl groupList) {
 	for _, g := range groupNames {
 		if GroupExists(g) {

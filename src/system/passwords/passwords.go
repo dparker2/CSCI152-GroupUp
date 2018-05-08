@@ -15,7 +15,7 @@ func IsValid(hash string, password string) bool {
 	return true
 }
 
-func Encrypt(password string) (string, error) {
+func Hash(password string) (string, error) {
 	str, err := bcrypt.GenerateFromPassword([]byte(password), salt)
 	return string(str), err
 }
