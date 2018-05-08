@@ -95,7 +95,6 @@ func GetConnectionByUsername(username string) (conn *websocket.Conn) {
 
 func GetCurrentGroups(token string) (list []string) {
 	usr := users[token]
-	log.Println(usr)
 	currGrps := usr.CurrentGroups
 	for _, grp := range currGrps {
 		list = append(list, grp.Name)
