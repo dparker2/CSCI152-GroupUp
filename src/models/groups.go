@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"strconv"
 	"sync"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 
@@ -93,6 +94,7 @@ func UserExistsInGroup(token string, grpName string) (b bool) {
 func AddGroup(name string, token string) (groupid string) {
 	for {
 		// Generate random 4 digits
+		rand.Seed(time.Now().UTC().UnixNano())
 		randFour := 1000 + rand.Intn(9999-1000)
 		randID := strconv.Itoa(randFour)
 		groupid = name + "_" + randID
@@ -116,8 +118,7 @@ func AddGroup(name string, token string) (groupid string) {
 	}
 }
 
-// AddUserToGroup adds a user to a group
-func AddUserToGroup(token string, grpName string) error {
+func AddUserToGroupMap(token string, grpName string) error {
 	if !UserExists(token) {
 		return errors.New("AddUserToGroup - user given does not exist")
 	}
@@ -130,6 +131,12 @@ func AddUserToGroup(token string, grpName string) error {
 	newUser := users[token]
 	grp := groups[grpName]
 	grp.addUser(newUser)
+	return nil
+}
+
+// AddUserToGroup adds a user to a group
+func AddUserToGroup(token string, grpName string) error {
+	AddUserToGroupMap(token, grpName)
 	username := GetUsername(token)
 	AddUserToGroupDB(grpName, username)
 	return nil
@@ -168,6 +175,7 @@ func GetOtherConnectionsInGroup(token string, grpName string) (conn []*websocket
 	if !GroupExists(grpName) {
 		return nil
 	}
+	fmt.Println(token)
 	users := groups[grpName].Users
 	for _, user := range users {
 		if user.Token != token && user.WsConn != nil {

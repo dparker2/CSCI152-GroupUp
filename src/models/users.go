@@ -95,7 +95,6 @@ func GetConnectionByUsername(username string) (conn *websocket.Conn) {
 
 func GetCurrentGroups(token string) (list []string) {
 	usr := users[token]
-	log.Println(usr)
 	currGrps := usr.CurrentGroups
 	for _, grp := range currGrps {
 		list = append(list, grp.Name)
@@ -185,11 +184,17 @@ func AddGroupToUsersCurrentGroups(token string, grpName string) {
 	db_AddGroupToUsersGroups(u.UserID, grpName)
 }
 
-func RemoveGroupFromUser(token string, grpName string) {
+func RemoveGroupFromUser(token string, grpName string) (err error) {
 	u := users[token]
 	grp := groups[grpName]
 	u.CurrentGroups.remove(grp)
 	db_RemoveGroupFromUsersGroups(u.UserID, grpName)
+	err = DecreaseGroupIndexSubs(grpName)
+
+	if err != nil {
+		return err
+	}
+	return
 }
 
 func (ul *userList) add(u *user) {

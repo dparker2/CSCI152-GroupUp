@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -23,24 +24,21 @@ func CreateGroupInDB(groupid string) (err error) {
 //   0 index is groupname
 //   1 index is number of users
 //   2 index is creator
-func SearchGroupsInDB(str string) (usrs [][]string, err error) {
-	/*stmt, err := dbAcc.Prepare("SELECT Username FROM UserInfo WHERE Username LIKE CONCAT('%', ? ,'%') ORDER BY Username ASC LIMIT 20")
+func SearchGroupsInDB(str string) (grps [][]string, err error) {
+	rows, err := db.Query("SELECT * FROM GroupIndex WHERE GroupID LIKE CONCAT('%', ? ,'%') ORDER BY GroupID ASC LIMIT 20", str)
 	if err != nil {
 		return nil, err
 	}
-	usernames, err := stmt.Query(str)
-	if err != nil {
-		return nil, err
-	}
-	for usernames.Next() {
-		var u string
-		err = usernames.Scan(&u)
+	for rows.Next() {
+		var groupname, subs, creator string
+		err = rows.Scan(&groupname, &subs, &creator)
 		if err != nil {
-			log.Println(err.Error())
-			return
+			panic(err)
 		}
-		usrs = append(usrs, u)
-	}*/
+		var result []string
+		result = append(result, groupname, subs, creator)
+		grps = append(grps, result)
+	}
 	return
 }
 
@@ -51,7 +49,43 @@ func PutAdminInGroupDB(groupid string, admin string) (err error) {
 		panic(err)
 	}
 	_, err = adminstmt.Exec(admin)
+	PutInGroupIndex(groupid, admin)
+	return
+}
 
+func PutInGroupIndex(groupid string, creator string) (err error) {
+	stmt, err := db.Prepare("INSERT INTO GroupIndex (GroupID, SubbedUsers, Creator) VALUES (?, 0, ?)")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(groupid, creator)
+	return
+}
+
+func RemoveFromGroupIndex(groupid string) (err error) {
+	stmt, err := db.Prepare("DELETE FROM GroupIndex WHERE GroupID = ?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(groupid)
+	return
+}
+
+func IncreaseGroupIndexSubs(groupid string) (err error) {
+	stmt, err := db.Prepare("UPDATE GroupIndex SET SubbedUsers = SubbedUsers + 1 WHERE GroupID = ?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(groupid)
+	return
+}
+
+func DecreaseGroupIndexSubs(groupid string) (err error) {
+	stmt, err := db.Prepare("UPDATE GroupIndex SET SubbedUsers = SubbedUsers - 1 WHERE GroupID = ?")
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(groupid)
 	return
 }
 
@@ -68,6 +102,7 @@ func AddUserToGroupDB(groupid string, username string) (err error) {
 	case err == sql.ErrNoRows:
 		fmt.Println("User doesn't already exist in userList, adding...")
 		_, err = addstmt.Exec(username)
+		IncreaseGroupIndexSubs(groupid)
 	case err != nil:
 		panic(err)
 	default:
@@ -78,18 +113,26 @@ func AddUserToGroupDB(groupid string, username string) (err error) {
 	return
 }
 
-// WriteChatToDB stores chat into the DB
-func WriteChatToDB(groupid string, username string, msg string) (err error) {
-
-	chatstmt, err := db.Prepare("INSERT INTO " + groupid + " (user, Clock, Message) VALUES (?, current_timestamp(),  ?)")
-	fmt.Println("Inserting chat to DB...")
+func RemoveUserFromGroupDB(groupid string, username string) (err error) {
+	stmt, err := db.Prepare("DELETE FROM " + groupid + " WHERE userList = ?")
 	if err != nil {
 		panic(err)
 	}
-	_, err = chatstmt.Exec(username, msg)
+	_, err = stmt.Exec(username)
+	return
+}
+
+// WriteChatToDB stores chat into the DB
+func WriteChatToDB(groupid string, timestamp string, username string, msg string) (err error) {
+	chatstmt, err := db.Prepare("INSERT INTO " + groupid + " (user, Clock, Message) VALUES (?, ?, ?)")
+	fmt.Println("Inserting chat to DB...")
+	if err != nil {
+		return err
+	}
+	_, err = chatstmt.Exec(username, timestamp, msg)
 
 	if err != nil {
-		panic(err)
+		return err
 	}
 	return
 }
@@ -98,7 +141,8 @@ func WriteChatToDB(groupid string, username string, msg string) (err error) {
 func GetChatLogFromDB(groupid string) (chatLog [][]string) {
 	chatstmt, err := db.Query("SELECT user, Clock, Message FROM " + groupid + " WHERE Message IS NOT NULL")
 	if err != nil {
-		panic(err)
+		log.Println(err.Error())
+		return
 	}
 
 	defer chatstmt.Close()
@@ -108,8 +152,11 @@ func GetChatLogFromDB(groupid string) (chatLog [][]string) {
 		var message string
 		err = chatstmt.Scan(&username, &timestamp, &message)
 		if err != nil {
-			panic(err)
+			log.Println(err.Error())
+			return
 		}
+		ts, _ := time.Parse("2006-01-02 15:04:05", timestamp)
+		timestamp = ts.Format(time.RFC3339)
 		var aChat []string
 		aChat = append(aChat, timestamp, username, message)
 		chatLog = append(chatLog, aChat)

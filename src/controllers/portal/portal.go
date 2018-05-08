@@ -61,3 +61,25 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(p)
 	}
 }
+
+func Register(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		panic(err)
+	}
+	// only run after input is validated for length etc
+	regEmail := r.Form.Get("reg_email")
+	regUsername := r.Form.Get("reg_username")
+	regPassword1 := r.Form.Get("reg_password1")
+	log.Println(regEmail)
+	log.Println(regUsername)
+	isVerified := models.VerifyRegister(regUsername, regEmail)
+	if isVerified {
+		models.CreateAccount(regUsername, regPassword1, regEmail)
+		w.Header().Set("Content-Type", "application/json")
+		p := loginResponse{
+			RedirectPath: "/portal",
+		}
+		json.NewEncoder(w).Encode(p)
+	}
+}
