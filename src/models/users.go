@@ -130,6 +130,12 @@ func GetOnlineFollowers(token string) (list []string, err error) {
 	}
 	return
 }
+func GetUserID(token string) (id int) {
+	if UserExists(token) {
+		return users[token].UserID
+	}
+	return
+}
 
 // SetUserStatus sets the status of user associated with token
 func SetUserStatus(token string, status int) {

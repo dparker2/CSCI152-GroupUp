@@ -53,3 +53,19 @@ span.chat-username:after {
     padding: 10px;
     max-width: 20%;
 }
+
+.studyModeTab {
+	border-radius: 0px;
+	background-color: #262828;
+	color: white;
+}
+
+.studyModeTab:hover {
+    background-color: white;
+    color: black;
+    transition: all 0.2s ease;
+}
+
+.studyModeMenu {
+    margin-bottom: 10px;
+}

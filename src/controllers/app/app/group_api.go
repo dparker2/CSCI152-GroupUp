@@ -64,8 +64,6 @@ func groupJoin(args wsAPIstruct) error {
 		usrConn.WriteJSON(&wsMessage{
 			Code:    "group",
 			Groupid: groupid, // "Okay to render"
-			// TODO: Write a function in models to query db and put FullUserList in here.
-			// TODO: Put list of usernames in the group object here. (ie groups[groupid].Users[i].Username)
 		})
 
 		fullChatLog := models.GetChatLogFromDB(groupid)
@@ -91,6 +89,20 @@ func groupJoin(args wsAPIstruct) error {
 				Groupid:  groupid,
 				Username: username,
 				Status:   status,
+			})
+		}
+		// get flashcards from db here
+		flashcards, _ := models.GetFlashcardsFromDB(groupid)
+		for _, card := range flashcards {
+			index := card[0]
+			front := card[1]
+			back := card[2]
+			usrConn.WriteJSON(&wsMessage{
+				Code:    "group/flashcards/new",
+				Groupid: groupid,
+				Front:   front,
+				Back:    back,
+				Index:   index,
 			})
 		}
 		writeJSONToOthersInGroup(groupid, userToken, args.Msg)
@@ -133,15 +145,47 @@ func groupWhiteboard(args wsAPIstruct) error {
 			log.Println(err.Error())
 		}
 	}
+	return nil
+}
+
+func groupFlashcardNew(args wsAPIstruct) (err error) {
+	groupid := args.Msg.Groupid
+	uuid := models.GetUserID(args.UserToken)
+	args.Msg.Index, err = models.InsertCardToDB(groupid, uuid)
+	if err != nil {
+		return err
+	}
+	writeJSONToGroup(groupid, args.Msg)
+	return
+}
+
+func groupFlashcardEditFront(args wsAPIstruct) error {
+	groupid := args.Msg.Groupid
+	index := args.Msg.Index
+	front := args.Msg.Front
+	uuid := models.GetUserID(args.UserToken)
+
+	err := models.UpdateFlashcardFront(groupid, index, front, uuid)
+	if err != nil {
+		return err
+	}
+	writeJSONToGroup(groupid, args.Msg)
 
 	return nil
 }
 
-func groupFlashcardNew(args wsAPIstruct) error {
-	return nil
-}
+func groupFlashcardEditBack(args wsAPIstruct) error {
+	groupid := args.Msg.Groupid
+	index := args.Msg.Index
+	back := args.Msg.Back
+	uuid := models.GetUserID(args.UserToken)
 
-func groupFlashcardEdit(ars wsAPIstruct) error {
+	err := models.UpdateFlashcardBack(groupid, index, back, uuid)
+	if err != nil {
+		return err
+	}
+	writeJSONToGroup(groupid, args.Msg)
+
 	return nil
 }
 

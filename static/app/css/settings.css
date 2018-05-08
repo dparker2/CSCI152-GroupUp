@@ -27,7 +27,7 @@ p{
     margin-top: 50px;
 }
 
-.list-button{
+.option-list .list-button{
     background-color: transparent;
     color: #758096;
     width: 170px;
@@ -39,12 +39,12 @@ p{
     font-weight: 100px;
 }
 
-.list-button:hover{
+.option-list .list-button:hover{
     background-color: #1d1f21;
     color: #fff;
 }
 
-.list-button:active{
+.option-list .list-button:active{
     background-color: #23719b;
     color: #fff;
 }
