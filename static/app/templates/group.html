@@ -12,7 +12,6 @@
                     <div class="studyModeMenu">
                         <button v-on:click="studyMode='whiteboard'" class="studyModeTab">Whiteboard</button>
                         <button v-on:click="studyMode='flashcards'" class="studyModeTab">Flashcards</button>
-                        
                     </div>
                     <white-board v-if="studyMode == 'whiteboard'"></white-board>
                     <flash-cards v-else-if="studyMode == 'flashcards'"></flash-cards>

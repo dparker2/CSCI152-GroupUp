@@ -29,6 +29,25 @@ function Flashcards(ws) {
                 this.isEditingCardText = !this.isEditingCardText;
                 this.showExitEditButton = !this.showExitEditButton;
             },
+            editListView: function(index, text, isFront) {
+                this.textareaEdit = text;
+                this.cardEditingInList = index;
+                if (isFront) {
+                    this.isEditingFrontListView = true;
+                } else {
+                    this.isEditingBackListView = true;
+                }
+            },
+            normalListView: function(index, isFront, sendfunc) {
+                sendfunc(index);
+                this.cardEditingInList = 0;
+                this.currentCard = index;
+                if (isFront) {
+                    this.isEditingFrontListView = false;
+                } else {
+                    this.isEditingBackListView = false;
+                }
+            },
             nextCard: function () {
                 this.currentCard = this.currentCard % (this.$parent.deck.length) + 1;
                 document.getElementById('flipContainer').classList.remove('flip');
@@ -43,23 +62,34 @@ function Flashcards(ws) {
                     groupid: this.$parent.groupid,
                 }));
             },
-            sendFront: function () {
+            sendFront: function (index) {
+                text = { text: this.textareaEdit };
+                card = (index) ? { index: index } : { index: this.currentCard };
+                this.textareaEdit = '';
                 ws.send(JSON.stringify({
                     code: "group/flashcards/editfront",
                     groupid: this.$parent.groupid,
-                    front: this.textareaFront,
-                    index: this.currentCard.toString(),
+                    front: text.text,
+                    index: card.index.toString(),
                 }));
-                this.textareaFront = '';
             },
-            sendBack: function () {
+            sendBack: function (index) {
+                text = { text: this.textareaEdit };
+                card = (index) ? { index: index } : { index: this.currentCard };
+                this.textareaEdit = '';
                 ws.send(JSON.stringify({
                     code: "group/flashcards/editback",
                     groupid: this.$parent.groupid,
-                    back: this.textareaBack,
-                    index: this.currentCard.toString(),
+                    back: text.text,
+                    index: card.index.toString(),
                 }));
-                this.textareaBack = '';
+            }
+        },
+        watch: {
+            cardEditingInList: function () {
+                this.$nextTick(function() {
+                    jQuery('#activeTextarea').focus();
+                })
             }
         }
     }
