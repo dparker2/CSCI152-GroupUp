@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-func TestnewUser(t *testing.T) {
+func TestNewUser(t *testing.T) {
 	testUsername := "testusername"
 	testUser := newUser(testUsername)
 	if testUser.Token == "" {
