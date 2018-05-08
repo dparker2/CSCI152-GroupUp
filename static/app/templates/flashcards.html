@@ -2,12 +2,35 @@
 <script type="text/javascript" src="/js/app/flashcards-component.js"></script>
 <script type="text/x-template" id="tmpl-flashcards">
     <div class="flash-card"> 
-        <div style="display:flex; flex-direction:column" v-if="view == 'list'">    
-        <template v-for="card in $parent.deck">
+        <div style="display:flex; flex-direction:column; position: relative" v-if="view == 'list'"> 
+            <i class="fi fi-close" v-on:click="view ='card'"></i>
+            <template v-for="card in $parent.deck">
             <div v-bind:style="{ order: card.index-1 }"  class="list-wrapper" >
                 {{ card.index }}
-                <div v-bind:id="'card'+card.index" class="list-item"> {{ card.front }}</div>
-                <div class="list-item">{{ card.back }}</div>                     
+                <div 
+                    v-show="cardEditingInList !== card.index && !isEditingFrontListView" 
+                    v-html="card.front" 
+                    v-on:dblclick="isEditingFrontListView = true; cardEditingInList = card.index; textareaFront = card.front" 
+                    class="list-item">
+                </div>
+                <textarea 
+                    class="list-item" 
+                    v-on:blur="currentCard = card.index; sendFront(); cardEditingInList = 0; isEditingFrontListView = false" 
+                    v-show="cardEditingInList === card.index && isEditingFrontListView" 
+                    v-model="textareaFront">
+                </textarea>                
+                <div 
+                    v-show="cardEditingInList !== card.index && !isEditingBackListView" 
+                    v-html="card.back" 
+                    v-on:dblclick="isEditingBackListView = true; cardEditingInList = card.index; textareaBack = card.back" 
+                    class="list-item">
+                </div>
+                <textarea 
+                    class="list-item"
+                    v-on:blur="isEditingBackListView = false; currentCard = card.index; sendBack(); cardEditingInList = 0" 
+                    v-show="cardEditingInList === card.index && isEditingBackListView" 
+                    v-model="textareaBack">
+                </textarea>                         
             </div>
         </template>
         </div>
@@ -18,21 +41,25 @@
             <template v-for="card in $parent.deck">
                 <div v-if="card.index == currentCard" class="flipper">
                     <div class="front">
-                        <button class="list-button" v-on:click="view ='list'"> + </button>
-                        <div v-on:dblclick ="showEditView(); textareaFront = card.front;" v-html="card.front" v-show="isShowingCardText" class="card"></div>
+                        <!--<button class="list-button" v-on:click="view ='list'; showExitListButton = true"> + </button>-->
+                        <i class="fi fi-list-1 list-button" v-on:click="view ='list'"></i>
+                        <i class="fi fi-close cancel-edit"  v-show="isEditingCardText" v-on:click="toggleCardView"></i>
+                        <div v-on:dblclick ="toggleCardView(); textareaFront = card.front;" v-html="card.front" v-show="isShowingCardText" class="card"></div>
                         <textarea v-show="isEditingCardText" v-model="textareaFront" rows="10" cols="50"></textarea>
                         <div class="card-num"> {{ currentCard }} / {{ $parent.deck.length }} </div>
                         <i class="fi fi-spinner-rotate-forward flip-button" v-if="isShowingCardText" v-on:click="flipCard()"></i> 
-                        <i class="fi fi-save saveButton" v-on:click="sendFront()" v-if="isEditingCardText"></i>
+                        <i class="fi fi-save save-button" v-on:click="sendFront(); toggleCardView()" v-if="isEditingCardText"></i>
                         <i class="fi fi-angle-right right arrow" v-if="isShowingCardText" v-on:click="nextCard"></i>
                         <i class="fi fi-angle-left left arrow" v-if="isShowingCardText" v-on:click="prevCard"></i>
                     </div>
                     <div class="back">
-                        <div v-on:dblclick="showEditView(); textareaBack = card.back;" v-html="card.back" v-show="isShowingCardText" class="card"></div>
+                        <i class="fi fi-list-1 list-button" v-on:click="view ='list'"></i>
+                        <i class="fi fi-close cancel-edit"  v-show="isEditingCardText" v-on:click="toggleCardView"></i>
+                        <div v-on:dblclick="toggleCardView(); textareaBack = card.back;" v-html="card.back" v-show="isShowingCardText" class="card"></div>
                         <textarea v-show="isEditingCardText" v-model="textareaBack" rows="10" cols="50"></textarea>
                         <div class="card-num"> {{ currentCard }} / {{ $parent.deck.length }} </div>
                         <i class="fi fi-spinner-rotate-forward flip-button" v-if="isShowingCardText" v-on:click="flipCard()"></i> 
-                        <i class="fi fi-save saveButton" v-on:click="sendBack()" v-if="isEditingCardText"></i>
+                        <i class="fi fi-save save-button" v-on:click="sendBack(); toggleCardView()" v-if="isEditingCardText"></i>
                         <i class="fi fi-angle-right right arrow" v-if="isShowingCardText" v-on:click="nextCard"></i>
                         <i class="fi fi-angle-left left arrow" v-if="isShowingCardText" v-on:click="prevCard"></i>
                     </div>

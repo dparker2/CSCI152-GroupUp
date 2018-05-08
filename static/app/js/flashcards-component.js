@@ -9,10 +9,14 @@ function Flashcards(ws) {
             return { 
                 isShowingCardText: true,
                 isEditingCardText: false,
+                isEditingFrontListView: false,
+                isEditingBackListView: false,
+                cardEditingInList: 0,
                 currentCard: 1,
-                view: 'card',
+                view: 'list',
                 textareaFront: '',
                 textareaBack: '',
+                textareaListView: '',
                 deckSize: 0,
             }
         },
@@ -20,9 +24,10 @@ function Flashcards(ws) {
             flipCard: function() {
                 document.getElementById('flipContainer').classList.toggle('flip');
             },
-            showEditView: function() {
+            toggleCardView: function() {
                 this.isShowingCardText = !this.isShowingCardText; 
                 this.isEditingCardText = !this.isEditingCardText;
+                this.showExitEditButton = !this.showExitEditButton;
             },
             nextCard: function () {
                 this.currentCard = this.currentCard % (this.$parent.deck.length) + 1;
@@ -39,8 +44,6 @@ function Flashcards(ws) {
                 }));
             },
             sendFront: function () {
-                this.isEditingCardText = !this.isEditingCardText;
-                this.isShowingCardText = !this.isShowingCardText;
                 ws.send(JSON.stringify({
                     code: "group/flashcards/editfront",
                     groupid: this.$parent.groupid,
@@ -50,8 +53,6 @@ function Flashcards(ws) {
                 this.textareaFront = '';
             },
             sendBack: function () {
-                this.isEditingCardText = !this.isEditingCardText;
-                this.isShowingCardText = !this.isShowingCardText;
                 ws.send(JSON.stringify({
                     code: "group/flashcards/editback",
                     groupid: this.$parent.groupid,
